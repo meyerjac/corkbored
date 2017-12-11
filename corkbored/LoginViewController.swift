@@ -34,8 +34,8 @@ class LoginViewController: UIViewController {
                 print(error!)
             } else {
                 print("user logged in")
-                let vc = UsernameViewController()
-                self.present(vc, animated: true, completion: nil)
+                
+                self.performSegue(withIdentifier: "loginSegue", sender: nil)
             }
         }
     }

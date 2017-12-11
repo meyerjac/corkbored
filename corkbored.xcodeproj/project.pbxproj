@@ -23,6 +23,7 @@
 		85A5361A1FD91D7B0096E054 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A536191FD91D7B0096E054 /* User.swift */; };
 		85A5361C1FDB8B2A0096E054 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */; };
 		85A5361E1FDB9AA40096E054 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A5361D1FDB9AA40096E054 /* ProfileViewController.swift */; };
+		85A536241FDE612C0096E054 /* gary.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 85A536231FDE612B0096E054 /* gary.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		85A5361D1FDB9AA40096E054 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		85A536201FDBC8F50096E054 /* ProximaNovaSoft-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNovaSoft-Regular.otf"; path = "../../../../../../Downloads/tinder-app-ui-kit/Fonts/ProximaNovaSoft-Regular.otf"; sourceTree = "<group>"; };
+		85A536231FDE612B0096E054 /* gary.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = gary.jpg; sourceTree = "<group>"; };
 		AE3C97FC0800C06186AF5248 /* Pods-corkbored.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-corkbored.release.xcconfig"; path = "Pods/Target Support Files/Pods-corkbored/Pods-corkbored.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -85,6 +87,7 @@
 		852197201FCFC5AE0013D76C /* corkbored */ = {
 			isa = PBXGroup;
 			children = (
+				85A536231FDE612B0096E054 /* gary.jpg */,
 				85A5361F1FDB9B7C0096E054 /* fonts */,
 				850CF6B61FD71958000184CA /* corkbored.entitlements */,
 				852197211FCFC5AE0013D76C /* AppDelegate.swift */,
@@ -200,6 +203,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8521972F1FCFC5AE0013D76C /* LaunchScreen.storyboard in Resources */,
+				85A536241FDE612C0096E054 /* gary.jpg in Resources */,
 				850C47CB1FD209B3005F1BCC /* GoogleService-Info.plist in Resources */,
 				8521972C1FCFC5AE0013D76C /* Assets.xcassets in Resources */,
 				852197271FCFC5AE0013D76C /* Main.storyboard in Resources */,
