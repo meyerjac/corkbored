@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		75FA6D97A0F885A30033C191 /* libPods-corkbored.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D2C7A554B7518982A253BE6 /* libPods-corkbored.a */; };
 		850C47CB1FD209B3005F1BCC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 850C47CA1FD209B3005F1BCC /* GoogleService-Info.plist */; };
+		851FC8A61FDFC79C007BA2E6 /* ProximaNovaSoft-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 85A536201FDBC8F50096E054 /* ProximaNovaSoft-Regular.otf */; };
 		852197221FCFC5AE0013D76C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852197211FCFC5AE0013D76C /* AppDelegate.swift */; };
 		852197241FCFC5AE0013D76C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852197231FCFC5AE0013D76C /* ViewController.swift */; };
 		852197271FCFC5AE0013D76C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 852197251FCFC5AE0013D76C /* Main.storyboard */; };
@@ -205,6 +206,7 @@
 				8521972F1FCFC5AE0013D76C /* LaunchScreen.storyboard in Resources */,
 				85A536241FDE612C0096E054 /* gary.jpg in Resources */,
 				850C47CB1FD209B3005F1BCC /* GoogleService-Info.plist in Resources */,
+				851FC8A61FDFC79C007BA2E6 /* ProximaNovaSoft-Regular.otf in Resources */,
 				8521972C1FCFC5AE0013D76C /* Assets.xcassets in Resources */,
 				852197271FCFC5AE0013D76C /* Main.storyboard in Resources */,
 			);

@@ -15,14 +15,18 @@ class User {
     var username: String!
     var currentCity: String!
     var profilePics: Array<String>!
-    var age: String!
+    var posts: Array<String>!
+    var birthday: String!
+    var bio: String!
     
-    init(name: String, username: String, currentCity: String, profilePics: Array<String>, age: String) {
+    init(name: String, username: String, currentCity: String, profilePics: Array<String>, posts: Array<String>, birthday: String, bio: String) {
         self.name = name
         self.username = username
         self.currentCity = currentCity
         self.profilePics = profilePics
-        self.age = age
+        self.posts = posts
+        self.birthday = birthday
+        self.bio = bio
     }
     
     init(snapshot: DataSnapshot) {
@@ -32,12 +36,12 @@ class User {
         self.username = snapshotValue!["username"] as! String
         self.currentCity = snapshotValue!["currentCity"] as! String
         self.profilePics = snapshotValue!["profilePics"] as! Array
-        self.age = snapshotValue!["age"] as! String
+        self.posts = snapshotValue!["posts"] as! Array
+        self.birthday = snapshotValue!["birthday"] as! String
+        self.bio = snapshotValue!["bio"] as! String
     }
     
     func toAnyObject() -> [String: AnyObject] {
-        return ["name": name as AnyObject, "username": username as AnyObject, "currentCity": currentCity as AnyObject, "age": age as AnyObject]
+        return ["name": name as AnyObject, "username": username as AnyObject, "currentCity": currentCity as AnyObject, "profilePics": profilePics as AnyObject, "posts": posts as AnyObject, "birthday": birthday as AnyObject, "bio": bio as AnyObject]
     }
-    
-    
 }

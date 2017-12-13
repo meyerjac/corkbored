@@ -61,13 +61,13 @@ class PhoneEmailRegistrationViewController: UIViewController {
         let uid = userInfo?.uid
         let email = userInfo?.email
         
-        var delimiter = "@"
+        let delimiter = "@"
         var token = email?.components(separatedBy: delimiter)
         let username = token![0]
         
         let emptyArray = [String]()
         
-        let newUser = User(name: email!, username: username, currentCity: "", profilePics: emptyArray , age: "")
+        let newUser = User(name: "", username: username, currentCity: "", profilePics: emptyArray, posts: emptyArray, birthday: "", bio: "")
 
         ref.child("users").child(uid!).setValue(newUser.toAnyObject())
 
