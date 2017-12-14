@@ -68,7 +68,8 @@
                                 </state>
                             </button>
                         </subviews>
-                        <color key="tintColor" white="0.33000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
@@ -161,12 +162,25 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="IMB-GV-3G6">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="postCell" rowHeight="101" id="IMB-GV-3G6">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="101"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="IMB-GV-3G6" id="EeU-b9-Kqu">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="100.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="meyerjac" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="78w-Tg-WdM">
+                                                    <rect key="frame" x="40" y="11" width="61" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a7Q-NR-uU8">
+                                                    <rect key="frame" x="15" y="11" width="20" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                            </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
@@ -442,7 +456,6 @@
                             <constraint firstItem="Lvg-WU-zB7" firstAttribute="top" secondItem="9q0-oo-xSq" secondAttribute="bottom" constant="8" id="Y86-uG-aeG"/>
                             <constraint firstItem="vdJ-t2-Ihl" firstAttribute="leading" secondItem="4ad-Ln-ex2" secondAttribute="leading" constant="16" id="aBl-3C-SlY"/>
                             <constraint firstItem="Wmp-dz-gjd" firstAttribute="centerX" secondItem="Xcd-PM-ggN" secondAttribute="centerX" id="agm-oI-9QA"/>
-                            <constraint firstItem="9q0-oo-xSq" firstAttribute="leading" secondItem="4ad-Ln-ex2" secondAttribute="leading" constant="16" id="akW-Gq-EZI"/>
                             <constraint firstItem="nfi-eR-XOc" firstAttribute="bottom" secondItem="4ad-Ln-ex2" secondAttribute="bottom" id="aqZ-Ud-CUK"/>
                             <constraint firstItem="9q0-oo-xSq" firstAttribute="centerX" secondItem="Xcd-PM-ggN" secondAttribute="centerX" id="h61-gJ-lra"/>
                             <constraint firstItem="Wmp-dz-gjd" firstAttribute="top" secondItem="Yff-Bv-gFA" secondAttribute="bottom" constant="8" id="iQe-yS-m7I"/>

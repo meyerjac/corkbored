@@ -8,12 +8,15 @@
 
 import UIKit
 import Firebase
+import SVProgressHUD
 
 class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var birthday: String = "12 4 13"
     var name: String = "Jackson meyer"
     var bio: String = "hello there, default value"
     var imagePickerController = UIImagePickerController()
+    
+    
   
     @IBOutlet weak var goButton: UIButton!
     
@@ -33,8 +36,16 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     @IBAction func submitButton(_ sender: Any) {
         goButton.isEnabled = false
-    
         
+        SVProgressHUD.setDefaultAnimationType(.flat)
+        SVProgressHUD.setDefaultStyle(.dark)
+        
+        
+        SVProgressHUD.setForegroundColor(UIColor.cyan)           //Ring Color
+        SVProgressHUD.setBackgroundColor(UIColor.black)        //HUD Color
+        SVProgressHUD.setBackgroundLayerColor(UIColor.clear) //Background Color
+        SVProgressHUD.setDefaultMaskType(.clear)
+        SVProgressHUD.showProgress(0.1, status: "Creating your profile...")
         
         let userInfo = Auth.auth().currentUser
         let uid = userInfo?.uid
@@ -43,7 +54,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
             let imageName = NSUUID().uuidString
             let storageRef = Storage.storage().reference().child("profileImages").child("\(imageName).png")
-
+            SVProgressHUD.showProgress(0.2)
+        
             if let uploadData = UIImagePNGRepresentation(self.mainImage.image!) {
              
                 storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
@@ -52,8 +64,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                         print(error ?? "error")
                         return
                     }
-                    
+                    SVProgressHUD.showProgress(0.4)
                     if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
+                        SVProgressHUD.showProgress(0.6)
                         let values = ["name": self.name, "birthday": self.birthday, "profilePic": profileImageUrl]
                         
                         self.registerUserIntoDatabaseWithUid(uid: uid!, values: values as [String : AnyObject])
@@ -65,8 +78,11 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     func registerUserIntoDatabaseWithUid(uid: String, values:[String: AnyObject]) {
         var ref: DatabaseReference!
         ref = Database.database().reference()
+        SVProgressHUD.showProgress(0.7)
+        
         
         ref.child("users").child(uid).updateChildValues(values) { (err, ref) in
+            SVProgressHUD.showProgress(0.9)
             if err != nil {
                 print(err!)
                 let alert = UIAlertController(title: "Error", message: err?.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
@@ -86,7 +102,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     }
                 }))
             } else {
-                
+                 SVProgressHUD.showProgress(1.0)
+                 SVProgressHUD.dismiss()
                  self.performSegue(withIdentifier: "ontoFeedSegue", sender: nil)
             }
         }
