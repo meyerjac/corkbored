@@ -11,7 +11,7 @@ import FirebaseAuth
 import Firebase
 
 class PhoneEmailRegistrationViewController: UIViewController {
-    @IBOutlet weak var emailNextButton: UIButton!
+    @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var plusOneTextView: UILabel!
     @IBOutlet weak var phoneNumberTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
@@ -22,18 +22,36 @@ class PhoneEmailRegistrationViewController: UIViewController {
         let vc = LoginViewController()
         self.present(vc, animated: true, completion: nil)
     }
-    @IBAction func emailNextButtonClicked(_ sender: Any) {
+    
+    @IBAction func nextButtonClicked(_ sender: Any) {
+        nextButton.isEnabled = false
 
         switch (emailPhoneSegmentedControl.selectedSegmentIndex) {
+            
         case 0:
             let email: String = emailTextField.text!
             let password: String = passwordTextField.text!
             Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
                 if error != nil {
                     print(error!)
+                    let alert = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                    self.present(alert, animated: true, completion: nil)
+                    
+                    alert.addAction(UIAlertAction(title: "Try again", style: .cancel, handler: { action in
+                        switch action.style{
+                        case .cancel:
+                            self.nextButton.isEnabled = true
+                            print("cancel")
+                        case .default:
+                            self.nextButton.isEnabled = true
+                            print("default case")
+                        case .destructive:
+                            self.nextButton.isEnabled = true
+                            print("destructive case")
+                        }
+                    }))
                 } else {
                     self.handleCreateUser()
-                    
                 }
             })
             break;
@@ -50,6 +68,11 @@ class PhoneEmailRegistrationViewController: UIViewController {
         super.viewDidLoad()
         
         emailPhoneSegmentedControl.addTarget(self, action: #selector(handleValueChanged), for: .valueChanged)
+        
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     func handleCreateUser() {
@@ -65,9 +88,10 @@ class PhoneEmailRegistrationViewController: UIViewController {
         var token = email?.components(separatedBy: delimiter)
         let username = token![0]
         
-        let emptyArray = [String]()
+        var emptyArray = [String]()
+        emptyArray.append("0")
         
-        let newUser = User(name: "", username: username, currentCity: "", profilePics: emptyArray, posts: emptyArray, birthday: "", bio: "")
+        let newUser = User(name: "", username: username, currentCity: "", profilePic: "", posts: emptyArray, birthday: "", bio: "")
 
         ref.child("users").child(uid!).setValue(newUser.toAnyObject())
 

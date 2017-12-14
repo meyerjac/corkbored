@@ -12,7 +12,10 @@ import Firebase
 
 class LoginViewController: UIViewController {
     @IBOutlet weak var emailTextView: UITextField!
+    
     @IBOutlet weak var passwordTextField: UITextField!
+    
+    @IBOutlet weak var loginButton: UIButton!
     
     @IBAction func loginButtonClicked(_ sender: Any) {
        handleLogin()
@@ -33,6 +36,22 @@ class LoginViewController: UIViewController {
         Auth.auth().signIn(withEmail: email!, password: password!) { (user, error) in
             if error != nil {
                 print(error!)
+                let alert = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                self.present(alert, animated: true, completion: nil)
+                
+                alert.addAction(UIAlertAction(title: "Try again", style: .cancel, handler: { action in
+                    switch action.style{
+                    case .cancel:
+                        self.loginButton.isEnabled = true
+                        print("cancel")
+                    case .default:
+                        self.loginButton.isEnabled = true
+                        print("default case")
+                    case .destructive:
+                        self.loginButton.isEnabled = true
+                        print("destructive case")
+                    }
+                }))
             } else {
                 print("user logged in")
                 
@@ -40,21 +59,15 @@ class LoginViewController: UIViewController {
             }
         }
     }
+    
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
-    */
-
 }

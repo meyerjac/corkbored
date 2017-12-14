@@ -7,17 +7,17 @@
 //
 
 import UIKit
+import Firebase
 
 class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    var birthday = ""
-    var imagePicked = 0
-    let imagePickerController = UIImagePickerController()
+    var birthday: String = "12 4 13"
+    var name: String = "Jackson meyer"
+    var bio: String = "hello there, default value"
+    var imagePickerController = UIImagePickerController()
+  
+    @IBOutlet weak var goButton: UIButton!
     
     @IBOutlet weak var mainImage: UIImageView!
-    
-    @IBOutlet weak var topImage: UIImageView!
-    
-    @IBOutlet weak var bottomImage: UIImageView!
     
     @IBOutlet weak var firstAndLastNameTextView: UITextField!
     
@@ -32,87 +32,111 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     @IBAction func submitButton(_ sender: Any) {
-        let name = firstAndLastNameTextView.text
-        let bio = bioTextView.text
-        
-        if (name?.count)! < 6 {
-            //name is less than 6 characters, unlikely
-            print("error1")
-        }
-        if (bio?.count)! < 50 {
-            //bio is less than 50 characters, please add more
-            print("error2")
-        }
-        
-        if birthday == "" {
-            //birthday isn't correct, please add birthday
-            print("error3")
-        }
-    }
-
-    @objc func handleLargeProfileImageView(_ sender: UIImageView) {
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.savedPhotosAlbum){
-            imagePicked = 0
-            print(imagePicked)
-            present(imagePickerController, animated: true)
-        }
-    }
-
-    @objc func handleTopImageView() {
-        imagePickerController.sourceType = .photoLibrary
-        imagePickerController.delegate = self
-        imagePicked = 1
-        print(imagePicked)
-        present(imagePickerController, animated: true, completion: nil)
-    }
-
-    @objc func handleBottomImageView() {
-        imagePickerController.sourceType = .photoLibrary
-        imagePickerController.delegate = self
-        imagePicked = 2
-        print(imagePicked)
-        present(imagePickerController, animated: true, completion: nil)
-    }
+        goButton.isEnabled = false
     
         
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage
         
-        if imagePicked == 0 {
-            mainImage.image = pickedImage
-        } else if imagePicked == 1 {
-            topImage.image = pickedImage
-        } else if imagePicked == 2 {
-            bottomImage.image = pickedImage
+        let userInfo = Auth.auth().currentUser
+        let uid = userInfo?.uid
+        
+        
+        
+            let imageName = NSUUID().uuidString
+            let storageRef = Storage.storage().reference().child("profileImages").child("\(imageName).png")
+
+            if let uploadData = UIImagePNGRepresentation(self.mainImage.image!) {
+             
+                storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
+                 
+                    if error != nil {
+                        print(error ?? "error")
+                        return
+                    }
+                    
+                    if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
+                        let values = ["name": self.name, "birthday": self.birthday, "profilePic": profileImageUrl]
+                        
+                        self.registerUserIntoDatabaseWithUid(uid: uid!, values: values as [String : AnyObject])
+                    }
+                }
+        )}
+    }
+    
+    func registerUserIntoDatabaseWithUid(uid: String, values:[String: AnyObject]) {
+        var ref: DatabaseReference!
+        ref = Database.database().reference()
+        
+        ref.child("users").child(uid).updateChildValues(values) { (err, ref) in
+            if err != nil {
+                print(err!)
+                let alert = UIAlertController(title: "Error", message: err?.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                self.present(alert, animated: true, completion: nil)
+                
+                alert.addAction(UIAlertAction(title: "Try again", style: .cancel, handler: { action in
+                    switch action.style{
+                    case .cancel:
+                        self.goButton.isEnabled = true
+                        print("cancel")
+                    case .default:
+                        self.goButton.isEnabled = true
+                        print("default case")
+                    case .destructive:
+                        self.goButton.isEnabled = true
+                        print("destructive case")
+                    }
+                }))
+            } else {
+                
+                 self.performSegue(withIdentifier: "ontoFeedSegue", sender: nil)
+            }
         }
-        dismiss(animated: true)
+    }
+  
+    @objc func handleLargeProfileImageView(_ sender: UIImageView) {
+        imagePickerController.sourceType = .photoLibrary
+        imagePickerController.delegate = self
+        imagePickerController.allowsEditing = true
+        
+        present(imagePickerController, animated: true)
+    }
+        
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        var selectedImageFromPicker: UIImage?
+        
+        if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
+            selectedImageFromPicker = editedImage
+        } else if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            selectedImageFromPicker = originalImage
+        }
+        
+        if let selectedImage = selectedImageFromPicker {
+            mainImage.image = selectedImage
+        }
+        dismiss(animated: true, completion: nil)
     }
     
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
+        print("cancelled picker")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+      
         
-       
         mainImage.contentMode = .scaleAspectFit
-        topImage.contentMode = .scaleAspectFit
-        bottomImage.contentMode = .scaleAspectFit
         
         mainImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleLargeProfileImageView)))
         
-        topImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTopImageView)))
-        
-        bottomImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleBottomImageView)))
-        
         mainImage.isUserInteractionEnabled = true
-        topImage.isUserInteractionEnabled = true
-        bottomImage.isUserInteractionEnabled = true
-        
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
