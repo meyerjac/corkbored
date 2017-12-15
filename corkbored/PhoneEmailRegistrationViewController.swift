@@ -94,7 +94,6 @@ class PhoneEmailRegistrationViewController: UIViewController {
         let newUser = User(name: "", username: username, currentCity: "", profilePic: "", posts: emptyArray, birthday: "", bio: "")
 
         ref.child("users").child(uid!).setValue(newUser.toAnyObject())
-
         self.performSegue(withIdentifier: "segue1", sender: nil)
     }
     

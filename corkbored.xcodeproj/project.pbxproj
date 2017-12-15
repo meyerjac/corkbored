@@ -25,6 +25,9 @@
 		85A5361C1FDB8B2A0096E054 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */; };
 		85A5361E1FDB9AA40096E054 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A5361D1FDB9AA40096E054 /* ProfileViewController.swift */; };
 		85A536241FDE612C0096E054 /* gary.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 85A536231FDE612B0096E054 /* gary.jpg */; };
+		85F466231FE34C2F00D46D5C /* newPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F466221FE34C2F00D46D5C /* newPostViewController.swift */; };
+		85F4665C1FE391CC00D46D5C /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F4665B1FE391CC00D46D5C /* Post.swift */; };
+		85F4665E1FE3B3E100D46D5C /* WhatsOnYourMindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F4665D1FE3B3E100D46D5C /* WhatsOnYourMindViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +52,15 @@
 		85A5361D1FDB9AA40096E054 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		85A536201FDBC8F50096E054 /* ProximaNovaSoft-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNovaSoft-Regular.otf"; path = "../../../../../../Downloads/tinder-app-ui-kit/Fonts/ProximaNovaSoft-Regular.otf"; sourceTree = "<group>"; };
 		85A536231FDE612B0096E054 /* gary.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = gary.jpg; sourceTree = "<group>"; };
+		85F466221FE34C2F00D46D5C /* newPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newPostViewController.swift; sourceTree = "<group>"; };
+		85F466551FE3919600D46D5C /* icons8-more-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icons8-more-50.png"; sourceTree = "<group>"; };
+		85F466561FE3919600D46D5C /* commentBubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = commentBubble.png; sourceTree = "<group>"; };
+		85F466571FE3919600D46D5C /* facebookLike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebookLike.png; sourceTree = "<group>"; };
+		85F466581FE3919600D46D5C /* comment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comment.png; sourceTree = "<group>"; };
+		85F466591FE3919600D46D5C /* heart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart.png; sourceTree = "<group>"; };
+		85F4665A1FE3919700D46D5C /* comm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comm.png; sourceTree = "<group>"; };
+		85F4665B1FE391CC00D46D5C /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		85F4665D1FE3B3E100D46D5C /* WhatsOnYourMindViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsOnYourMindViewController.swift; sourceTree = "<group>"; };
 		AE3C97FC0800C06186AF5248 /* Pods-corkbored.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-corkbored.release.xcconfig"; path = "Pods/Target Support Files/Pods-corkbored/Pods-corkbored.release.xcconfig"; sourceTree = "<group>"; };
 		DE112B83570EAD111C300F68 /* Pods_corkbored.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_corkbored.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -88,7 +100,7 @@
 		852197201FCFC5AE0013D76C /* corkbored */ = {
 			isa = PBXGroup;
 			children = (
-				85A536231FDE612B0096E054 /* gary.jpg */,
+				85F466541FE3918F00D46D5C /* photos */,
 				85A5361F1FDB9B7C0096E054 /* fonts */,
 				850CF6B61FD71958000184CA /* corkbored.entitlements */,
 				852197211FCFC5AE0013D76C /* AppDelegate.swift */,
@@ -98,6 +110,8 @@
 				852903321FD7BC75005477CE /* UsernameViewController.swift */,
 				85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */,
 				85A5361D1FDB9AA40096E054 /* ProfileViewController.swift */,
+				85F4665D1FE3B3E100D46D5C /* WhatsOnYourMindViewController.swift */,
+				85F466221FE34C2F00D46D5C /* newPostViewController.swift */,
 				852197251FCFC5AE0013D76C /* Main.storyboard */,
 				8521972B1FCFC5AE0013D76C /* Assets.xcassets */,
 				8521972D1FCFC5AE0013D76C /* LaunchScreen.storyboard */,
@@ -105,6 +119,7 @@
 				850C47CA1FD209B3005F1BCC /* GoogleService-Info.plist */,
 				852197281FCFC5AE0013D76C /* corkbored.xcdatamodeld */,
 				85A536191FD91D7B0096E054 /* User.swift */,
+				85F4665B1FE391CC00D46D5C /* Post.swift */,
 			);
 			path = corkbored;
 			sourceTree = "<group>";
@@ -115,6 +130,20 @@
 				85A536201FDBC8F50096E054 /* ProximaNovaSoft-Regular.otf */,
 			);
 			path = fonts;
+			sourceTree = "<group>";
+		};
+		85F466541FE3918F00D46D5C /* photos */ = {
+			isa = PBXGroup;
+			children = (
+				85F466581FE3919600D46D5C /* comment.png */,
+				85F466551FE3919600D46D5C /* icons8-more-50.png */,
+				85F4665A1FE3919700D46D5C /* comm.png */,
+				85F466591FE3919600D46D5C /* heart.png */,
+				85F466561FE3919600D46D5C /* commentBubble.png */,
+				85F466571FE3919600D46D5C /* facebookLike.png */,
+				85A536231FDE612B0096E054 /* gary.jpg */,
+			);
+			path = photos;
 			sourceTree = "<group>";
 		};
 		B77457943834D5573D9ADCB0 /* Pods */ = {
@@ -285,11 +314,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				8529032F1FD75602005477CE /* LoginViewController.swift in Sources */,
+				85F4665C1FE391CC00D46D5C /* Post.swift in Sources */,
 				85A5361A1FD91D7B0096E054 /* User.swift in Sources */,
 				852197241FCFC5AE0013D76C /* ViewController.swift in Sources */,
 				8521972A1FCFC5AE0013D76C /* corkbored.xcdatamodeld in Sources */,
 				852903311FD75675005477CE /* PhoneEmailRegistrationViewController.swift in Sources */,
+				85F466231FE34C2F00D46D5C /* newPostViewController.swift in Sources */,
 				852903331FD7BC75005477CE /* UsernameViewController.swift in Sources */,
+				85F4665E1FE3B3E100D46D5C /* WhatsOnYourMindViewController.swift in Sources */,
 				85A5361E1FDB9AA40096E054 /* ProfileViewController.swift in Sources */,
 				85A5361C1FDB8B2A0096E054 /* FeedViewController.swift in Sources */,
 				852197221FCFC5AE0013D76C /* AppDelegate.swift in Sources */,

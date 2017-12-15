@@ -2,14 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need this!</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) needs your location to serve you better when in use</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>$(PRODUCT_NAME) needs your location to serve you better</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>needs location to fetch posts from people around you</string>
 	<key>CFBundleSignature</key>
 	<string></string>
 	<key>NSHumanReadableCopyright</key>
@@ -66,10 +58,18 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location so we can give you relevent posts near you!</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Need t use camera</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Need to use photolibrary</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>CFBundleIconFile</key>
+	<string></string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

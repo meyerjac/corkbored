@@ -9,16 +9,24 @@
 import UIKit
 import Firebase
 import SVProgressHUD
+import CoreLocation
 
-class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    var birthday: String = "12 4 13"
+class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,  CLLocationManagerDelegate {
+    
+    var locationManager = CLLocationManager()
+    var geocoder = CLGeocoder()
+    var userLocation: CLLocation = CLLocation()
+    var currentCity:String = ""
+    var currentStateCode: String = ""
+    
+    var birthday: String = "5 12 92"
     var name: String = "Jackson meyer"
     var bio: String = "hello there, default value"
     var imagePickerController = UIImagePickerController()
     
-    
-  
     @IBOutlet weak var goButton: UIButton!
+    
+    @IBOutlet weak var changeProfilePhoto: UIButton!
     
     @IBOutlet weak var mainImage: UIImageView!
     
@@ -36,6 +44,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     @IBAction func submitButton(_ sender: Any) {
         goButton.isEnabled = false
+        bio = (bioTextView.text)!
         
         SVProgressHUD.setDefaultAnimationType(.flat)
         SVProgressHUD.setDefaultStyle(.dark)
@@ -49,8 +58,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         let userInfo = Auth.auth().currentUser
         let uid = userInfo?.uid
-        
-        
         
             let imageName = NSUUID().uuidString
             let storageRef = Storage.storage().reference().child("profileImages").child("\(imageName).png")
@@ -67,7 +74,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     SVProgressHUD.showProgress(0.4)
                     if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
                         SVProgressHUD.showProgress(0.6)
-                        let values = ["name": self.name, "birthday": self.birthday, "profilePic": profileImageUrl]
+                        let values = [ "bio": self.bio, "birthday": self.birthday,"currentCity": self.currentCity, "currentState": self.currentStateCode, "name": self.name,"profilePic": profileImageUrl]
                         
                         self.registerUserIntoDatabaseWithUid(uid: uid!, values: values as [String : AnyObject])
                     }
@@ -133,30 +140,58 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         dismiss(animated: true, completion: nil)
     }
     
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        self.userLocation = locations[0]
+        print(userLocation)
+        
+        geocoder.reverseGeocodeLocation(userLocation,
+            completionHandler: { (placemarks, error) in
+                if error == nil {
+                    let location = placemarks?[0]
+                    print(location!)
+                    self.currentCity = (location?.locality)!
+                    print(self.currentCity)
+                    self.currentStateCode = (location?.administrativeArea)!
+                    print(self.currentStateCode)
+            }
+                else {
+            // An error occurred during geocoding.
+                    print("couldnt get users location")
+                }
+        })
+    }
+    
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
         print("cancelled picker")
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-      
-        
-        mainImage.contentMode = .scaleAspectFit
-        
-        mainImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleLargeProfileImageView)))
-        
-        mainImage.isUserInteractionEnabled = true
-    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
     
-   
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+        
+        changeProfilePhoto.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleLargeProfileImageView)))
+        changeProfilePhoto.isUserInteractionEnabled = true
+        
+        mainImage.contentMode = .scaleAspectFit
+        mainImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleLargeProfileImageView)))
+        mainImage.isUserInteractionEnabled = true
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 }
+
+    
+
