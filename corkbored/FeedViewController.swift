@@ -10,30 +10,40 @@ import UIKit
 
 class FeedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    
-    @IBOutlet weak var TopView: UIView!
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "postCell")
-        cell.textLabel?.text = "top row"
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as! FeedViewControllerTableViewCell
+        
+        cell.messageBody.text = "There is an annoying bug happenening!"
+        
+        cell.profilePhotoImageView.image = UIImage(named: "elon.jpg")
+        cell.profilePhotoImageView.layer.masksToBounds = false
+        cell.profilePhotoImageView.layer.borderColor = UIColor.black.cgColor
+        cell.profilePhotoImageView.layer.cornerRadius = cell.profilePhotoImageView.frame.height/2
+        cell.profilePhotoImageView.clipsToBounds = true
+        
+        cell.usernameTextField.text = "meyerjac"
+        
+        
         return cell
+        
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 125
     }
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
-       
-        TopView.addGestureRecognizer(UITapGestureRecognizer(target: FeedViewController(), action: #selector(topViewClicked)))
+    
         // Do any additional setup after loading the view.
     }
-    
-    @objc func topViewClicked() {
-    print("it woorked")
-    }
+
     
     
     override func didReceiveMemoryWarning() {

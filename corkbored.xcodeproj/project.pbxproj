@@ -27,7 +27,8 @@
 		85A536241FDE612C0096E054 /* gary.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 85A536231FDE612B0096E054 /* gary.jpg */; };
 		85F466231FE34C2F00D46D5C /* newPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F466221FE34C2F00D46D5C /* newPostViewController.swift */; };
 		85F4665C1FE391CC00D46D5C /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F4665B1FE391CC00D46D5C /* Post.swift */; };
-		85F4665E1FE3B3E100D46D5C /* WhatsOnYourMindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F4665D1FE3B3E100D46D5C /* WhatsOnYourMindViewController.swift */; };
+		85F466601FE3B76100D46D5C /* elon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 85F4665F1FE3B76100D46D5C /* elon.jpg */; };
+		85F466621FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,7 +61,8 @@
 		85F466591FE3919600D46D5C /* heart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart.png; sourceTree = "<group>"; };
 		85F4665A1FE3919700D46D5C /* comm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comm.png; sourceTree = "<group>"; };
 		85F4665B1FE391CC00D46D5C /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
-		85F4665D1FE3B3E100D46D5C /* WhatsOnYourMindViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsOnYourMindViewController.swift; sourceTree = "<group>"; };
+		85F4665F1FE3B76100D46D5C /* elon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = elon.jpg; path = ../../../../../elon.jpg; sourceTree = "<group>"; };
+		85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewControllerTableViewCell.swift; sourceTree = "<group>"; };
 		AE3C97FC0800C06186AF5248 /* Pods-corkbored.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-corkbored.release.xcconfig"; path = "Pods/Target Support Files/Pods-corkbored/Pods-corkbored.release.xcconfig"; sourceTree = "<group>"; };
 		DE112B83570EAD111C300F68 /* Pods_corkbored.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_corkbored.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -109,8 +111,8 @@
 				852903301FD75675005477CE /* PhoneEmailRegistrationViewController.swift */,
 				852903321FD7BC75005477CE /* UsernameViewController.swift */,
 				85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */,
+				85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */,
 				85A5361D1FDB9AA40096E054 /* ProfileViewController.swift */,
-				85F4665D1FE3B3E100D46D5C /* WhatsOnYourMindViewController.swift */,
 				85F466221FE34C2F00D46D5C /* newPostViewController.swift */,
 				852197251FCFC5AE0013D76C /* Main.storyboard */,
 				8521972B1FCFC5AE0013D76C /* Assets.xcassets */,
@@ -135,6 +137,7 @@
 		85F466541FE3918F00D46D5C /* photos */ = {
 			isa = PBXGroup;
 			children = (
+				85F4665F1FE3B76100D46D5C /* elon.jpg */,
 				85F466581FE3919600D46D5C /* comment.png */,
 				85F466551FE3919600D46D5C /* icons8-more-50.png */,
 				85F4665A1FE3919700D46D5C /* comm.png */,
@@ -232,6 +235,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85F466601FE3B76100D46D5C /* elon.jpg in Resources */,
 				8521972F1FCFC5AE0013D76C /* LaunchScreen.storyboard in Resources */,
 				85A536241FDE612C0096E054 /* gary.jpg in Resources */,
 				850C47CB1FD209B3005F1BCC /* GoogleService-Info.plist in Resources */,
@@ -321,9 +325,9 @@
 				852903311FD75675005477CE /* PhoneEmailRegistrationViewController.swift in Sources */,
 				85F466231FE34C2F00D46D5C /* newPostViewController.swift in Sources */,
 				852903331FD7BC75005477CE /* UsernameViewController.swift in Sources */,
-				85F4665E1FE3B3E100D46D5C /* WhatsOnYourMindViewController.swift in Sources */,
 				85A5361E1FDB9AA40096E054 /* ProfileViewController.swift in Sources */,
 				85A5361C1FDB8B2A0096E054 /* FeedViewController.swift in Sources */,
+				85F466621FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift in Sources */,
 				852197221FCFC5AE0013D76C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
