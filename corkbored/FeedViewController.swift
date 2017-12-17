@@ -7,8 +7,15 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
 
 class FeedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    var currentCity: String = ""
+    var username: String = ""
+    var messageBody: String = ""
+    var profilePhoto: String = ""
+
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
@@ -28,7 +35,6 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         cell.usernameTextField.text = "meyerjac"
         
-        
         return cell
         
     }
@@ -40,7 +46,20 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
+        let userInfo = Auth.auth().currentUser
+        let uid = userInfo?.uid
+        
+        var ref: DatabaseReference!
+        ref = Database.database().reference()
+        
+        ref.child("users").child(uid!).observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            let value = snapshot.value as? NSDictionary
+            self.currentCity = value?["currentCity"] as? String ?? ""
+        }) { (error) in
+            print(error.localizedDescription)
+        }
         // Do any additional setup after loading the view.
     }
 

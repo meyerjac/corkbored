@@ -29,6 +29,13 @@
 		85F4665C1FE391CC00D46D5C /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F4665B1FE391CC00D46D5C /* Post.swift */; };
 		85F466601FE3B76100D46D5C /* elon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 85F4665F1FE3B76100D46D5C /* elon.jpg */; };
 		85F466621FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */; };
+		85F466661FE5FF7900D46D5C /* MessageTypeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F466651FE5FF7900D46D5C /* MessageTypeTableViewCell.swift */; };
+		85F4666B1FE600FF00D46D5C /* pricetag.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F466671FE600FF00D46D5C /* pricetag.png */; };
+		85F4666C1FE600FF00D46D5C /* text.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F466681FE600FF00D46D5C /* text.png */; };
+		85F4666D1FE600FF00D46D5C /* calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F466691FE600FF00D46D5C /* calendar.png */; };
+		85F4666E1FE600FF00D46D5C /* picture.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F4666A1FE600FF00D46D5C /* picture.png */; };
+		85F466701FE6016100D46D5C /* rgb.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F4666F1FE6016100D46D5C /* rgb.png */; };
+		85F466731FE6573F00D46D5C /* BackgroundColorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F466721FE6573F00D46D5C /* BackgroundColorCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +70,13 @@
 		85F4665B1FE391CC00D46D5C /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		85F4665F1FE3B76100D46D5C /* elon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = elon.jpg; path = ../../../../../elon.jpg; sourceTree = "<group>"; };
 		85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewControllerTableViewCell.swift; sourceTree = "<group>"; };
+		85F466651FE5FF7900D46D5C /* MessageTypeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTypeTableViewCell.swift; sourceTree = "<group>"; };
+		85F466671FE600FF00D46D5C /* pricetag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pricetag.png; path = "../../../../../../Downloads/my-icons-collection/png/pricetag.png"; sourceTree = "<group>"; };
+		85F466681FE600FF00D46D5C /* text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = text.png; path = "../../../../../../Downloads/my-icons-collection/png/text.png"; sourceTree = "<group>"; };
+		85F466691FE600FF00D46D5C /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendar.png; path = "../../../../../../Downloads/my-icons-collection/png/calendar.png"; sourceTree = "<group>"; };
+		85F4666A1FE600FF00D46D5C /* picture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = picture.png; path = "../../../../../../Downloads/my-icons-collection/png/picture.png"; sourceTree = "<group>"; };
+		85F4666F1FE6016100D46D5C /* rgb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rgb.png; path = ../../../../../../Downloads/rgb.png; sourceTree = "<group>"; };
+		85F466721FE6573F00D46D5C /* BackgroundColorCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundColorCollectionViewCell.swift; sourceTree = "<group>"; };
 		AE3C97FC0800C06186AF5248 /* Pods-corkbored.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-corkbored.release.xcconfig"; path = "Pods/Target Support Files/Pods-corkbored/Pods-corkbored.release.xcconfig"; sourceTree = "<group>"; };
 		DE112B83570EAD111C300F68 /* Pods_corkbored.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_corkbored.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -102,6 +116,7 @@
 		852197201FCFC5AE0013D76C /* corkbored */ = {
 			isa = PBXGroup;
 			children = (
+				85F466711FE601F600D46D5C /* models */,
 				85F466541FE3918F00D46D5C /* photos */,
 				85A5361F1FDB9B7C0096E054 /* fonts */,
 				850CF6B61FD71958000184CA /* corkbored.entitlements */,
@@ -111,17 +126,17 @@
 				852903301FD75675005477CE /* PhoneEmailRegistrationViewController.swift */,
 				852903321FD7BC75005477CE /* UsernameViewController.swift */,
 				85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */,
+				85F466651FE5FF7900D46D5C /* MessageTypeTableViewCell.swift */,
 				85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */,
 				85A5361D1FDB9AA40096E054 /* ProfileViewController.swift */,
 				85F466221FE34C2F00D46D5C /* newPostViewController.swift */,
 				852197251FCFC5AE0013D76C /* Main.storyboard */,
+				85F466721FE6573F00D46D5C /* BackgroundColorCollectionViewCell.swift */,
 				8521972B1FCFC5AE0013D76C /* Assets.xcassets */,
 				8521972D1FCFC5AE0013D76C /* LaunchScreen.storyboard */,
 				852197301FCFC5AE0013D76C /* Info.plist */,
 				850C47CA1FD209B3005F1BCC /* GoogleService-Info.plist */,
 				852197281FCFC5AE0013D76C /* corkbored.xcdatamodeld */,
-				85A536191FD91D7B0096E054 /* User.swift */,
-				85F4665B1FE391CC00D46D5C /* Post.swift */,
 			);
 			path = corkbored;
 			sourceTree = "<group>";
@@ -137,6 +152,11 @@
 		85F466541FE3918F00D46D5C /* photos */ = {
 			isa = PBXGroup;
 			children = (
+				85F4666F1FE6016100D46D5C /* rgb.png */,
+				85F466691FE600FF00D46D5C /* calendar.png */,
+				85F4666A1FE600FF00D46D5C /* picture.png */,
+				85F466671FE600FF00D46D5C /* pricetag.png */,
+				85F466681FE600FF00D46D5C /* text.png */,
 				85F4665F1FE3B76100D46D5C /* elon.jpg */,
 				85F466581FE3919600D46D5C /* comment.png */,
 				85F466551FE3919600D46D5C /* icons8-more-50.png */,
@@ -147,6 +167,15 @@
 				85A536231FDE612B0096E054 /* gary.jpg */,
 			);
 			path = photos;
+			sourceTree = "<group>";
+		};
+		85F466711FE601F600D46D5C /* models */ = {
+			isa = PBXGroup;
+			children = (
+				85A536191FD91D7B0096E054 /* User.swift */,
+				85F4665B1FE391CC00D46D5C /* Post.swift */,
+			);
+			path = models;
 			sourceTree = "<group>";
 		};
 		B77457943834D5573D9ADCB0 /* Pods */ = {
@@ -237,10 +266,15 @@
 			files = (
 				85F466601FE3B76100D46D5C /* elon.jpg in Resources */,
 				8521972F1FCFC5AE0013D76C /* LaunchScreen.storyboard in Resources */,
+				85F4666C1FE600FF00D46D5C /* text.png in Resources */,
 				85A536241FDE612C0096E054 /* gary.jpg in Resources */,
 				850C47CB1FD209B3005F1BCC /* GoogleService-Info.plist in Resources */,
 				851FC8A61FDFC79C007BA2E6 /* ProximaNovaSoft-Regular.otf in Resources */,
 				8521972C1FCFC5AE0013D76C /* Assets.xcassets in Resources */,
+				85F4666E1FE600FF00D46D5C /* picture.png in Resources */,
+				85F4666D1FE600FF00D46D5C /* calendar.png in Resources */,
+				85F466701FE6016100D46D5C /* rgb.png in Resources */,
+				85F4666B1FE600FF00D46D5C /* pricetag.png in Resources */,
 				852197271FCFC5AE0013D76C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -319,6 +353,7 @@
 			files = (
 				8529032F1FD75602005477CE /* LoginViewController.swift in Sources */,
 				85F4665C1FE391CC00D46D5C /* Post.swift in Sources */,
+				85F466731FE6573F00D46D5C /* BackgroundColorCollectionViewCell.swift in Sources */,
 				85A5361A1FD91D7B0096E054 /* User.swift in Sources */,
 				852197241FCFC5AE0013D76C /* ViewController.swift in Sources */,
 				8521972A1FCFC5AE0013D76C /* corkbored.xcdatamodeld in Sources */,
@@ -328,6 +363,7 @@
 				85A5361E1FDB9AA40096E054 /* ProfileViewController.swift in Sources */,
 				85A5361C1FDB8B2A0096E054 /* FeedViewController.swift in Sources */,
 				85F466621FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift in Sources */,
+				85F466661FE5FF7900D46D5C /* MessageTypeTableViewCell.swift in Sources */,
 				852197221FCFC5AE0013D76C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

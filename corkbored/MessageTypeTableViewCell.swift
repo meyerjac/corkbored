@@ -1,20 +1,20 @@
 //
-//  FeedViewControllerTableViewCell.swift
+//  MessageTypeTableViewCell.swift
 //  corkbored
 //
-//  Created by Jackson Meyer on 12/15/17.
+//  Created by Jackson Meyer on 12/16/17.
 //  Copyright © 2017 Jackson Meyer. All rights reserved.
 //
 
 import UIKit
 
-class FeedViewControllerTableViewCell: UITableViewCell {
+class MessageTypeTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var messageTypeImage: UIImageView!
+    
+    @IBOutlet weak var messageTypeLabel: UILabel!
+    
 
-    @IBOutlet weak var messageBody: UILabel!
-    @IBOutlet weak var usernameTextField: UILabel!
-    @IBOutlet weak var profilePhotoImageView: UIImageView!
-    
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -25,5 +25,4 @@ class FeedViewControllerTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
 }
