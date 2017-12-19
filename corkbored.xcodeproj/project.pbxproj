@@ -21,21 +21,30 @@
 		852903331FD7BC75005477CE /* UsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852903321FD7BC75005477CE /* UsernameViewController.swift */; };
 		85430BE21FD229A300DB35B6 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85430BE01FD229A300DB35B6 /* FBSDKCoreKit.framework */; };
 		85430BE31FD229A300DB35B6 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85430BE11FD229A300DB35B6 /* FBSDKLoginKit.framework */; };
+		854824AA1FE8B3370046DD4C /* createPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854824A91FE8B3370046DD4C /* createPostViewController.swift */; };
+		8558609C1FE8EC4C002FE655 /* NormalPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8558609B1FE8EC4C002FE655 /* NormalPostViewController.swift */; };
 		85A5361A1FD91D7B0096E054 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A536191FD91D7B0096E054 /* User.swift */; };
 		85A5361C1FDB8B2A0096E054 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */; };
 		85A5361E1FDB9AA40096E054 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A5361D1FDB9AA40096E054 /* ProfileViewController.swift */; };
 		85A536241FDE612C0096E054 /* gary.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 85A536231FDE612B0096E054 /* gary.jpg */; };
-		85F466231FE34C2F00D46D5C /* newPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F466221FE34C2F00D46D5C /* newPostViewController.swift */; };
+		85D513261FE8C29600DF4BC4 /* postTypeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D513251FE8C29600DF4BC4 /* postTypeTableViewCell.swift */; };
+		85E945491FE8F56900E4A0C3 /* postBackgroundCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E945481FE8F56900E4A0C3 /* postBackgroundCollectionViewCell.swift */; };
+		85E945621FE9016800E4A0C3 /* 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 85E9455E1FE9016700E4A0C3 /* 3.png */; };
+		85E945631FE9016800E4A0C3 /* 4.png in Resources */ = {isa = PBXBuildFile; fileRef = 85E9455F1FE9016700E4A0C3 /* 4.png */; };
+		85E945641FE9016800E4A0C3 /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 85E945601FE9016800E4A0C3 /* 1.png */; };
+		85E945651FE9016800E4A0C3 /* 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 85E945611FE9016800E4A0C3 /* 2.png */; };
+		85E945681FE9018600E4A0C3 /* 6.png in Resources */ = {isa = PBXBuildFile; fileRef = 85E945661FE9018600E4A0C3 /* 6.png */; };
+		85E945691FE9018600E4A0C3 /* 5.png in Resources */ = {isa = PBXBuildFile; fileRef = 85E945671FE9018600E4A0C3 /* 5.png */; };
+		85E9456B1FE90D5E00E4A0C3 /* sellPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E9456A1FE90D5E00E4A0C3 /* sellPostViewController.swift */; };
+		85E9456D1FE90DA500E4A0C3 /* eventPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E9456C1FE90DA500E4A0C3 /* eventPostViewController.swift */; };
 		85F4665C1FE391CC00D46D5C /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F4665B1FE391CC00D46D5C /* Post.swift */; };
 		85F466601FE3B76100D46D5C /* elon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 85F4665F1FE3B76100D46D5C /* elon.jpg */; };
 		85F466621FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */; };
-		85F466661FE5FF7900D46D5C /* MessageTypeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F466651FE5FF7900D46D5C /* MessageTypeTableViewCell.swift */; };
 		85F4666B1FE600FF00D46D5C /* pricetag.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F466671FE600FF00D46D5C /* pricetag.png */; };
 		85F4666C1FE600FF00D46D5C /* text.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F466681FE600FF00D46D5C /* text.png */; };
 		85F4666D1FE600FF00D46D5C /* calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F466691FE600FF00D46D5C /* calendar.png */; };
 		85F4666E1FE600FF00D46D5C /* picture.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F4666A1FE600FF00D46D5C /* picture.png */; };
 		85F466701FE6016100D46D5C /* rgb.png in Resources */ = {isa = PBXBuildFile; fileRef = 85F4666F1FE6016100D46D5C /* rgb.png */; };
-		85F466731FE6573F00D46D5C /* BackgroundColorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F466721FE6573F00D46D5C /* BackgroundColorCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,12 +64,23 @@
 		852903321FD7BC75005477CE /* UsernameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameViewController.swift; sourceTree = "<group>"; };
 		85430BE01FD229A300DB35B6 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../DOCUMENTS/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		85430BE11FD229A300DB35B6 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../DOCUMENTS/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		854824A91FE8B3370046DD4C /* createPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createPostViewController.swift; sourceTree = "<group>"; };
+		8558609B1FE8EC4C002FE655 /* NormalPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalPostViewController.swift; sourceTree = "<group>"; };
 		85A536191FD91D7B0096E054 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		85A5361D1FDB9AA40096E054 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		85A536201FDBC8F50096E054 /* ProximaNovaSoft-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNovaSoft-Regular.otf"; path = "../../../../../../Downloads/tinder-app-ui-kit/Fonts/ProximaNovaSoft-Regular.otf"; sourceTree = "<group>"; };
 		85A536231FDE612B0096E054 /* gary.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = gary.jpg; sourceTree = "<group>"; };
-		85F466221FE34C2F00D46D5C /* newPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newPostViewController.swift; sourceTree = "<group>"; };
+		85D513251FE8C29600DF4BC4 /* postTypeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = postTypeTableViewCell.swift; sourceTree = "<group>"; };
+		85E945481FE8F56900E4A0C3 /* postBackgroundCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = postBackgroundCollectionViewCell.swift; sourceTree = "<group>"; };
+		85E9455E1FE9016700E4A0C3 /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 3.png; path = ../../../../../../../Downloads/jpg2png/3.png; sourceTree = "<group>"; };
+		85E9455F1FE9016700E4A0C3 /* 4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 4.png; path = ../../../../../../../Downloads/jpg2png/4.png; sourceTree = "<group>"; };
+		85E945601FE9016800E4A0C3 /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 1.png; path = ../../../../../../../Downloads/jpg2png/1.png; sourceTree = "<group>"; };
+		85E945611FE9016800E4A0C3 /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 2.png; path = ../../../../../../../Downloads/jpg2png/2.png; sourceTree = "<group>"; };
+		85E945661FE9018600E4A0C3 /* 6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 6.png; path = ../../../../../../6.png; sourceTree = "<group>"; };
+		85E945671FE9018600E4A0C3 /* 5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 5.png; path = ../../../../../../5.png; sourceTree = "<group>"; };
+		85E9456A1FE90D5E00E4A0C3 /* sellPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sellPostViewController.swift; sourceTree = "<group>"; };
+		85E9456C1FE90DA500E4A0C3 /* eventPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = eventPostViewController.swift; sourceTree = "<group>"; };
 		85F466551FE3919600D46D5C /* icons8-more-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icons8-more-50.png"; sourceTree = "<group>"; };
 		85F466561FE3919600D46D5C /* commentBubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = commentBubble.png; sourceTree = "<group>"; };
 		85F466571FE3919600D46D5C /* facebookLike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebookLike.png; sourceTree = "<group>"; };
@@ -70,13 +90,11 @@
 		85F4665B1FE391CC00D46D5C /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		85F4665F1FE3B76100D46D5C /* elon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = elon.jpg; path = ../../../../../elon.jpg; sourceTree = "<group>"; };
 		85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewControllerTableViewCell.swift; sourceTree = "<group>"; };
-		85F466651FE5FF7900D46D5C /* MessageTypeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTypeTableViewCell.swift; sourceTree = "<group>"; };
 		85F466671FE600FF00D46D5C /* pricetag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pricetag.png; path = "../../../../../../Downloads/my-icons-collection/png/pricetag.png"; sourceTree = "<group>"; };
 		85F466681FE600FF00D46D5C /* text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = text.png; path = "../../../../../../Downloads/my-icons-collection/png/text.png"; sourceTree = "<group>"; };
 		85F466691FE600FF00D46D5C /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendar.png; path = "../../../../../../Downloads/my-icons-collection/png/calendar.png"; sourceTree = "<group>"; };
 		85F4666A1FE600FF00D46D5C /* picture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = picture.png; path = "../../../../../../Downloads/my-icons-collection/png/picture.png"; sourceTree = "<group>"; };
 		85F4666F1FE6016100D46D5C /* rgb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rgb.png; path = ../../../../../../Downloads/rgb.png; sourceTree = "<group>"; };
-		85F466721FE6573F00D46D5C /* BackgroundColorCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundColorCollectionViewCell.swift; sourceTree = "<group>"; };
 		AE3C97FC0800C06186AF5248 /* Pods-corkbored.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-corkbored.release.xcconfig"; path = "Pods/Target Support Files/Pods-corkbored/Pods-corkbored.release.xcconfig"; sourceTree = "<group>"; };
 		DE112B83570EAD111C300F68 /* Pods_corkbored.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_corkbored.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -120,18 +138,17 @@
 				85F466541FE3918F00D46D5C /* photos */,
 				85A5361F1FDB9B7C0096E054 /* fonts */,
 				850CF6B61FD71958000184CA /* corkbored.entitlements */,
+				85D513271FE8C54000DF4BC4 /* login */,
 				852197211FCFC5AE0013D76C /* AppDelegate.swift */,
-				852197231FCFC5AE0013D76C /* ViewController.swift */,
-				8529032E1FD75602005477CE /* LoginViewController.swift */,
-				852903301FD75675005477CE /* PhoneEmailRegistrationViewController.swift */,
-				852903321FD7BC75005477CE /* UsernameViewController.swift */,
+				854824A91FE8B3370046DD4C /* createPostViewController.swift */,
+				8558609B1FE8EC4C002FE655 /* NormalPostViewController.swift */,
+				85E9456A1FE90D5E00E4A0C3 /* sellPostViewController.swift */,
+				85E9456C1FE90DA500E4A0C3 /* eventPostViewController.swift */,
 				85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */,
-				85F466651FE5FF7900D46D5C /* MessageTypeTableViewCell.swift */,
+				85E945481FE8F56900E4A0C3 /* postBackgroundCollectionViewCell.swift */,
 				85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */,
-				85A5361D1FDB9AA40096E054 /* ProfileViewController.swift */,
-				85F466221FE34C2F00D46D5C /* newPostViewController.swift */,
+				85D513251FE8C29600DF4BC4 /* postTypeTableViewCell.swift */,
 				852197251FCFC5AE0013D76C /* Main.storyboard */,
-				85F466721FE6573F00D46D5C /* BackgroundColorCollectionViewCell.swift */,
 				8521972B1FCFC5AE0013D76C /* Assets.xcassets */,
 				8521972D1FCFC5AE0013D76C /* LaunchScreen.storyboard */,
 				852197301FCFC5AE0013D76C /* Info.plist */,
@@ -149,9 +166,35 @@
 			path = fonts;
 			sourceTree = "<group>";
 		};
+		85D513271FE8C54000DF4BC4 /* login */ = {
+			isa = PBXGroup;
+			children = (
+				852197231FCFC5AE0013D76C /* ViewController.swift */,
+				8529032E1FD75602005477CE /* LoginViewController.swift */,
+				852903301FD75675005477CE /* PhoneEmailRegistrationViewController.swift */,
+				852903321FD7BC75005477CE /* UsernameViewController.swift */,
+				85A5361D1FDB9AA40096E054 /* ProfileViewController.swift */,
+			);
+			path = login;
+			sourceTree = "<group>";
+		};
+		85E945311FE8F3BF00E4A0C3 /* postBackgrounds */ = {
+			isa = PBXGroup;
+			children = (
+				85E945601FE9016800E4A0C3 /* 1.png */,
+				85E945611FE9016800E4A0C3 /* 2.png */,
+				85E9455E1FE9016700E4A0C3 /* 3.png */,
+				85E9455F1FE9016700E4A0C3 /* 4.png */,
+				85E945671FE9018600E4A0C3 /* 5.png */,
+				85E945661FE9018600E4A0C3 /* 6.png */,
+			);
+			path = postBackgrounds;
+			sourceTree = "<group>";
+		};
 		85F466541FE3918F00D46D5C /* photos */ = {
 			isa = PBXGroup;
 			children = (
+				85E945311FE8F3BF00E4A0C3 /* postBackgrounds */,
 				85F4666F1FE6016100D46D5C /* rgb.png */,
 				85F466691FE600FF00D46D5C /* calendar.png */,
 				85F4666A1FE600FF00D46D5C /* picture.png */,
@@ -237,6 +280,9 @@
 							com.apple.Keychain = {
 								enabled = 1;
 							};
+							com.apple.Push = {
+								enabled = 1;
+							};
 						};
 					};
 				};
@@ -270,10 +316,16 @@
 				85A536241FDE612C0096E054 /* gary.jpg in Resources */,
 				850C47CB1FD209B3005F1BCC /* GoogleService-Info.plist in Resources */,
 				851FC8A61FDFC79C007BA2E6 /* ProximaNovaSoft-Regular.otf in Resources */,
+				85E945681FE9018600E4A0C3 /* 6.png in Resources */,
 				8521972C1FCFC5AE0013D76C /* Assets.xcassets in Resources */,
 				85F4666E1FE600FF00D46D5C /* picture.png in Resources */,
+				85E945631FE9016800E4A0C3 /* 4.png in Resources */,
+				85E945641FE9016800E4A0C3 /* 1.png in Resources */,
+				85E945651FE9016800E4A0C3 /* 2.png in Resources */,
+				85E945621FE9016800E4A0C3 /* 3.png in Resources */,
 				85F4666D1FE600FF00D46D5C /* calendar.png in Resources */,
 				85F466701FE6016100D46D5C /* rgb.png in Resources */,
+				85E945691FE9018600E4A0C3 /* 5.png in Resources */,
 				85F4666B1FE600FF00D46D5C /* pricetag.png in Resources */,
 				852197271FCFC5AE0013D76C /* Main.storyboard in Resources */,
 			);
@@ -289,7 +341,14 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-corkbored/Pods-corkbored-resources.sh",
-				"${PODS_ROOT}/SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle",
+				$PODS_CONFIGURATION_BUILD_DIR/FirebaseUI/FirebaseAuthUI.bundle,
+				$PODS_CONFIGURATION_BUILD_DIR/FirebaseUI/FirebaseFacebookAuthUI.bundle,
+				$PODS_CONFIGURATION_BUILD_DIR/FirebaseUI/FirebaseGoogleAuthUI.bundle,
+				$PODS_CONFIGURATION_BUILD_DIR/FirebaseUI/FirebasePhoneAuthUI.bundle,
+				$PODS_CONFIGURATION_BUILD_DIR/FirebaseUI/FirebaseTwitterAuthUI.bundle,
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterKitResources.bundle",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterShareExtensionUIResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -307,17 +366,39 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-corkbored/Pods-corkbored-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
+				"${BUILT_PRODUCTS_DIR}/BoringSSL/openssl.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC/GRPCClient.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-ProtoRPC/ProtoRPC.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-RxLibrary/RxLibrary.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtoRPC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxLibrary.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -352,18 +433,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				8529032F1FD75602005477CE /* LoginViewController.swift in Sources */,
+				854824AA1FE8B3370046DD4C /* createPostViewController.swift in Sources */,
+				85E945491FE8F56900E4A0C3 /* postBackgroundCollectionViewCell.swift in Sources */,
 				85F4665C1FE391CC00D46D5C /* Post.swift in Sources */,
-				85F466731FE6573F00D46D5C /* BackgroundColorCollectionViewCell.swift in Sources */,
+				85D513261FE8C29600DF4BC4 /* postTypeTableViewCell.swift in Sources */,
 				85A5361A1FD91D7B0096E054 /* User.swift in Sources */,
+				85E9456D1FE90DA500E4A0C3 /* eventPostViewController.swift in Sources */,
+				8558609C1FE8EC4C002FE655 /* NormalPostViewController.swift in Sources */,
 				852197241FCFC5AE0013D76C /* ViewController.swift in Sources */,
 				8521972A1FCFC5AE0013D76C /* corkbored.xcdatamodeld in Sources */,
 				852903311FD75675005477CE /* PhoneEmailRegistrationViewController.swift in Sources */,
-				85F466231FE34C2F00D46D5C /* newPostViewController.swift in Sources */,
 				852903331FD7BC75005477CE /* UsernameViewController.swift in Sources */,
 				85A5361E1FDB9AA40096E054 /* ProfileViewController.swift in Sources */,
+				85E9456B1FE90D5E00E4A0C3 /* sellPostViewController.swift in Sources */,
 				85A5361C1FDB8B2A0096E054 /* FeedViewController.swift in Sources */,
 				85F466621FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift in Sources */,
-				85F466661FE5FF7900D46D5C /* MessageTypeTableViewCell.swift in Sources */,
 				852197221FCFC5AE0013D76C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

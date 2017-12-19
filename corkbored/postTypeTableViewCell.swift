@@ -1,20 +1,20 @@
 //
-//  MessageTypeTableViewCell.swift
+//  postTypeTableViewCell.swift
 //  corkbored
 //
-//  Created by Jackson Meyer on 12/16/17.
+//  Created by Jackson Meyer on 12/18/17.
 //  Copyright © 2017 Jackson Meyer. All rights reserved.
 //
 
 import UIKit
 
-class MessageTypeTableViewCell: UITableViewCell {
-    
-    @IBOutlet weak var messageTypeImage: UIImageView!
-    
-    @IBOutlet weak var messageTypeLabel: UILabel!
-    
+class postTypeTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var postTypeImage: UIImageView!
+    
+    @IBOutlet weak var postTypeLabel: UILabel!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -25,4 +25,5 @@ class MessageTypeTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+
 }

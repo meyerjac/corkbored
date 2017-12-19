@@ -30,7 +30,9 @@ class UsernameViewController: UIViewController {
                         self.username = value?["username"] as? String ?? ""
 
                         self.userNameWelcomeTextField.text = "Thankyou for being a user of Corkbored, curing campuses of Boredom, sharing funny thing, and bettering yourself, your new username is \(self.username), you can it this now or later"
-
+                        
+                        self.changeButton.isHidden = true
+                        self.newUsernameTextField.isHidden = true
                         // ...
                     }) { (error) in
                         print(error.localizedDescription)

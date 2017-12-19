@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseAuth
 import Firebase
+import FirebaseAuthUI
 
 class PhoneEmailRegistrationViewController: UIViewController {
     @IBOutlet weak var nextButton: UIButton!
