@@ -1,120 +1,152 @@
-//
 //  createPostViewController.swift
 //  corkbored
 //
 //  Created by Jackson Meyer on 12/18/17.
 //  Copyright © 2017 Jackson Meyer. All rights reserved.
-//
 
 import UIKit
+import Firebase
+import SVProgressHUD
 
-class createPostViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class createPostViewController: UIViewController, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    @IBOutlet weak var eventView: UIView!
+    var imagePickerController = UIImagePickerController()
     
-    @IBOutlet weak var normalView: UIView!
+    var currentCity = "noCity"
     
-    @IBOutlet weak var sellView: UIView!
+    var nowish = "0.0"
     
-    let nowish = Date().timeIntervalSinceReferenceDate
-    let cellItemLabels = ["Sell something", "Event coming up?", "Just Post"]
-    let cellItemPhotos = ["pricetag.png", "calendar.png", "text.png"]
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    @IBAction func addPicture(_ sender: Any) {
+        imagePickerController.sourceType = .photoLibrary
+        imagePickerController.allowsEditing = true
+        imagePickerController.delegate = self
         
-        return cellItemLabels.count
+        present(imagePickerController, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")! as! postTypeTableViewCell
-        
-        cell.postTypeImage.image = UIImage(named: cellItemPhotos[indexPath.row])
-        
-        cell.postTypeLabel.text = cellItemLabels[indexPath.row]
-        
-        return cell
-    }
+    @IBOutlet weak var newPostImageView: UIImageView!
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
-    }
+    @IBOutlet weak var whatsOnYourMindTextField: UITextView!
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    @IBOutlet weak var charactersRemaining: UILabel!
+    
+    @IBAction func postBarButtonItemClicked(_ sender: Any) {
+        let imageName = NSUUID().uuidString
         
-        switch (indexPath.row){
-        case 0:
-            //Sell
-            print("sell")
-            normalView.isHidden = true
-            eventView.isHidden = true
-            sellView.isHidden = false
-        case 1:
-            //Event
-            print("1")
-            normalView.isHidden = true
-            eventView.isHidden = false
-            sellView.isHidden = true
-        case 2:
-            //Post
-            print("2")
-            normalView.isHidden = false
-            eventView.isHidden = true
-            sellView.isHidden = true
+        let storageRef = Storage.storage().reference().child("postImages").child("\(imageName).png")
+        
+        if let uploadData = UIImagePNGRepresentation(self.newPostImageView.image!) {
             
-        default:
-            print("nothing selected")
-        }
+            storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
+                if error != nil {
+                    print(error ?? "error")
+                    return
+                } else {
+                    let uid = (Auth.auth().currentUser?.uid)!
+                    var profileRef: DatabaseReference!
+                    var cityFeedRef: DatabaseReference!
+                    profileRef = Database.database().reference().child("users").child(uid).child("posts")
+                    cityFeedRef = Database.database().reference().child("posts").child(self.currentCity)
+                    
+                    let message = self.whatsOnYourMindTextField.text
+                    
+                    let poster = Post(pinnedTimeAsInterval: self.nowish, ownerUid: uid, postMessage: message!, pinnedMediaFileName: imageName)
+                    
+                    let post = poster.toAnyObject()
+                    
+                    print(post)
+                    
+                    profileRef.childByAutoId().setValue(post)
+                    
+                    cityFeedRef.childByAutoId().setValue(post)
+                      print("we are here 5")
+                    
+                    self.performSegue(withIdentifier: "postBarButtonToFeed", sender: nil)
+                }
+            }
+        )}
     }
     
-    //ACTION
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        var selectedImageFromPicker: UIImage?
+        
+        if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
+            selectedImageFromPicker = editedImage
+        } else if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            selectedImageFromPicker = originalImage
+        }
+        
+        if let selectedImage = selectedImageFromPicker {
+            newPostImageView.image = selectedImage
+        }
+        dismiss(animated: true, completion: nil)
+    }
     
-    //        uid = (Auth.auth().currentUser?.uid)!
-    //
-    //        var profileRef: DatabaseReference!
-    //        var cityFeedRef: DatabaseReference!
-    //
-    //        profileRef = Database.database().reference().child("users").child(uid).child("posts")
-    //        cityFeedRef = Database.database().reference().child("posts").child(currentCity)
-    //
-    //
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+        print("cancelled picker")
+    }
     
     
-    //        let post = Post(pinnedTimeAsInterval: <#T##Int#>, ownerUid: <#T##String#>, type: <#T##String#>, sellItemDescription: <#T##String#>, sellPrice: <#T##Int#>, sellPhotoUrl: <#T##String#>, sellCondition: <#T##String#>, eventDateTime: <#T##String#>, eventLocation: <#T##String#>, eventDescription: <#T##String#>, postMessage: <#T##String#>, postBackgroundColor: <#T##String!#>, pinnedMediaUrl: <#T##String#>)
-    //
-    //         print(post)
-    
-    //         profileRef.childByAutoId().setValue(post)
-    //         cityFeedRef.childByAutoId().setValue(post)
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     
     
-    //at very end, on completion of post being sent to firebase successfully
-    //
-    //        performSegue(withIdentifier: "postToFeed", sender: nil)
-
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        if range.location + range.length > whatsOnYourMindTextField.text.count {
+            
+            return false
+            
+        }
+        
+        let maxChar = 100
+        
+        charactersRemaining.text = String(maxChar - whatsOnYourMindTextField.text.count)
+        
+        if (maxChar - whatsOnYourMindTextField.text.count) <= 20 {
+            
+            charactersRemaining.textColor = UIColor.red
+            
+        } else if (maxChar - whatsOnYourMindTextField.text.count) <= 60 {
+            
+            charactersRemaining.textColor = UIColor.green
+            
+        }
+        
+        let newLength = whatsOnYourMindTextField.text.count + text.count - range.length
+        
+        return newLength <= maxChar
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        newPostImageView.contentMode = .scaleAspectFit
         
-
-        // Do any additional setup after loading the view.
+          nowish = String(Date().timeIntervalSinceReferenceDate)
         
-        //
-        //        uid = (Auth.auth().currentUser?.uid)!
-        //        var profileRef: DatabaseReference!
-        //
-        //        profileRef = Database.database().reference().child("users").child(uid)
-        //        profileRef.observeSingleEvent(of: .value, with: { (snapshot) in
-        //            // Get user value
-        //            let value = snapshot.value as? NSDictionary
-        //            self.currentCity = value?["currentCity"] as? String ?? ""
-        //
-        //            // ...
-        //        })
+                var uid = (Auth.auth().currentUser?.uid)!
+        
+                uid = (Auth.auth().currentUser?.uid)!
+                var profileRef: DatabaseReference!
+        
+                profileRef = Database.database().reference().child("users").child(uid)
+                profileRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                    // Get user value
+                    let value = snapshot.value as? NSDictionary
+                    self.currentCity = value?["currentCity"] as? String ?? ""
+        
+                    // ...
+                })
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+
 }

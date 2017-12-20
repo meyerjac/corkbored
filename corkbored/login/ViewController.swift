@@ -15,15 +15,22 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        if Auth.auth().currentUser != nil {
-//            let vc = FeedViewController()
-//            present(FeedViewController, animated: true, completion: nil)
-//        } else {
-//            print("nope", Auth.auth().currentUser?.uid)
-//        }
-//
-//
+        checkIfUserIsLoggedIn()
+
     }
     
+    func checkIfUserIsLoggedIn() {
+        if Auth.auth().currentUser?.uid != nil {
+             print("user logged in")
+            perform(#selector(login), with: nil, afterDelay: 0)
+            
+        } else {
+            print("user not logged in")
+        }
+}
+
+    @objc func login() {
+        performSegue(withIdentifier: "autoLogin", sender: self)
+    }
 }
 

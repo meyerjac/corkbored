@@ -13,7 +13,7 @@ class FeedViewControllerTableViewCell: UITableViewCell {
     @IBOutlet weak var messageBody: UILabel!
     @IBOutlet weak var usernameTextField: UILabel!
     @IBOutlet weak var profilePhotoImageView: UIImageView!
-    
+    @IBOutlet weak var timePosted: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

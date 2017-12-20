@@ -46,6 +46,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBAction func submitButton(_ sender: Any) {
         goButton.isEnabled = false
         bio = (bioTextView.text)!
+        name = firstAndLastNameTextView.text!
         
         SVProgressHUD.setDefaultAnimationType(.flat)
         SVProgressHUD.setDefaultStyle(.dark)
@@ -75,7 +76,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     SVProgressHUD.showProgress(0.4)
                     if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
                         SVProgressHUD.showProgress(0.6)
-                        let values = [ "bio": self.bio, "birthday": self.birthday,"currentCity": self.currentCity, "currentState": self.currentStateCode, "name": self.name,"profilePic": profileImageUrl]
+                        let values = [ "bio": self.bio, "birthday": self.birthday,"currentCity": self.currentCity, "currentState": self.currentStateCode, "name": self.name,"profilePic": imageName]
                         
                         self.registerUserIntoDatabaseWithUid(uid: uid!, values: values as [String : AnyObject])
                     }
