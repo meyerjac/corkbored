@@ -13,11 +13,8 @@ import FirebaseAuthUI
 
 class PhoneEmailRegistrationViewController: UIViewController {
     @IBOutlet weak var nextButton: UIButton!
-    @IBOutlet weak var plusOneTextView: UILabel!
-    @IBOutlet weak var phoneNumberTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var emailPhoneSegmentedControl: UISegmentedControl!
     
     @IBAction func signInClicked(_ sender: Any) {
         let vc = LoginViewController()
@@ -27,9 +24,6 @@ class PhoneEmailRegistrationViewController: UIViewController {
     @IBAction func nextButtonClicked(_ sender: Any) {
         nextButton.isEnabled = false
 
-        switch (emailPhoneSegmentedControl.selectedSegmentIndex) {
-            
-        case 0:
             let email: String = emailTextField.text!
             let password: String = passwordTextField.text!
             Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
@@ -55,20 +49,11 @@ class PhoneEmailRegistrationViewController: UIViewController {
                     self.handleCreateUser()
                 }
             })
-            break;
-        case 1:
-            //phone selected
-            print("phone")
-            break;
-        default:
-            break;
-        }
     }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        emailPhoneSegmentedControl.addTarget(self, action: #selector(handleValueChanged), for: .valueChanged)
         
     }
     
@@ -89,27 +74,12 @@ class PhoneEmailRegistrationViewController: UIViewController {
         var token = email?.components(separatedBy: delimiter)
         let username = token![0]
         
-        var emptyArray = [String]()
-        emptyArray.append("0")
+        let emptyArray = [String]()
         
         let newUser = User(name: "", username: username, currentCity: "", profilePic: "", posts: emptyArray, birthday: "", bio: "")
 
         ref.child("users").child(uid!).setValue(newUser.toAnyObject())
         self.performSegue(withIdentifier: "segue1", sender: nil)
-    }
-    
-    @objc func handleValueChanged() {
-        if (emailPhoneSegmentedControl.titleForSegment(at: emailPhoneSegmentedControl.selectedSegmentIndex) == "Phone") {
-            emailTextField.isHidden = true
-            passwordTextField.isHidden = true
-            phoneNumberTextField.isHidden = false
-            plusOneTextView.isHidden = false
-        } else {
-            emailTextField.isHidden = false
-            passwordTextField.isHidden = false
-            phoneNumberTextField.isHidden = true
-            plusOneTextView.isHidden = true
-        }
     }
 
     override func didReceiveMemoryWarning() {

@@ -9,11 +9,14 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import Nuke
 
 class FeedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var currentCity: String = "San Fransisco"
+    var currentCity: String = ""
     var messageBody: String = ""
     var profilePhotoFileName: String = ""
+    var activeUser = Auth.auth().currentUser
+    var manager = Nuke.Manager.shared
     
     
     var posts = [Post]()
@@ -44,20 +47,35 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             // Get user value
             
             let value = snapshot.value as? NSDictionary
-            let profilePic = value?["profilePic"] as? String ?? ""
+            let url = value?["profilePic"] as? String ?? ""
+            let urlUrl = URL.init(string: url)
+            print(url, "1")
+            print(url, "1")
+            
             let username = value?["username"] as? String ?? ""
             
-            let storageRef = Storage.storage().reference().child("profileImages").child("\(profilePic).png")
+//            let storageRef = Storage.storage().reference().child("profileImages").child("\(profilePic).png")
+//
+//            storageRef.getData(maxSize: 1 * 1024 * 1024) { (data, error) -> Void in
+//                if (error != nil) {
+//                    print(error ?? "There was an error")
+//                } else {
+//                    DispatchQueue.main.async() {
+//                    cell.profilePhotoImageView.image = UIImage(data: data!)
+//                    }
+//
+//                }
+//            }
             
-            storageRef.getData(maxSize: 1 * 1024 * 1024) { (data, error) -> Void in
-                if (error != nil) {
-                    print(error ?? "There was an error")
-                } else {
-                    cell.profilePhotoImageView.image = UIImage(data: data!)
-                }
-            }
-
             cell.usernameTextField.text = username
+            cell.profilePhotoImageView?.image = nil
+            cell.profilePhotoImageView?.contentMode = .scaleAspectFill
+            cell.profilePhotoImageView?.layer.borderWidth = 1.0
+            cell.profilePhotoImageView?.layer.masksToBounds = false
+            cell.profilePhotoImageView.layer.borderColor = UIColor.white.cgColor
+            cell.profilePhotoImageView?.layer.cornerRadius = cell.profilePhotoImageView.frame.size.width / 2
+            cell.profilePhotoImageView?.clipsToBounds = true
+            self.manager.loadImage(with: urlUrl!, into: cell.profilePhotoImageView)
         }) { (error) in
             print(error.localizedDescription)
         }
@@ -86,7 +104,11 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             stringTimeStamp = "\(minutesSince ?? 23) min"
         } else if minutesSince! > 60 {
             let hours = minutesSince!/60
-           stringTimeStamp = "\(hours) hr"
+            if hours >= 25 {
+                
+            } else {
+                  stringTimeStamp = "\(hours) hr"
+            }
         }
     
         cell.messageBody.text = post.postMessage
@@ -104,8 +126,32 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+//        do {
+//            try Auth.auth().signOut()
+//
+//        } catch let logoutError {
+//
+//            print(logoutError)
+//
+//        }
     
+//        performSegue(withIdentifier: "loggingOut", sender: self)
+        
+        checkAuthStatus()
         fetchCurrentPosition()
+    }
+    
+    func checkAuthStatus() {
+        let userInfo = Auth.auth().currentUser
+        
+        if (userInfo != nil) {
+        // user is signed in
+        print(userInfo)
+        } else {
+        performSegue(withIdentifier: "loggingOut", sender: self)
+        }
+        
     }
     
     func fetchCurrentPosition() {
@@ -118,26 +164,64 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         ref.child("users").child(uid!).observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             let value = snapshot.value as? NSDictionary
+            print(self.currentCity)
             self.currentCity = value?["currentCity"] as? String ?? ""
+            print(self.currentCity)
+            self.fetchPosts()
         }) { (error) in
             print(error.localizedDescription)
         }
-        fetchPosts()
     }
     
     func fetchPosts() {
-        Database.database().reference().child("posts").child("San Francisco").observe(.childAdded) { (snapshot) in
+        
+        var refExists: DatabaseReference!
+        refExists = Database.database().reference()
             
-            if let dictionary = snapshot.value as? [String: AnyObject] {
-              let post = Post(snapshot: snapshot)
-                self.posts.append(post)
+        refExists.child("posts").observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            print(self.currentCity, "Current City")
+            if snapshot.hasChild("\(self.currentCity)") {
+                print("city exists")
+                 self.tableView.isHidden = false
                 
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
+                
+                Database.database().reference().child("posts").child(self.currentCity).observe(.childAdded) { (snapshot) in
+                    
+                    if let dictionary = snapshot.value as? [String: AnyObject] {
+                        let post = Post(snapshot: snapshot)
+                        self.posts.append(post)
+                        
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    }
                 }
+            }else{
+                print("city doesn't exist")
+                self.tableView.isHidden = true
+                self.handleAlertWhenNoTableViewItemsExist()
+        
             }
-        }
+        })
     }
+    
+    func handleAlertWhenNoTableViewItemsExist() {
+        let alert = UIAlertController(title: "Error", message: "corkboard hasn't made it to your city yet, start the conversation!", preferredStyle: UIAlertControllerStyle.alert)
+        self.present(alert, animated: true, completion: nil)
+        
+        alert.addAction(UIAlertAction(title: "okay", style: .cancel, handler: { action in
+            switch action.style{
+            case .cancel:
+                print("cancel")
+            case .default:
+                print("default case")
+            case .destructive:
+                print("destructive case")
+            }
+        }))
+    }
+ 
     
     @objc func handleLogout() {
         do {
@@ -156,4 +240,5 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
 }

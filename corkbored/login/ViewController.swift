@@ -21,11 +21,15 @@ class ViewController: UIViewController {
     
     func checkIfUserIsLoggedIn() {
         if Auth.auth().currentUser?.uid != nil {
+            
              print("user logged in")
+            
             perform(#selector(login), with: nil, afterDelay: 0)
             
         } else {
+            
             print("user not logged in")
+            
         }
 }
 

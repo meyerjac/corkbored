@@ -16,12 +16,17 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
     
     var nowish = "0.0"
     
+    var picturePresent = false
+    
     @IBAction func addPicture(_ sender: Any) {
+        picturePresent = true
+        
         imagePickerController.sourceType = .photoLibrary
         imagePickerController.allowsEditing = true
         imagePickerController.delegate = self
         
         present(imagePickerController, animated: true)
+        print(currentCity, "1")
     }
     
     @IBOutlet weak var newPostImageView: UIImageView!
@@ -31,40 +36,70 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
     @IBOutlet weak var charactersRemaining: UILabel!
     
     @IBAction func postBarButtonItemClicked(_ sender: Any) {
-        let imageName = NSUUID().uuidString
         
-        let storageRef = Storage.storage().reference().child("postImages").child("\(imageName).png")
-        
-        if let uploadData = UIImagePNGRepresentation(self.newPostImageView.image!) {
+        if picturePresent {
+            let imageName = NSUUID().uuidString
             
-            storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
-                if error != nil {
-                    print(error ?? "error")
-                    return
-                } else {
-                    let uid = (Auth.auth().currentUser?.uid)!
-                    var profileRef: DatabaseReference!
-                    var cityFeedRef: DatabaseReference!
-                    profileRef = Database.database().reference().child("users").child(uid).child("posts")
-                    cityFeedRef = Database.database().reference().child("posts").child(self.currentCity)
-                    
-                    let message = self.whatsOnYourMindTextField.text
-                    
-                    let poster = Post(pinnedTimeAsInterval: self.nowish, ownerUid: uid, postMessage: message!, pinnedMediaFileName: imageName)
-                    
-                    let post = poster.toAnyObject()
-                    
-                    print(post)
-                    
-                    profileRef.childByAutoId().setValue(post)
-                    
-                    cityFeedRef.childByAutoId().setValue(post)
-                      print("we are here 5")
-                    
-                    self.performSegue(withIdentifier: "postBarButtonToFeed", sender: nil)
+            let storageRef = Storage.storage().reference().child("postImages").child("\(imageName).png")
+            
+            let uploadData = UIImagePNGRepresentation(self.newPostImageView.image!)
+                
+            storageRef.putData(uploadData!, metadata: nil, completion: { (metadata, error) in
+                    if error != nil {
+                        print(error ?? "error")
+                        return
+                    } else {
+                        if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
+                            let uid = (Auth.auth().currentUser?.uid)!
+                            var profileRef: DatabaseReference!
+                            var cityFeedRef: DatabaseReference!
+                            profileRef = Database.database().reference().child("users").child(uid).child("posts")
+                            cityFeedRef = Database.database().reference().child("posts").child(self.currentCity)
+                            
+                            let message = self.whatsOnYourMindTextField.text
+                            
+                            let poster = Post(pinnedTimeAsInterval: self.nowish, ownerUid: uid, postMessage: message!, pinnedMediaFileName: profileImageUrl)
+                            
+                            let post = poster.toAnyObject()
+                            
+                            print(post)
+                            
+                            profileRef.childByAutoId().setValue(post)
+                            
+                            cityFeedRef.childByAutoId().setValue(post)
+                            print("we are here 5")
+                            
+                            self.performSegue(withIdentifier: "postBarButtonToFeed", sender: nil)
+                        }
+                      
+                    }
                 }
-            }
-        )}
+        )} else {
+            sendPicturelessPostToDatabase()
+        }
+    }
+    
+    func sendPicturelessPostToDatabase() {
+        let uid = (Auth.auth().currentUser?.uid)!
+        var profileRef: DatabaseReference!
+        var cityFeedRef: DatabaseReference!
+        profileRef = Database.database().reference().child("users").child(uid).child("posts")
+        cityFeedRef = Database.database().reference().child("posts").child(self.currentCity)
+        
+        let message = self.whatsOnYourMindTextField.text
+        
+        let poster = Post(pinnedTimeAsInterval: self.nowish, ownerUid: uid, postMessage: message!, pinnedMediaFileName: "null")
+        
+        let post = poster.toAnyObject()
+        
+        print(post)
+        
+        profileRef.childByAutoId().setValue(post)
+        
+        cityFeedRef.childByAutoId().setValue(post)
+        print("we are here 5")
+        
+        self.performSegue(withIdentifier: "postBarButtonToFeed", sender: nil)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -85,6 +120,7 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
+        picturePresent = false
         print("cancelled picker")
     }
     

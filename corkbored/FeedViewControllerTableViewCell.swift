@@ -15,6 +15,7 @@ class FeedViewControllerTableViewCell: UITableViewCell {
     @IBOutlet weak var profilePhotoImageView: UIImageView!
     @IBOutlet weak var timePosted: UILabel!
     
+    @IBOutlet weak var postPhoto: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

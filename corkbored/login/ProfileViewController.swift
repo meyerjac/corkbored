@@ -10,9 +10,20 @@ import UIKit
 import Firebase
 import SVProgressHUD
 import CoreLocation
+import RSKImageCropper
 
 
-class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,  CLLocationManagerDelegate {
+class ProfileViewController: UIViewController, UIImagePickerControllerDelegate,
+UINavigationControllerDelegate,  CLLocationManagerDelegate {
+    func imageCropViewControllerDidCancelCrop(_ controller: RSKImageCropViewController) {
+        _ = self.navigationController?.popViewController(animated: true)
+    }
+    
+    func imageCropViewController(_ controller: RSKImageCropViewController, didCropImage croppedImage: UIImage, usingCropRect cropRect: CGRect, rotationAngle: CGFloat) {
+        self.mainImage.image = croppedImage
+        _ = self.navigationController?.popViewController(animated: true)
+    }
+    
     
     var locationManager = CLLocationManager()
     var geocoder = CLGeocoder()
@@ -76,7 +87,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     SVProgressHUD.showProgress(0.4)
                     if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
                         SVProgressHUD.showProgress(0.6)
-                        let values = [ "bio": self.bio, "birthday": self.birthday,"currentCity": self.currentCity, "currentState": self.currentStateCode, "name": self.name,"profilePic": imageName]
+                        let values = [ "bio": self.bio, "birthday": self.birthday,"currentCity": self.currentCity, "currentState": self.currentStateCode, "name": self.name,"profilePic": profileImageUrl]
                         
                         self.registerUserIntoDatabaseWithUid(uid: uid!, values: values as [String : AnyObject])
                     }
@@ -119,11 +130,12 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
   
     @objc func handleLargeProfileImageView(_ sender: UIImageView) {
-        imagePickerController.sourceType = .photoLibrary
-        imagePickerController.delegate = self
-        imagePickerController.allowsEditing = true
+        var imagePicker : UIImagePickerController!
         
-        present(imagePickerController, animated: true)
+        imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        self.present(imagePicker, animated: true, completion: nil)
     }
         
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -176,6 +188,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
         locationManager.requestWhenInUseAuthorization()
