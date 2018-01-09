@@ -17,8 +17,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     var profilePhotoFileName: String = ""
     var activeUser = Auth.auth().currentUser
     var manager = Nuke.Manager.shared
-    
-    
+
     var posts = [Post]()
     
     @IBOutlet weak var tableView: UITableView!
@@ -31,73 +30,29 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         return posts.count
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if posts[indexPath.row].pinnedMediaFileName != "null" {
+            return 430
+        } else {
+            return 130
+        }
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
-        let cell = tableView.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as! FeedViewControllerTableViewCell
-    
+        //getting time stamp of users device to to compare to stamp of post
         let nowish = Double(Date().timeIntervalSinceReferenceDate)
         
+        //pulling and identifying each post from array as a single post
         let post = posts[indexPath.row]
         
-        //getting Profile picture and username
-        var ref: DatabaseReference!
-        ref = Database.database().reference()
-        
-        ref.child("users").child(post.ownerUid).observeSingleEvent(of: .value, with: { (snapshot) in
-            // Get user value
-            
-            let value = snapshot.value as? NSDictionary
-            let url = value?["profilePic"] as? String ?? ""
-            let urlUrl = URL.init(string: url)
-            print(url, "1")
-            print(url, "1")
-            
-            let username = value?["username"] as? String ?? ""
-            
-//            let storageRef = Storage.storage().reference().child("profileImages").child("\(profilePic).png")
-//
-//            storageRef.getData(maxSize: 1 * 1024 * 1024) { (data, error) -> Void in
-//                if (error != nil) {
-//                    print(error ?? "There was an error")
-//                } else {
-//                    DispatchQueue.main.async() {
-//                    cell.profilePhotoImageView.image = UIImage(data: data!)
-//                    }
-//
-//                }
-//            }
-            
-            cell.usernameTextField.text = username
-            cell.profilePhotoImageView?.image = nil
-            cell.profilePhotoImageView?.contentMode = .scaleAspectFill
-            cell.profilePhotoImageView?.layer.borderWidth = 1.0
-            cell.profilePhotoImageView?.layer.masksToBounds = false
-            cell.profilePhotoImageView.layer.borderColor = UIColor.white.cgColor
-            cell.profilePhotoImageView?.layer.cornerRadius = cell.profilePhotoImageView.frame.size.width / 2
-            cell.profilePhotoImageView?.clipsToBounds = true
-            self.manager.loadImage(with: urlUrl!, into: cell.profilePhotoImageView)
-        }) { (error) in
-            print(error.localizedDescription)
-        }
-        
-      
-        
-        
-        //getting the correct timestamp label
+        //getting the correct timestamp label for post
         let postDate = Double(post.pinnedTimeAsInterval)
-        
         let difference = ((nowish - postDate!)/60)
-        
         let stringDifference = String(difference)
-        
         let delimiter = "."
-        
         var numbers = stringDifference.components(separatedBy: delimiter)
-        
         let minutesSince = Int(numbers[0])
-        
         var stringTimeStamp = ""
-        
         if minutesSince! < 1 {
             stringTimeStamp = "just now"
         } else if minutesSince! <= 60 {
@@ -105,53 +60,143 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else if minutesSince! > 60 {
             let hours = minutesSince!/60
             if hours >= 25 {
-                
+                deletePostFromFeed(postUid: post.postUid)
             } else {
-                  stringTimeStamp = "\(hours) hr"
+                stringTimeStamp = "\(hours) hr"
             }
         }
-    
-        cell.messageBody.text = post.postMessage
         
-        cell.timePosted.text = stringTimeStamp
+        //my two type of table cell
+        if post.pinnedMediaFileName != "null" {
+            let textAndImageCell = tableView.dequeueReusableCell(withIdentifier: "postCellWithPhoto", for: indexPath) as! FeedViewControllerTableViewCell
+            
+            //getting Profile picture and username
+            var ref: DatabaseReference!
+            ref = Database.database().reference()
+            
+            ref.child("users").child(post.ownerUid).observeSingleEvent(of: .value, with: { (snapshot) in
+                // Get user value
+                
+                let value = snapshot.value as? NSDictionary
+                
+                let postProfilePictureStringURL = value?["profilePic"] as? String ?? ""
+                let username = value?["username"] as? String ?? ""
+                
+                if let urlUrl = URL.init(string: postProfilePictureStringURL) {
+                    self.manager.loadImage(with: urlUrl, into: textAndImageCell.profilePhotoImageView)
+                }
+                
+                textAndImageCell.usernameTextField.text = username
+                
+            }) { (error) in
+                print(error.localizedDescription)
+            }
+   
+            textAndImageCell.profilePhotoImageView?.contentMode = .scaleAspectFit
+            textAndImageCell.profilePhotoImageView?.layer.borderWidth = 1.0
+            textAndImageCell.profilePhotoImageView?.layer.masksToBounds = false
+            textAndImageCell.profilePhotoImageView.layer.borderColor = UIColor.white.cgColor
+            textAndImageCell.profilePhotoImageView?.layer.cornerRadius = textAndImageCell.profilePhotoImageView.frame.size.width / 2
+            textAndImageCell.profilePhotoImageView?.clipsToBounds = true
+            
+            //setting picture field
+            let postPhotoString = URL.init(string: post.pinnedMediaFileName)
+            self.manager.loadImage(with: postPhotoString!, into: textAndImageCell.postPhoto)
+            
+            textAndImageCell.timePosted.text = stringTimeStamp
+            
+            textAndImageCell.messageBody.text = post.postMessage
+            
+            return textAndImageCell
+            
+        } else {
+            let textOnlyCell = tableView.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as! FeedViewControllerTableViewCell
+            
+            
+            //getting Profile picture and username
+            var ref: DatabaseReference!
+            ref = Database.database().reference()
+            
+            ref.child("users").child(post.ownerUid).observeSingleEvent(of: .value, with: { (snapshot) in
+                // Get user value
+                
+                let value = snapshot.value as? NSDictionary
+                
+                let postProfilePictureStringURL = value?["profilePic"] as? String ?? ""
+                let username = value?["username"] as? String ?? ""
+                
+                if let urlUrl = URL.init(string: postProfilePictureStringURL) {
+                    self.manager.loadImage(with: urlUrl, into: textOnlyCell.profilePhotoImageView)
+                }
+                
+                textOnlyCell.usernameTextField.text = username
+                
+            }) { (error) in
+                print(error.localizedDescription)
+            }
+            
         
-        return cell
-        
+            textOnlyCell.profilePhotoImageView?.contentMode = .scaleAspectFit
+            textOnlyCell.profilePhotoImageView?.layer.borderWidth = 1.0
+            textOnlyCell.profilePhotoImageView?.layer.masksToBounds = false
+            textOnlyCell.profilePhotoImageView.layer.borderColor = UIColor.white.cgColor
+            textOnlyCell.profilePhotoImageView?.layer.cornerRadius = textOnlyCell.profilePhotoImageView.frame.size.width / 2
+            textOnlyCell.profilePhotoImageView?.clipsToBounds = true
+            
+            textOnlyCell.timePosted.text = stringTimeStamp
+            
+            textOnlyCell.messageBody.text = post.postMessage
+            
+            return textOnlyCell
+        }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 125
-    }
-    
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        do {
-//            try Auth.auth().signOut()
-//
-//        } catch let logoutError {
-//
-//            print(logoutError)
-//
-//        }
-    
-//        performSegue(withIdentifier: "loggingOut", sender: self)
-        
         checkAuthStatus()
-        fetchCurrentPosition()
+   
     }
     
     func checkAuthStatus() {
         let userInfo = Auth.auth().currentUser
         
         if (userInfo != nil) {
+            
         // user is signed in
-        print(userInfo)
+        fetchCurrentPosition()
+            
         } else {
+            
         performSegue(withIdentifier: "loggingOut", sender: self)
+            
         }
+    }
+    
+    func deletePostFromFeed(postUid: String) {
+        print("trying to delete")
+        var ref: DatabaseReference!
+        ref = Database.database().reference()
+        let postReference = ref.child("posts").child(currentCity).child(postUid)
+        print(postReference)
         
+//        referenece to image
+//        let storage = Storage.storage().reference()
+//        let postImageRef = storage.child("postImages")
+        
+        
+        // Remove the post from the DB
+         postReference.removeValue()
+         print("trying to delete after remove")
+        
+//        // Remove the image from storage
+//        let imageRef = storage.child("posts").child(uid).child("\(selectedPost.postID).jpg")
+//        imageRef.delete { error in
+//            if let error = error {
+//                // Uh-oh, an error occurred!
+//            } else {
+//                // File deleted successfully
+//            }
+//        }
     }
     
     func fetchCurrentPosition() {
@@ -164,9 +209,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         ref.child("users").child(uid!).observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             let value = snapshot.value as? NSDictionary
-            print(self.currentCity)
             self.currentCity = value?["currentCity"] as? String ?? ""
-            print(self.currentCity)
             self.fetchPosts()
         }) { (error) in
             print(error.localizedDescription)
@@ -177,15 +220,12 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         var refExists: DatabaseReference!
         refExists = Database.database().reference()
-            
+
         refExists.child("posts").observeSingleEvent(of: .value, with: { (snapshot) in
-            
-            print(self.currentCity, "Current City")
+
             if snapshot.hasChild("\(self.currentCity)") {
-                print("city exists")
-                 self.tableView.isHidden = false
-                
-                
+                self.tableView.isHidden = false
+               
                 Database.database().reference().child("posts").child(self.currentCity).observe(.childAdded) { (snapshot) in
                     
                     if let dictionary = snapshot.value as? [String: AnyObject] {
@@ -201,7 +241,6 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
                 print("city doesn't exist")
                 self.tableView.isHidden = true
                 self.handleAlertWhenNoTableViewItemsExist()
-        
             }
         })
     }
@@ -222,7 +261,6 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         }))
     }
  
-    
     @objc func handleLogout() {
         do {
             try Auth.auth().signOut()
@@ -240,5 +278,4 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 }

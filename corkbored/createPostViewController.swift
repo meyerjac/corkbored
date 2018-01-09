@@ -26,7 +26,6 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
         imagePickerController.delegate = self
         
         present(imagePickerController, animated: true)
-        print(currentCity, "1")
     }
     
     @IBOutlet weak var newPostImageView: UIImageView!
@@ -38,66 +37,90 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
     @IBAction func postBarButtonItemClicked(_ sender: Any) {
         
         if picturePresent {
-            let imageName = NSUUID().uuidString
-            
-            let storageRef = Storage.storage().reference().child("postImages").child("\(imageName).png")
-            
-            let uploadData = UIImagePNGRepresentation(self.newPostImageView.image!)
-                
-            storageRef.putData(uploadData!, metadata: nil, completion: { (metadata, error) in
-                    if error != nil {
-                        print(error ?? "error")
-                        return
-                    } else {
-                        if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
-                            let uid = (Auth.auth().currentUser?.uid)!
-                            var profileRef: DatabaseReference!
-                            var cityFeedRef: DatabaseReference!
-                            profileRef = Database.database().reference().child("users").child(uid).child("posts")
-                            cityFeedRef = Database.database().reference().child("posts").child(self.currentCity)
-                            
-                            let message = self.whatsOnYourMindTextField.text
-                            
-                            let poster = Post(pinnedTimeAsInterval: self.nowish, ownerUid: uid, postMessage: message!, pinnedMediaFileName: profileImageUrl)
-                            
-                            let post = poster.toAnyObject()
-                            
-                            print(post)
-                            
-                            profileRef.childByAutoId().setValue(post)
-                            
-                            cityFeedRef.childByAutoId().setValue(post)
-                            print("we are here 5")
-                            
-                            self.performSegue(withIdentifier: "postBarButtonToFeed", sender: nil)
-                        }
-                      
-                    }
-                }
-        )} else {
+            print("picture present")
+            sendPicturePostToDatabase()
+        } else {
+            print("picture NOT present")
             sendPicturelessPostToDatabase()
         }
     }
     
+    func sendPicturePostToDatabase() {
+        let imageName = NSUUID().uuidString
+        
+        let storageRef = Storage.storage().reference().child("postImages").child("\(imageName).png")
+        
+        let uploadData = UIImagePNGRepresentation(self.newPostImageView.image!)
+        print(uploadData)
+        
+        storageRef.putData(uploadData!, metadata: nil, completion: { (metadata, error) in
+            if error != nil {
+                print("ERROR")
+                print(error ?? "error")
+                return
+            } else {
+                if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
+                    let message = self.whatsOnYourMindTextField.text
+            
+                    let uid = (Auth.auth().currentUser?.uid)!
+                    
+                    let profileRef: DatabaseReference!
+                    let cityFeedRef: DatabaseReference!
+                    
+                    profileRef = Database.database().reference().child("users").child(uid).child("posts")
+                    cityFeedRef = Database.database().reference().child("posts").child(self.currentCity)
+                
+                    let profRef = profileRef.childByAutoId()
+                    let feedRef = cityFeedRef.childByAutoId()
+                    
+                    let profRefUid = profRef.key
+                    let feedRefUid = feedRef.key
+                    
+                    let uids = [profRefUid, feedRefUid]
+                    let refs = [profRef, feedRef]
+                    
+                    for i in 0 ... 1 {
+                        let poster = Post(pinnedTimeAsInterval: self.nowish, ownerUid: uid, postMessage: message!, postUid: uids[i], pinnedMediaFileName: profileImageUrl)
+                        
+                        let post = poster.toAnyObject()
+                        refs[i].setValue(post)
+                        
+                    }
+                    
+                    self.performSegue(withIdentifier: "postBarButtonToFeed", sender: nil)
+                }
+                
+            }
+        })
+    }
+    
     func sendPicturelessPostToDatabase() {
+        let message = self.whatsOnYourMindTextField.text
+        
         let uid = (Auth.auth().currentUser?.uid)!
+        
         var profileRef: DatabaseReference!
         var cityFeedRef: DatabaseReference!
+        
         profileRef = Database.database().reference().child("users").child(uid).child("posts")
         cityFeedRef = Database.database().reference().child("posts").child(self.currentCity)
         
-        let message = self.whatsOnYourMindTextField.text
+        let profRef = profileRef.childByAutoId()
+        let feedRef = cityFeedRef.childByAutoId()
         
-        let poster = Post(pinnedTimeAsInterval: self.nowish, ownerUid: uid, postMessage: message!, pinnedMediaFileName: "null")
+        let profRefUid = profRef.key
+        let feedRefUid = feedRef.key
         
-        let post = poster.toAnyObject()
+        let uids = [profRefUid, feedRefUid]
+        let refs = [profRef, feedRef]
         
-        print(post)
-        
-        profileRef.childByAutoId().setValue(post)
-        
-        cityFeedRef.childByAutoId().setValue(post)
-        print("we are here 5")
+        for i in 0 ... 1 {
+            let poster = Post(pinnedTimeAsInterval: self.nowish, ownerUid: uid, postMessage: message!, postUid: uids[i], pinnedMediaFileName: "null")
+            
+            let post = poster.toAnyObject()
+            refs[i].setValue(post)
+            
+        }
         
         self.performSegue(withIdentifier: "postBarButtonToFeed", sender: nil)
     }
