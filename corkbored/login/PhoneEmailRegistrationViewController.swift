@@ -54,7 +54,11 @@ class PhoneEmailRegistrationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        loadUIStuff()
+    }
+    
+    func loadUIStuff() {
+        nextButton.layer.cornerRadius = nextButton.frame.height / 2
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

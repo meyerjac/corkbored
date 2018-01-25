@@ -17,7 +17,6 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     var profilePhotoFileName: String = ""
     var activeUser = Auth.auth().currentUser
     var manager = Nuke.Manager.shared
-
     var posts = [Post]()
     
     @IBOutlet weak var tableView: UITableView!
@@ -26,19 +25,27 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         handleLogout()
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            print(posts[indexPath.row].postUid)
+//         performSegue(withIdentifier: "loggingOut", sender: self)
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return posts.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if posts[indexPath.row].pinnedMediaFileName != "null" {
-            return 430
+            return 500
         } else {
-            return 130
+            return 100
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        
+        
         //getting time stamp of users device to to compare to stamp of post
         let nowish = Double(Date().timeIntervalSinceReferenceDate)
         
@@ -68,6 +75,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         //my two type of table cell
         if post.pinnedMediaFileName != "null" {
+            
             let textAndImageCell = tableView.dequeueReusableCell(withIdentifier: "postCellWithPhoto", for: indexPath) as! FeedViewControllerTableViewCell
             
             //getting Profile picture and username
@@ -111,7 +119,6 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             
         } else {
             let textOnlyCell = tableView.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as! FeedViewControllerTableViewCell
-            
             
             //getting Profile picture and username
             var ref: DatabaseReference!
@@ -179,24 +186,9 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         let postReference = ref.child("posts").child(currentCity).child(postUid)
         print(postReference)
         
-//        referenece to image
-//        let storage = Storage.storage().reference()
-//        let postImageRef = storage.child("postImages")
-        
-        
         // Remove the post from the DB
          postReference.removeValue()
          print("trying to delete after remove")
-        
-//        // Remove the image from storage
-//        let imageRef = storage.child("posts").child(uid).child("\(selectedPost.postID).jpg")
-//        imageRef.delete { error in
-//            if let error = error {
-//                // Uh-oh, an error occurred!
-//            } else {
-//                // File deleted successfully
-//            }
-//        }
     }
     
     func fetchCurrentPosition() {
@@ -223,7 +215,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         refExists.child("posts").observeSingleEvent(of: .value, with: { (snapshot) in
 
-            if snapshot.hasChild("\(self.currentCity)") {
+            if snapshot.hasChild("Corvallis") {
                 self.tableView.isHidden = false
                
                 Database.database().reference().child("posts").child(self.currentCity).observe(.childAdded) { (snapshot) in

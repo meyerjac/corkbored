@@ -24,7 +24,6 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
         _ = self.navigationController?.popViewController(animated: true)
     }
     
-    
     var locationManager = CLLocationManager()
     var geocoder = CLGeocoder()
     var userLocation: CLLocation = CLLocation()
@@ -58,38 +57,35 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
         goButton.isEnabled = false
         bio = (bioTextView.text)!
         name = firstAndLastNameTextView.text!
-        
+
         SVProgressHUD.setDefaultAnimationType(.flat)
         SVProgressHUD.setDefaultStyle(.dark)
-        
-        
         SVProgressHUD.setForegroundColor(UIColor.cyan)           //Ring Color
         SVProgressHUD.setBackgroundColor(UIColor.black)        //HUD Color
         SVProgressHUD.setBackgroundLayerColor(UIColor.clear) //Background Color
         SVProgressHUD.setDefaultMaskType(.clear)
         SVProgressHUD.showProgress(0.1, status: "Creating your profile...")
+        SVProgressHUD.showProgress(0.2, status: "Creating your profile...")
         
         let userInfo = Auth.auth().currentUser
         let uid = userInfo?.uid
+        let imageName = NSUUID().uuidString
+        let storageRef = Storage.storage().reference().child("profileImages").child("\(imageName).png")
         
-            let imageName = NSUUID().uuidString
-            let storageRef = Storage.storage().reference().child("profileImages").child("\(imageName).png")
-            SVProgressHUD.showProgress(0.2)
-        
-            if let uploadData = UIImagePNGRepresentation(self.mainImage.image!) {
+        if let uploadData = UIImagePNGRepresentation(self.mainImage.image!) {
              
-                storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
+            storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
                  
-                    if error != nil {
-                        print(error ?? "error")
-                        return
-                    }
-                    SVProgressHUD.showProgress(0.4)
-                    if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
-                        SVProgressHUD.showProgress(0.6)
-                        let values = [ "bio": self.bio, "birthday": self.birthday,"currentCity": self.currentCity, "currentState": self.currentStateCode, "name": self.name,"profilePic": profileImageUrl]
+                if error != nil {
+                    print(error ?? "error")
+                    return
+                }
+            SVProgressHUD.showProgress(0.4, status: "Creating your profile...")
+            if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
+                SVProgressHUD.showProgress(0.6, status: "Creating your profile...")
+                let values = [ "bio": self.bio, "birthday": self.birthday,"currentCity": self.currentCity, "currentState": self.currentStateCode, "name": self.name,"profilePic": profileImageUrl]
                         
-                        self.registerUserIntoDatabaseWithUid(uid: uid!, values: values as [String : AnyObject])
+                    self.registerUserIntoDatabaseWithUid(uid: uid!, values: values as [String : AnyObject])
                     }
                 }
         )}
@@ -98,11 +94,11 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
     func registerUserIntoDatabaseWithUid(uid: String, values:[String: AnyObject]) {
         var ref: DatabaseReference!
         ref = Database.database().reference()
-        SVProgressHUD.showProgress(0.7)
+        SVProgressHUD.showProgress(0.7, status: "Creating your profile...")
         
         
         ref.child("users").child(uid).updateChildValues(values) { (err, ref) in
-            SVProgressHUD.showProgress(0.9)
+            SVProgressHUD.showProgress(0.9, status: "Creating your profile...")
             if err != nil {
                 print(err!)
                 let alert = UIAlertController(title: "Error", message: err?.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
@@ -122,7 +118,7 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
                     }
                 }))
             } else {
-                 SVProgressHUD.showProgress(1.0)
+                 SVProgressHUD.showProgress(1.0, status: "Creating your profile...")
                  SVProgressHUD.dismiss()
                  self.performSegue(withIdentifier: "ontoFeedSegue", sender: nil)
             }
@@ -135,6 +131,7 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        imagePicker.allowsEditing = true
         self.present(imagePicker, animated: true, completion: nil)
     }
         
@@ -188,7 +185,7 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        loadUIViews()
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
@@ -201,6 +198,12 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
         mainImage.contentMode = .scaleAspectFit
         mainImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleLargeProfileImageView)))
         mainImage.isUserInteractionEnabled = true
+    }
+    
+    func loadUIViews() {
+        mainImage.layer.cornerRadius = mainImage.frame.width / 2
+        mainImage.layer.masksToBounds = true;
+        mainImage.layer.borderWidth = 0;
     }
 
     override func didReceiveMemoryWarning() {

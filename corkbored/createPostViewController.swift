@@ -47,51 +47,47 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
     
     func sendPicturePostToDatabase() {
         let imageName = NSUUID().uuidString
-        
         let storageRef = Storage.storage().reference().child("postImages").child("\(imageName).png")
-        
         let uploadData = UIImagePNGRepresentation(self.newPostImageView.image!)
-        print(uploadData)
         
-        storageRef.putData(uploadData!, metadata: nil, completion: { (metadata, error) in
-            if error != nil {
-                print("ERROR")
-                print(error ?? "error")
-                return
-            } else {
-                if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
-                    let message = self.whatsOnYourMindTextField.text
-            
-                    let uid = (Auth.auth().currentUser?.uid)!
-                    
-                    let profileRef: DatabaseReference!
-                    let cityFeedRef: DatabaseReference!
-                    
-                    profileRef = Database.database().reference().child("users").child(uid).child("posts")
-                    cityFeedRef = Database.database().reference().child("posts").child(self.currentCity)
-                
-                    let profRef = profileRef.childByAutoId()
-                    let feedRef = cityFeedRef.childByAutoId()
-                    
-                    let profRefUid = profRef.key
-                    let feedRefUid = feedRef.key
-                    
-                    let uids = [profRefUid, feedRefUid]
-                    let refs = [profRef, feedRef]
-                    
-                    for i in 0 ... 1 {
-                        let poster = Post(pinnedTimeAsInterval: self.nowish, ownerUid: uid, postMessage: message!, postUid: uids[i], pinnedMediaFileName: profileImageUrl)
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "postBarButtonToFeed", sender: nil)
+            storageRef.putData(uploadData!, metadata: nil, completion: { (metadata, error) in
+                if error != nil {
+                    print(error ?? "error")
+                    return
+                } else {
+                    if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
+                        let message = self.whatsOnYourMindTextField.text
+                        let uid = (Auth.auth().currentUser?.uid)!
                         
-                        let post = poster.toAnyObject()
-                        refs[i].setValue(post)
+                        let profileRef: DatabaseReference!
+                        let cityFeedRef: DatabaseReference!
                         
+                        profileRef = Database.database().reference().child("users").child(uid).child("posts")
+                        cityFeedRef = Database.database().reference().child("posts").child(self.currentCity)
+                        
+                        let profRef = profileRef.childByAutoId()
+                        let feedRef = cityFeedRef.childByAutoId()
+                        
+                        let profRefUid = profRef.key
+                        let feedRefUid = feedRef.key
+                        
+                        let uids = [profRefUid, feedRefUid]
+                        let refs = [profRef, feedRef]
+                        
+                        for i in 0 ... 1 {
+                            let poster = Post(pinnedTimeAsInterval: self.nowish, ownerUid: uid, postMessage: message!, postUid: uids[i], pinnedMediaFileName: profileImageUrl)
+                            
+                            let post = poster.toAnyObject()
+                            refs[i].setValue(post)
+                            
+                        }
                     }
                     
-                    self.performSegue(withIdentifier: "postBarButtonToFeed", sender: nil)
                 }
-                
-            }
-        })
+            })
+        }
     }
     
     func sendPicturelessPostToDatabase() {
