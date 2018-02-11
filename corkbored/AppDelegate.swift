@@ -19,8 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
          FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        // Override point for customization after application launch.
-         FirebaseApp.configure()
+        
+    
+        
         return true
     }
     
@@ -33,7 +34,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return handled;
     }
     
-    
+    override init() {
+        super.init()
+        FirebaseApp.configure()
+        // not really needed unless you really need it FIRDatabase.database().persistenceEnabled = true
+    }
     
 
     func applicationWillResignActive(_ application: UIApplication) {

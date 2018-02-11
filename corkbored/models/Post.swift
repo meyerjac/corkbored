@@ -16,14 +16,19 @@ class Post {
     var postMessage: String
     var postUid: String
     var pinnedMediaFileName: String
+    var likes: Array<Any>?
+    var comments: Array<Comment>?
     
     
-    init(pinnedTimeAsInterval: String, ownerUid: String, postMessage: String, postUid: String, pinnedMediaFileName: String) {
+    init(pinnedTimeAsInterval: String, ownerUid: String, postMessage: String, postUid: String, pinnedMediaFileName: String, likes: Array<Any>?, comments: Array<Comment>?) {
+        
         self.pinnedTimeAsInterval = pinnedTimeAsInterval
         self.ownerUid = ownerUid
         self.postMessage = postMessage
         self.postUid = postUid
         self.pinnedMediaFileName = pinnedMediaFileName
+        self.likes = likes
+        self.comments = comments
     }
     
     init(snapshot: DataSnapshot) {
@@ -34,10 +39,12 @@ class Post {
         self.postMessage = snapshotValue!["postMessage"] as! String
         self.postUid = snapshotValue!["postUid"] as! String
         self.pinnedMediaFileName = snapshotValue!["pinnedMediaFileName"] as! String
+        self.likes = snapshotValue!["likes"] as? Array
+        self.comments = snapshotValue!["comments"] as? Array
     }
     
     func toAnyObject() -> [String: AnyObject] {
-        return ["pinnedTimeAsInterval": pinnedTimeAsInterval as AnyObject, "ownerUid": ownerUid as AnyObject, "postMessage": postMessage as AnyObject, "postUid": postUid as AnyObject, "pinnedMediaFileName": pinnedMediaFileName as AnyObject]
+        return ["pinnedTimeAsInterval": pinnedTimeAsInterval as AnyObject, "ownerUid": ownerUid as AnyObject, "postMessage": postMessage as AnyObject, "postUid": postUid as AnyObject, "pinnedMediaFileName": pinnedMediaFileName as AnyObject, "likes": likes as AnyObject, "comments": comments as AnyObject]
     }
 }
 

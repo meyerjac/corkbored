@@ -14,6 +14,10 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
     
     var currentCity = "noCity"
     
+    var likeArray = [String]()
+    
+    var commentArray = [Comment]()
+    
     var nowish = "0.0"
     
     var picturePresent = false
@@ -51,7 +55,6 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
         let uploadData = UIImagePNGRepresentation(self.newPostImageView.image!)
         
         DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "postBarButtonToFeed", sender: nil)
             storageRef.putData(uploadData!, metadata: nil, completion: { (metadata, error) in
                 if error != nil {
                     print(error ?? "error")
@@ -77,7 +80,7 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
                         let refs = [profRef, feedRef]
                         
                         for i in 0 ... 1 {
-                            let poster = Post(pinnedTimeAsInterval: self.nowish, ownerUid: uid, postMessage: message!, postUid: uids[i], pinnedMediaFileName: profileImageUrl)
+                            let poster = Post(pinnedTimeAsInterval: self.nowish, ownerUid: uid, postMessage: message!, postUid: uids[i], pinnedMediaFileName: profileImageUrl, likes: self.likeArray, comments: self.commentArray)
                             
                             let post = poster.toAnyObject()
                             refs[i].setValue(post)
@@ -111,14 +114,12 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
         let refs = [profRef, feedRef]
         
         for i in 0 ... 1 {
-            let poster = Post(pinnedTimeAsInterval: self.nowish, ownerUid: uid, postMessage: message!, postUid: uids[i], pinnedMediaFileName: "null")
+            let poster = Post(pinnedTimeAsInterval: self.nowish, ownerUid: uid, postMessage: message!, postUid: uids[i], pinnedMediaFileName: "null", likes: self.likeArray, comments: self.commentArray)
             
             let post = poster.toAnyObject()
             refs[i].setValue(post)
             
         }
-        
-        self.performSegue(withIdentifier: "postBarButtonToFeed", sender: nil)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -178,24 +179,28 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         newPostImageView.contentMode = .scaleAspectFit
         
           nowish = String(Date().timeIntervalSinceReferenceDate)
         
                 var uid = (Auth.auth().currentUser?.uid)!
-        
                 uid = (Auth.auth().currentUser?.uid)!
                 var profileRef: DatabaseReference!
         
                 profileRef = Database.database().reference().child("users").child(uid)
-                profileRef.observeSingleEvent(of: .value, with: { (snapshot) in
-                    // Get user value
-                    let value = snapshot.value as? NSDictionary
-                    self.currentCity = value?["currentCity"] as? String ?? ""
+           getUsersLocation()
+    }
+    
+    func getUsersLocation() {
         
-                    // ...
-                })
+        let userLocationObject = UserDefaults.standard.object(forKey: "currentUserLocation")
+        
+        if let userLocation = userLocationObject as? String {
+            
+            currentCity = userLocation
+            
+        }
     }
 
     override func didReceiveMemoryWarning() {

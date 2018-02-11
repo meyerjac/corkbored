@@ -1,17 +1,14 @@
-//
-//  FeedViewController.swift
-//  corkbored
-//
-//  Created by Jackson Meyer on 12/8/17.
-//  Copyright © 2017 Jackson Meyer. All rights reserved.
-//
-
 import UIKit
 import Firebase
 import FirebaseAuth
 import Nuke
+import CoreLocation
 
-class FeedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource {
+    //CORELOCATION, VARIABLES, STORAGE
+    var locationManager = CLLocationManager()
+    var geocoder = CLGeocoder()
+    var userLocation: CLLocation = CLLocation()
     var currentCity: String = ""
     var messageBody: String = ""
     var profilePhotoFileName: String = ""
@@ -21,36 +18,36 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBOutlet weak var tableView: UITableView!
     
-    @IBAction func logout(_ sender: Any) {
-        handleLogout()
-    }
+//    @IBAction func logout(_ sender: Any) {
+//        handleLogout()
+//    }
     
+    //TABLE VIEW FUNCTIONS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             print(posts[indexPath.row].postUid)
-//         performSegue(withIdentifier: "loggingOut", sender: self)
     }
-    
+   
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return posts.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if posts[indexPath.row].pinnedMediaFileName != "null" {
-            return 500
+            return 450
         } else {
-            return 100
+            return 200
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        
         
         //getting time stamp of users device to to compare to stamp of post
         let nowish = Double(Date().timeIntervalSinceReferenceDate)
         
         //pulling and identifying each post from array as a single post
         let post = posts[indexPath.row]
+        
+        
         
         //getting the correct timestamp label for post
         let postDate = Double(post.pinnedTimeAsInterval)
@@ -66,7 +63,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             stringTimeStamp = "\(minutesSince ?? 23) min"
         } else if minutesSince! > 60 {
             let hours = minutesSince!/60
-            if hours >= 25 {
+            if hours >= 24 {
                 deletePostFromFeed(postUid: post.postUid)
             } else {
                 stringTimeStamp = "\(hours) hr"
@@ -120,6 +117,20 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else {
             let textOnlyCell = tableView.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as! FeedViewControllerTableViewCell
             
+            textOnlyCell.likeButton.tag = indexPath.row
+            
+            textOnlyCell.likeButton.addTarget(self, action: #selector(handleLike), for: .touchUpInside)
+            
+            textOnlyCell.dislikeButton.tag = indexPath.row
+            
+            textOnlyCell.dislikeButton.addTarget(self, action: #selector(handledislike), for: .touchUpInside)
+            
+            textOnlyCell.commentButton.tag = indexPath.row
+            
+            textOnlyCell.commentButton.addTarget(self, action: #selector(commentdislike), for: .touchUpInside)
+            
+            
+            
             //getting Profile picture and username
             var ref: DatabaseReference!
             ref = Database.database().reference()
@@ -158,37 +169,114 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        checkAuthStatus()
-   
-    }
-    
-    func checkAuthStatus() {
-        let userInfo = Auth.auth().currentUser
+    @objc func handleLike(sender: UIButton) {
+        //get UsersLocation
+        let userLocationObject = UserDefaults.standard.object(forKey: "currentUserLocation")
         
-        if (userInfo != nil) {
-            
-        // user is signed in
-        fetchCurrentPosition()
-            
-        } else {
-            
-        performSegue(withIdentifier: "loggingOut", sender: self)
-            
+        if let userLocation = userLocationObject as? String {
+            currentCity = userLocation
+        }
+        
+        //uid
+        let uid = (Auth.auth().currentUser?.uid)!
+        
+        //get PostID
+        let clickedPostUid = self.posts[sender.tag].postUid
+        print(clickedPostUid)
+        
+        //getting Profile picture and username
+        var ref: DatabaseReference!
+        ref = Database.database().reference()
+        
+        let postRef = ref.child("posts").child(self.currentCity).child(clickedPostUid).child("likes")
+        
+        postRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            if snapshot.hasChild(uid) {
+                
+                print("has child")
+                
+                postRef.child(uid).removeValue()
+                
+            } else {
+                print("does not have child")
+                
+                
+                //animated
+                sender.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+                
+                UIView.animate(withDuration: 2.0,
+                               delay: 0,
+                               usingSpringWithDamping: CGFloat(0.20),
+                               initialSpringVelocity: CGFloat(6.0),
+                               options: UIViewAnimationOptions.allowUserInteraction,
+                               animations: {
+                                sender.transform = CGAffineTransform.identity
+                },
+                               completion: { Void in()  }
+                )
+                
+                postRef.child(uid).setValue(uid)
+            }
+        }) { (error) in
+            print(error.localizedDescription)
         }
     }
     
+    @objc func handledislike(sender: UIButton) {
+    }
+    
+    @objc func handleComment(sender: UIButton) {
+        
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        fetchUserLocation()
+        
+//        do {
+//            try Auth.auth().signOut()
+//
+//        } catch let logoutError {
+//
+//            print(logoutError)
+//
+//        }
+//        checkAuthStatus()
+    }
+    
+    func fetchUserLocation() {
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation()
+    }
+    
+//    func checkAuthStatus() {
+//        let userInfo = Auth.auth().currentUser
+//
+//        if (userInfo != nil) {
+//
+//        // user is signed in
+//        fetchCurrentPosition()
+//
+//        } else {
+//
+//        performSegue(withIdentifier: "loggingOut", sender: self)
+//
+//        }
+//    }
+
     func deletePostFromFeed(postUid: String) {
         print("trying to delete")
         var ref: DatabaseReference!
         ref = Database.database().reference()
         let postReference = ref.child("posts").child(currentCity).child(postUid)
-        print(postReference)
         
         // Remove the post from the DB
          postReference.removeValue()
          print("trying to delete after remove")
+        return
     }
     
     func fetchCurrentPosition() {
@@ -202,14 +290,14 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             // Get user value
             let value = snapshot.value as? NSDictionary
             self.currentCity = value?["currentCity"] as? String ?? ""
-            self.fetchPosts()
+            self.fetchPosts(city: self.currentCity)
         }) { (error) in
             print(error.localizedDescription)
         }
     }
     
-    func fetchPosts() {
-        
+    func fetchPosts(city: String) {
+
         var refExists: DatabaseReference!
         refExists = Database.database().reference()
 
@@ -220,10 +308,9 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
                
                 Database.database().reference().child("posts").child(self.currentCity).observe(.childAdded) { (snapshot) in
                     
-                    if let dictionary = snapshot.value as? [String: AnyObject] {
+                    if let dictionary = snapshot.value as? [AnyHashable: AnyObject] {
                         let post = Post(snapshot: snapshot)
-                        self.posts.append(post)
-                        
+                        self.posts.insert(post, at: self.posts.startIndex)
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
                         }
@@ -253,17 +340,53 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         }))
     }
  
-    @objc func handleLogout() {
-        do {
-            try Auth.auth().signOut()
-            
-            } catch let logoutError {
-                
-            print(logoutError)
-                
-            }
+//    @objc func handleLogout() {
+//        do {
+//            try Auth.auth().signOut()
+//
+//            } catch let logoutError {
+//
+//            print(logoutError)
+//
+//            }
+//
+//       performSegue(withIdentifier: "loggingOut", sender: self)
+//    }
     
-       performSegue(withIdentifier: "loggingOut", sender: self)
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        self.userLocation = locations[0]
+        
+        geocoder.reverseGeocodeLocation(userLocation,
+                                        completionHandler: { (placemarks, error) in
+                                            if error == nil {
+                                                
+                                                let location = placemarks?[0]
+                                                
+                                                let retreivedCity = (location?.locality)!
+                                                
+                                                UserDefaults.standard.set(retreivedCity, forKey: "currentUserLocation")
+                                                
+                                                self.currentCity = retreivedCity
+                                                
+                                                self.fetchPosts(city: self.currentCity)
+                                            }
+                                                
+                                            else {
+                                                // An error occurred during geocoding.
+                                                
+                                                print("couldnt get users location")
+                                                
+                                            }
+        })
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        
+        print("failed")
+        
+        //failed to get one data point
     }
     
     override func didReceiveMemoryWarning() {

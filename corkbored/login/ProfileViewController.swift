@@ -1,11 +1,3 @@
-//
-//  ProfileViewController.swift
-//  corkbored
-//
-//  Created by Jackson Meyer on 12/8/17.
-//  Copyright © 2017 Jackson Meyer. All rights reserved.
-//
-
 import UIKit
 import Firebase
 import SVProgressHUD
@@ -35,15 +27,17 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
     var bio: String = "hello there, default value"
     var imagePickerController = UIImagePickerController()
     
+    
     @IBOutlet weak var goButton: UIButton!
     
     @IBOutlet weak var changeProfilePhoto: UIButton!
     
     @IBOutlet weak var mainImage: UIImageView!
     
-    @IBOutlet weak var firstAndLastNameTextView: UITextField!
+    @IBOutlet weak var firstAndLastNametextView: UITextField!
     
-    @IBOutlet weak var bioTextView: UITextView!
+    @IBOutlet weak var bioTextField: UITextView!
+   
     
     @IBAction func birthdayPickView(_ sender: Any) {
         let componenets = Calendar.current.dateComponents([.year, .month, .day], from: (sender as AnyObject).date)
@@ -55,9 +49,9 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
     
     @IBAction func submitButton(_ sender: Any) {
         goButton.isEnabled = false
-        bio = (bioTextView.text)!
-        name = firstAndLastNameTextView.text!
-
+        bio = (bioTextField.text)!
+        name = firstAndLastNametextView.text!
+        
         SVProgressHUD.setDefaultAnimationType(.flat)
         SVProgressHUD.setDefaultStyle(.dark)
         SVProgressHUD.setForegroundColor(UIColor.cyan)           //Ring Color
@@ -73,22 +67,22 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
         let storageRef = Storage.storage().reference().child("profileImages").child("\(imageName).png")
         
         if let uploadData = UIImagePNGRepresentation(self.mainImage.image!) {
-             
+            
             storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
-                 
+                
                 if error != nil {
                     print(error ?? "error")
                     return
                 }
-            SVProgressHUD.showProgress(0.4, status: "Creating your profile...")
-            if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
-                SVProgressHUD.showProgress(0.6, status: "Creating your profile...")
-                let values = [ "bio": self.bio, "birthday": self.birthday,"currentCity": self.currentCity, "currentState": self.currentStateCode, "name": self.name,"profilePic": profileImageUrl]
-                        
+                SVProgressHUD.showProgress(0.4, status: "Creating your profile...")
+                if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
+                    SVProgressHUD.showProgress(0.6, status: "Creating your profile...")
+                    let values = [ "bio": self.bio, "birthday": self.birthday,"currentCity": self.currentCity, "currentState": self.currentStateCode, "name": self.name,"profilePic": profileImageUrl]
+                    
                     self.registerUserIntoDatabaseWithUid(uid: uid!, values: values as [String : AnyObject])
-                    }
                 }
-        )}
+            }
+            )}
     }
     
     func registerUserIntoDatabaseWithUid(uid: String, values:[String: AnyObject]) {
@@ -118,13 +112,13 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
                     }
                 }))
             } else {
-                 SVProgressHUD.showProgress(1.0, status: "Creating your profile...")
-                 SVProgressHUD.dismiss()
-                 self.performSegue(withIdentifier: "ontoFeedSegue", sender: nil)
+                SVProgressHUD.showProgress(1.0, status: "Creating your profile...")
+                SVProgressHUD.dismiss()
+                self.performSegue(withIdentifier: "toTabViewController", sender: nil)
             }
         }
     }
-  
+    
     @objc func handleLargeProfileImageView(_ sender: UIImageView) {
         var imagePicker : UIImagePickerController!
         
@@ -134,7 +128,7 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
         imagePicker.allowsEditing = true
         self.present(imagePicker, animated: true, completion: nil)
     }
-        
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         var selectedImageFromPicker: UIImage?
@@ -156,19 +150,19 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
         print(userLocation)
         
         geocoder.reverseGeocodeLocation(userLocation,
-            completionHandler: { (placemarks, error) in
-                if error == nil {
-                    let location = placemarks?[0]
-                    print(location!)
-                    self.currentCity = (location?.locality)!
-                    print(self.currentCity)
-                    self.currentStateCode = (location?.administrativeArea)!
-                    print(self.currentStateCode)
-            }
-                else {
-            // An error occurred during geocoding.
-                    print("couldnt get users location")
-                }
+                                        completionHandler: { (placemarks, error) in
+                                            if error == nil {
+                                                let location = placemarks?[0]
+                                                print(location!)
+                                                self.currentCity = (location?.locality)!
+                                                print(self.currentCity)
+                                                self.currentStateCode = (location?.administrativeArea)!
+                                                print(self.currentStateCode)
+                                            }
+                                            else {
+                                                // An error occurred during geocoding.
+                                                print("couldnt get users location")
+                                            }
         })
     }
     
@@ -205,12 +199,10 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
         mainImage.layer.masksToBounds = true;
         mainImage.layer.borderWidth = 0;
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 }
-
-    
 
