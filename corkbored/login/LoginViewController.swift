@@ -21,6 +21,10 @@ class LoginViewController: UIViewController {
        handleLogin()
     }
 
+    @IBAction func dontHaveAnAccount(_ sender: Any) {
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

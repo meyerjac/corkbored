@@ -89,11 +89,15 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
                     }
                     
                 }
+                self.whatsOnYourMindTextField.text = ""
+                self.newPostImageView.isHidden = true
+                self.tabBarController?.selectedIndex = 0
             })
         }
     }
     
     func sendPicturelessPostToDatabase() {
+
         let message = self.whatsOnYourMindTextField.text
         
         let uid = (Auth.auth().currentUser?.uid)!
@@ -120,6 +124,10 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
             refs[i].setValue(post)
             
         }
+        
+        whatsOnYourMindTextField.text = ""
+        newPostImageView.isHidden = true
+        self.tabBarController?.selectedIndex = 0
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {

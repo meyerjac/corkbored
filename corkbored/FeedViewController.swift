@@ -5,6 +5,7 @@ import Nuke
 import CoreLocation
 
 class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource {
+    
     //CORELOCATION, VARIABLES, STORAGE
     var locationManager = CLLocationManager()
     var geocoder = CLGeocoder()
@@ -16,11 +17,20 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     var manager = Nuke.Manager.shared
     var posts = [Post]()
     
-    @IBOutlet weak var tableView: UITableView!
+    //passing messageData
+    var clickedPostMessageBody = ""
     
-//    @IBAction func logout(_ sender: Any) {
-//        handleLogout()
-//    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    @IBOutlet weak var tableView: UITableView!
     
     //TABLE VIEW FUNCTIONS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -46,8 +56,6 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         
         //pulling and identifying each post from array as a single post
         let post = posts[indexPath.row]
-        
-        
         
         //getting the correct timestamp label for post
         let postDate = Double(post.pinnedTimeAsInterval)
@@ -101,7 +109,8 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
             textAndImageCell.profilePhotoImageView?.layer.borderWidth = 1.0
             textAndImageCell.profilePhotoImageView?.layer.masksToBounds = false
             textAndImageCell.profilePhotoImageView.layer.borderColor = UIColor.white.cgColor
-            textAndImageCell.profilePhotoImageView?.layer.cornerRadius = textAndImageCell.profilePhotoImageView.frame.size.width / 2
+            textAndImageCell.profilePhotoImageView?.layer.cornerRadius
+            textAndImageCell.profilePhotoImageView.frame.size.width / 2
             textAndImageCell.profilePhotoImageView?.clipsToBounds = true
             
             //setting picture field
@@ -117,19 +126,9 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         } else {
             let textOnlyCell = tableView.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as! FeedViewControllerTableViewCell
             
-            textOnlyCell.likeButton.tag = indexPath.row
-            
-            textOnlyCell.likeButton.addTarget(self, action: #selector(handleLike), for: .touchUpInside)
-            
-            textOnlyCell.dislikeButton.tag = indexPath.row
-            
-            textOnlyCell.dislikeButton.addTarget(self, action: #selector(handledislike), for: .touchUpInside)
-            
             textOnlyCell.commentButton.tag = indexPath.row
             
-            textOnlyCell.commentButton.addTarget(self, action: #selector(commentdislike), for: .touchUpInside)
-            
-            
+            textOnlyCell.commentButton.addTarget(self, action: #selector(handleComment), for: .touchUpInside)
             
             //getting Profile picture and username
             var ref: DatabaseReference!
@@ -144,7 +143,9 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
                 let username = value?["username"] as? String ?? ""
                 
                 if let urlUrl = URL.init(string: postProfilePictureStringURL) {
+                    print("loaded Photo")
                     self.manager.loadImage(with: urlUrl, into: textOnlyCell.profilePhotoImageView)
+                    print("loaded Photo")
                 }
                 
                 textOnlyCell.usernameTextField.text = username
@@ -153,7 +154,6 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
                 print(error.localizedDescription)
             }
             
-        
             textOnlyCell.profilePhotoImageView?.contentMode = .scaleAspectFit
             textOnlyCell.profilePhotoImageView?.layer.borderWidth = 1.0
             textOnlyCell.profilePhotoImageView?.layer.masksToBounds = false
@@ -169,80 +169,18 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         }
     }
     
-    @objc func handleLike(sender: UIButton) {
-        //get UsersLocation
-        let userLocationObject = UserDefaults.standard.object(forKey: "currentUserLocation")
-        
-        if let userLocation = userLocationObject as? String {
-            currentCity = userLocation
-        }
-        
-        //uid
-        let uid = (Auth.auth().currentUser?.uid)!
-        
-        //get PostID
-        let clickedPostUid = self.posts[sender.tag].postUid
-        print(clickedPostUid)
-        
-        //getting Profile picture and username
-        var ref: DatabaseReference!
-        ref = Database.database().reference()
-        
-        let postRef = ref.child("posts").child(self.currentCity).child(clickedPostUid).child("likes")
-        
-        postRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            // Get user value
-            if snapshot.hasChild(uid) {
-                
-                print("has child")
-                
-                postRef.child(uid).removeValue()
-                
-            } else {
-                print("does not have child")
-                
-                
-                //animated
-                sender.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
-                
-                UIView.animate(withDuration: 2.0,
-                               delay: 0,
-                               usingSpringWithDamping: CGFloat(0.20),
-                               initialSpringVelocity: CGFloat(6.0),
-                               options: UIViewAnimationOptions.allowUserInteraction,
-                               animations: {
-                                sender.transform = CGAffineTransform.identity
-                },
-                               completion: { Void in()  }
-                )
-                
-                postRef.child(uid).setValue(uid)
-            }
-        }) { (error) in
-            print(error.localizedDescription)
-        }
-    }
-    
-    @objc func handledislike(sender: UIButton) {
-    }
-    
     @objc func handleComment(sender: UIButton) {
+        clickedPostMessageBody = posts[sender.tag].postMessage
+        print(clickedPostMessageBody)
+        print(clickedPostMessageBody, "1")
         
+        
+        performSegue(withIdentifier: "toComments", sender: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchUserLocation()
-        
-//        do {
-//            try Auth.auth().signOut()
-//
-//        } catch let logoutError {
-//
-//            print(logoutError)
-//
-//        }
-//        checkAuthStatus()
     }
     
     func fetchUserLocation() {
@@ -252,20 +190,35 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         locationManager.requestLocation()
     }
     
-//    func checkAuthStatus() {
-//        let userInfo = Auth.auth().currentUser
-//
-//        if (userInfo != nil) {
-//
-//        // user is signed in
-//        fetchCurrentPosition()
-//
-//        } else {
-//
-//        performSegue(withIdentifier: "loggingOut", sender: self)
-//
-//        }
-//    }
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        self.userLocation = locations[0]
+        
+        geocoder.reverseGeocodeLocation(userLocation,
+                                        completionHandler: { (placemarks, error) in
+                                            if error == nil {
+                                                
+                                                let location = placemarks?[0]
+                                                
+                                                let retreivedCity = (location?.locality)!
+                                                
+                                                UserDefaults.standard.set(retreivedCity, forKey: "currentUserLocation")
+                                                
+                                                self.currentCity = retreivedCity
+                                                
+                                                self.fetchPosts(city: self.currentCity)
+                                                
+                                                self.title = self.currentCity
+                                            }
+                                                
+                                            else {
+                                                // An error occurred during geocoding.
+                                                
+                                                print("couldnt get users location")
+                                                
+                                            }
+        })
+    }
 
     func deletePostFromFeed(postUid: String) {
         print("trying to delete")
@@ -278,27 +231,28 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
          print("trying to delete after remove")
         return
     }
-    
-    func fetchCurrentPosition() {
-        let userInfo = Auth.auth().currentUser
-        let uid = userInfo?.uid
-        
-        var ref: DatabaseReference!
-        ref = Database.database().reference()
-        
-        ref.child("users").child(uid!).observeSingleEvent(of: .value, with: { (snapshot) in
-            // Get user value
-            let value = snapshot.value as? NSDictionary
-            self.currentCity = value?["currentCity"] as? String ?? ""
-            self.fetchPosts(city: self.currentCity)
-        }) { (error) in
-            print(error.localizedDescription)
-        }
-    }
+//
+//    func fetchCurrentPosition() {
+//        let userInfo = Auth.auth().currentUser
+//        let uid = userInfo?.uid
+//
+//        var ref: DatabaseReference!
+//        ref = Database.database().reference()
+//
+//        ref.child("users").child(uid!).observeSingleEvent(of: .value, with: { (snapshot) in
+//            // Get user value
+//            let value = snapshot.value as? NSDictionary
+//            self.currentCity = value?["currentCity"] as? String ?? ""
+//            self.fetchPosts(city: self.currentCity)
+//        }) { (error) in
+//            print(error.localizedDescription)
+//        }
+//    }
     
     func fetchPosts(city: String) {
 
         var refExists: DatabaseReference!
+        
         refExists = Database.database().reference()
 
         refExists.child("posts").observeSingleEvent(of: .value, with: { (snapshot) in
@@ -339,54 +293,17 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
             }
         }))
     }
- 
-//    @objc func handleLogout() {
-//        do {
-//            try Auth.auth().signOut()
-//
-//            } catch let logoutError {
-//
-//            print(logoutError)
-//
-//            }
-//
-//       performSegue(withIdentifier: "loggingOut", sender: self)
-//    }
-    
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        self.userLocation = locations[0]
-        
-        geocoder.reverseGeocodeLocation(userLocation,
-                                        completionHandler: { (placemarks, error) in
-                                            if error == nil {
-                                                
-                                                let location = placemarks?[0]
-                                                
-                                                let retreivedCity = (location?.locality)!
-                                                
-                                                UserDefaults.standard.set(retreivedCity, forKey: "currentUserLocation")
-                                                
-                                                self.currentCity = retreivedCity
-                                                
-                                                self.fetchPosts(city: self.currentCity)
-                                            }
-                                                
-                                            else {
-                                                // An error occurred during geocoding.
-                                                
-                                                print("couldnt get users location")
-                                                
-                                            }
-        })
+  
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        //failed to get one data point
+        print("failed")
     }
     
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        print("failed")
+        var commentsViewController = segue.destination as! PostCommentsViewController
+            commentsViewController.messageBodyText = clickedPostMessageBody
         
-        //failed to get one data point
     }
     
     override func didReceiveMemoryWarning() {
