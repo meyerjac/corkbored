@@ -193,7 +193,6 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
           nowish = String(Date().timeIntervalSinceReferenceDate)
         
                 var uid = (Auth.auth().currentUser?.uid)!
-                uid = (Auth.auth().currentUser?.uid)!
                 var profileRef: DatabaseReference!
         
                 profileRef = Database.database().reference().child("users").child(uid)

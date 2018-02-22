@@ -19,6 +19,7 @@
 		851D042B203278F5006986E6 /* Proxima_Nova_Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 851D042A203278E1006986E6 /* Proxima_Nova_Light.otf */; };
 		851D042F20327A8C006986E6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 851D042E20327A8C006986E6 /* GoogleService-Info.plist */; };
 		851D04312033E459006986E6 /* PostCommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 851D04302033E459006986E6 /* PostCommentsViewController.swift */; };
+		851D0433203574F5006986E6 /* PostCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 851D0432203574F5006986E6 /* PostCommentTableViewCell.swift */; };
 		852197221FCFC5AE0013D76C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852197211FCFC5AE0013D76C /* AppDelegate.swift */; };
 		852197241FCFC5AE0013D76C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852197231FCFC5AE0013D76C /* ViewController.swift */; };
 		852197271FCFC5AE0013D76C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 852197251FCFC5AE0013D76C /* Main.storyboard */; };
@@ -37,6 +38,8 @@
 		85CEB66E202AA76E00636D88 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CEB66D202AA76E00636D88 /* ProfileViewController.swift */; };
 		85F4665C1FE391CC00D46D5C /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F4665B1FE391CC00D46D5C /* Post.swift */; };
 		85F466621FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */; };
+		85FCC26F203804750091B9AC /* HashtagCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FCC26E203804750091B9AC /* HashtagCollectionViewCell.swift */; };
+		85FCC271203812700091B9AC /* HashtagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FCC270203812700091B9AC /* HashtagViewController.swift */; };
 		85FD871F202D79BE00143339 /* aku_aku.png in Resources */ = {isa = PBXBuildFile; fileRef = 85FD871E202D79BE00143339 /* aku_aku.png */; };
 		85FD8721202D7B2800143339 /* appTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FD8720202D7B2800143339 /* appTabController.swift */; };
 		85FD8723202E16B900143339 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85FD8722202E16B900143339 /* LaunchScreen.storyboard */; };
@@ -57,6 +60,7 @@
 		851D042A203278E1006986E6 /* Proxima_Nova_Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Proxima_Nova_Light.otf; sourceTree = "<group>"; };
 		851D042E20327A8C006986E6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		851D04302033E459006986E6 /* PostCommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCommentsViewController.swift; sourceTree = "<group>"; };
+		851D0432203574F5006986E6 /* PostCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCommentTableViewCell.swift; sourceTree = "<group>"; };
 		8521971E1FCFC5AE0013D76C /* corkbored.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = corkbored.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		852197211FCFC5AE0013D76C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		852197231FCFC5AE0013D76C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -78,6 +82,8 @@
 		85CEB66D202AA76E00636D88 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		85F4665B1FE391CC00D46D5C /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewControllerTableViewCell.swift; sourceTree = "<group>"; };
+		85FCC26E203804750091B9AC /* HashtagCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagCollectionViewCell.swift; sourceTree = "<group>"; };
+		85FCC270203812700091B9AC /* HashtagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagViewController.swift; sourceTree = "<group>"; };
 		85FD871E202D79BE00143339 /* aku_aku.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = aku_aku.png; path = ../../../../../aku_aku.png; sourceTree = "<group>"; };
 		85FD8720202D7B2800143339 /* appTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = appTabController.swift; sourceTree = "<group>"; };
 		85FD8722202E16B900143339 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -128,12 +134,15 @@
 				850CF6B61FD71958000184CA /* corkbored.entitlements */,
 				85D513271FE8C54000DF4BC4 /* login */,
 				852197211FCFC5AE0013D76C /* AppDelegate.swift */,
-				854824A91FE8B3370046DD4C /* createPostViewController.swift */,
-				85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */,
-				85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */,
-				8526E2A6203024D400BD3F1A /* tabbedProfileViewController.swift */,
 				85FD8720202D7B2800143339 /* appTabController.swift */,
+				854824A91FE8B3370046DD4C /* createPostViewController.swift */,
 				851D04302033E459006986E6 /* PostCommentsViewController.swift */,
+				85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */,
+				85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */,
+				851D0432203574F5006986E6 /* PostCommentTableViewCell.swift */,
+				85FCC26E203804750091B9AC /* HashtagCollectionViewCell.swift */,
+				85FCC270203812700091B9AC /* HashtagViewController.swift */,
+				8526E2A6203024D400BD3F1A /* tabbedProfileViewController.swift */,
 				852197251FCFC5AE0013D76C /* Main.storyboard */,
 				85FD8722202E16B900143339 /* LaunchScreen.storyboard */,
 				8521972B1FCFC5AE0013D76C /* Assets.xcassets */,
@@ -419,12 +428,15 @@
 				85F4665C1FE391CC00D46D5C /* Post.swift in Sources */,
 				85A5361A1FD91D7B0096E054 /* User.swift in Sources */,
 				852197241FCFC5AE0013D76C /* ViewController.swift in Sources */,
+				851D0433203574F5006986E6 /* PostCommentTableViewCell.swift in Sources */,
 				8521972A1FCFC5AE0013D76C /* corkbored.xcdatamodeld in Sources */,
+				85FCC26F203804750091B9AC /* HashtagCollectionViewCell.swift in Sources */,
 				85CEB66E202AA76E00636D88 /* ProfileViewController.swift in Sources */,
 				852903311FD75675005477CE /* PhoneEmailRegistrationViewController.swift in Sources */,
 				852903331FD7BC75005477CE /* UsernameViewController.swift in Sources */,
 				851D04312033E459006986E6 /* PostCommentsViewController.swift in Sources */,
 				85A5361C1FDB8B2A0096E054 /* FeedViewController.swift in Sources */,
+				85FCC271203812700091B9AC /* HashtagViewController.swift in Sources */,
 				85F466621FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift in Sources */,
 				852197221FCFC5AE0013D76C /* AppDelegate.swift in Sources */,
 			);

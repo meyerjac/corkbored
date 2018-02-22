@@ -19,23 +19,20 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     
     //passing messageData
     var clickedPostMessageBody = ""
+    var clickedTimeLabel = ""
+    var clickedUsername = ""
+    var clickedPostOwnerUid = ""
+    var clickedPostUid = ""
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    //passing profile data
+    var clickedUserNameUid = ""
     
     @IBOutlet weak var tableView: UITableView!
     
-    //TABLE VIEW FUNCTIONS
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            print(posts[indexPath.row].postUid)
-    }
+//    //TABLE VIEW FUNCTIONS
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+////            print(posts[indexPath.row].postUid)
+//    }
    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return posts.count
@@ -109,26 +106,34 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
             textAndImageCell.profilePhotoImageView?.layer.borderWidth = 1.0
             textAndImageCell.profilePhotoImageView?.layer.masksToBounds = false
             textAndImageCell.profilePhotoImageView.layer.borderColor = UIColor.white.cgColor
-            textAndImageCell.profilePhotoImageView?.layer.cornerRadius
-            textAndImageCell.profilePhotoImageView.frame.size.width / 2
+            textAndImageCell.profilePhotoImageView?.layer.cornerRadius = textAndImageCell.profilePhotoImageView.frame.size.width / 2
             textAndImageCell.profilePhotoImageView?.clipsToBounds = true
+        
             
             //setting picture field
             let postPhotoString = URL.init(string: post.pinnedMediaFileName)
             self.manager.loadImage(with: postPhotoString!, into: textAndImageCell.postPhoto)
             
             textAndImageCell.timePosted.text = stringTimeStamp
-            
             textAndImageCell.messageBody.text = post.postMessage
             
             return textAndImageCell
             
         } else {
+            
+            
             let textOnlyCell = tableView.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as! FeedViewControllerTableViewCell
             
             textOnlyCell.commentButton.tag = indexPath.row
-            
             textOnlyCell.commentButton.addTarget(self, action: #selector(handleComment), for: .touchUpInside)
+            
+            textOnlyCell.usernameTextField.tag = indexPath.row
+            let usernameTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleProfile))
+            textOnlyCell.usernameTextField.addGestureRecognizer(usernameTapGesture)
+            
+            //react Image
+            textOnlyCell.reactButton.tag = indexPath.row
+            textOnlyCell.reactButton.addTarget(self, action: #selector(handleReaction), for: .touchUpInside)
             
             //getting Profile picture and username
             var ref: DatabaseReference!
@@ -143,9 +148,7 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
                 let username = value?["username"] as? String ?? ""
                 
                 if let urlUrl = URL.init(string: postProfilePictureStringURL) {
-                    print("loaded Photo")
                     self.manager.loadImage(with: urlUrl, into: textOnlyCell.profilePhotoImageView)
-                    print("loaded Photo")
                 }
                 
                 textOnlyCell.usernameTextField.text = username
@@ -171,11 +174,33 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     
     @objc func handleComment(sender: UIButton) {
         clickedPostMessageBody = posts[sender.tag].postMessage
-        print(clickedPostMessageBody)
-        print(clickedPostMessageBody, "1")
-        
+        clickedUsername = "workingOnUserName"
+        clickedTimeLabel = posts[sender.tag].pinnedTimeAsInterval
+        clickedPostOwnerUid = posts[sender.tag].ownerUid
+        clickedPostUid = posts[sender.tag].postUid
         
         performSegue(withIdentifier: "toComments", sender: nil)
+    }
+    
+    @objc func handleProfile(sender: UIGestureRecognizer) {
+        print("hello")
+        
+//        let labelTag = (sender.view as! UILabel).tag
+//
+//            let U = posts[labelTag].ownerUid
+//         print("hello 3")
+//        clickedUserNameUid = U
+//
+//        performSegue(withIdentifier: "toProfile", sender: nil)
+//         print("hello 2")
+    }
+    
+    
+    @objc func handleReaction(sender: UIButton) {
+       print("clicked")
+        
+        //cue horizontal scroll view/collectionview of emojis
+        
     }
     
     override func viewDidLoad() {
@@ -257,7 +282,7 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
 
         refExists.child("posts").observeSingleEvent(of: .value, with: { (snapshot) in
 
-            if snapshot.hasChild("Corvallis") {
+            if snapshot.hasChild(self.currentCity) {
                 self.tableView.isHidden = false
                
                 Database.database().reference().child("posts").child(self.currentCity).observe(.childAdded) { (snapshot) in
@@ -303,7 +328,11 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         
         var commentsViewController = segue.destination as! PostCommentsViewController
             commentsViewController.messageBodyText = clickedPostMessageBody
-        
+            commentsViewController.postOwnerUid = clickedPostOwnerUid
+            commentsViewController.username = clickedUsername
+            commentsViewController.timeSincePost = clickedTimeLabel
+            commentsViewController.currentCity = currentCity
+            commentsViewController.postUid = clickedPostUid
     }
     
     override func didReceiveMemoryWarning() {

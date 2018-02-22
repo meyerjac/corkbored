@@ -1,14 +1,9 @@
-//
-//  UsernameViewController.swift
-//  corkbored
-//
-//  Created by Jackson Meyer on 12/5/17.
-//  Copyright © 2017 Jackson Meyer. All rights reserved.
-//
 
 import UIKit
 import Firebase
 import FirebaseDatabase
+
+//THIS VIEW IS NOT CURRENTLY IN OUR MAIN STORYBOARD, WE DELETED IT
 
 class UsernameViewController: UIViewController {
     var username = ""

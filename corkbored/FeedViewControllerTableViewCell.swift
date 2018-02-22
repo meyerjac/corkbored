@@ -16,6 +16,9 @@ class FeedViewControllerTableViewCell: UITableViewCell {
     @IBOutlet weak var timePosted: UILabel!
     @IBOutlet weak var postPhoto: UIImageView!
     @IBOutlet weak var commentButton: UIButton!
+    @IBOutlet weak var numberOfComments: UILabel!
+    @IBOutlet weak var reactImageView: UIImageView!
+    @IBOutlet weak var reactButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()

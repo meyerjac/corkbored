@@ -16,16 +16,28 @@ import FBSDKLoginKit
 class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
+        print("did Complete")
+        //exchange token for firebase credential
+        let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
         
-        print("completed Login")
-        fetchProfile()
+        Auth.auth().signIn(with: credential) { (user, error) in
+            if let error = error {
+                print("error signing in")
+                // ...
+                return
+            }
+            // User is signed in
+            print("signed in user")
+            self.fetchFacebookProfile()
+        }
     }
     
     func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
-        print("logged out")
+        print("did log out")
     }
     
     func loginButtonWillLogin(_ loginButton: FBSDKLoginButton!) -> Bool {
+        print("will Login")
         return true
     }
     
@@ -33,13 +45,11 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var signUpWithEmailButton: UIButton!
-    
     @IBAction func signUpWithEmailButton(_ sender: Any) {
         passwordTextField.isHidden = false
         emailTextField.isHidden = false
         nextButton.isHidden = false
         signUpWithEmailButton.isHidden = true
-        
     }
     
     @IBAction func signInClicked(_ sender: Any) {
@@ -81,27 +91,24 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
     override func viewDidLoad() {
         super.viewDidLoad()
         loadUIStuff()
-        
-        let facebookLoginButton = FBSDKLoginButton()
-        facebookLoginButton.readPermissions = ["public_profile", "email", "user_friends"];
-        facebookLoginButton.delegate = self
-        facebookLoginButton.frame.size.width = view.frame.width - 32
-        facebookLoginButton.frame.size.height = 50
-        facebookLoginButton.layer.cornerRadius = 3
-        facebookLoginButton.center = view.center
-        
-        view.addSubview(facebookLoginButton)
-        
-        
-        if let token = FBSDKAccessToken.current() {
-            print(token)
-            fetchProfile()
-            
-        }
+        autoLogin()
     }
     
-    func fetchProfile() {
+    
+    
+    func autoLogin() {
+        if let token = FBSDKAccessToken.current() {
+            print(token)
+            print("nothing", token)
+            fetchFacebookProfile()
+        }
+    }
+  
+    func fetchFacebookProfile() {
         print("fetch profile")
+        
+        let uid = Auth.auth().currentUser?.uid
+        print("facebook", uid)
         
         let parameters = ["fields":"email, gender"]
         FBSDKGraphRequest(graphPath: "me", parameters: nil).start { (connection, result, error) -> Void in
@@ -128,9 +135,21 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
     
     
     func loadUIStuff() {
+        //main middle sign up button and next button if email is clicked//
         nextButton.layer.cornerRadius = 3
         signUpWithEmailButton.layer.cornerRadius = 3
         
+        //set facebook button in middle and set read permissions
+        
+        let facebookLoginButton = FBSDKLoginButton()
+        facebookLoginButton.readPermissions = ["public_profile", "email", "user_friends"];
+        facebookLoginButton.delegate = self
+        facebookLoginButton.frame.size.width = view.frame.width - 32
+        facebookLoginButton.frame.size.height = 50
+        facebookLoginButton.layer.cornerRadius = 3
+        facebookLoginButton.center = view.center
+        
+        view.addSubview(facebookLoginButton)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

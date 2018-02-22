@@ -8,18 +8,24 @@
 
 import UIKit
 import FirebaseAuth
+import FBSDKLoginKit
 
 class tabbedProfileViewController: UIViewController {
+    var profileUid = String()
     
     @IBAction func Logout(_ sender: Any) {
+        
+        let firebaseAuth = Auth.auth()
         do {
-                        try Auth.auth().signOut()
-               
-                       } catch let logoutError {
-                
-                            print(logoutError)
-                
-                        }
+            print("signing out")
+            try firebaseAuth.signOut()
+             FBSDKLoginManager().logOut()
+            
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+        }
+         print("success signing out of firebase")
+        performSegue(withIdentifier: "logout", sender: nil)
     }
     
     

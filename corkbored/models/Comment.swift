@@ -28,7 +28,7 @@ class Comment {
         
         self.pinnedTimeAsInterval = snapshotValue!["pinnedTimeAsInterval"] as! String
         self.ownerUid = snapshotValue!["ownerUid"] as! String
-        self.commentMessage = snapshotValue!["postMessage"] as! String
+        self.commentMessage = snapshotValue!["commentMessage"] as! String
         self.postUid = snapshotValue!["postUid"] as! String
     }
     
