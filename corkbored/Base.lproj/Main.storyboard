@@ -147,7 +147,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sRv-yg-8Sl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-659.5" y="671.5"/>
+            <point key="canvasLocation" x="-698" y="1099"/>
         </scene>
         <!--Feed View Controller-->
         <scene sceneID="dj8-ia-JVk">
@@ -1169,6 +1169,7 @@
                         <outlet property="passwordTextField" destination="Yff-Bv-gFA" id="a8M-F9-DJW"/>
                         <outlet property="signUpWithEmailButton" destination="ZZS-7e-L5o" id="CiV-zn-F5w"/>
                         <segue destination="fZA-7c-TM3" kind="modal" identifier="toProfile" id="IgN-rV-JGD"/>
+                        <segue destination="f6Y-ZQ-Qvk" kind="modal" identifier="phoneToFeed" id="3fT-J4-ihp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kGq-yv-Veg" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1201,9 +1202,9 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="xqm-vi-2sD"/>
-        <segue reference="uuz-sF-FdZ"/>
+        <segue reference="efj-JD-fMx"/>
         <segue reference="3yB-wi-rbh"/>
-        <segue reference="QbO-ox-72O"/>
+        <segue reference="3fT-J4-ihp"/>
         <segue reference="UTq-7Z-SbW"/>
     </inferredMetricsTieBreakers>
 </document>

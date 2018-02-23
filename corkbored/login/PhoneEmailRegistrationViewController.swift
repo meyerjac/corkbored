@@ -7,39 +7,30 @@
 //
 
 import UIKit
+import CoreLocation
 import FirebaseAuth
 import Firebase
 import FirebaseAuthUI
 import FBSDKCoreKit
 import FBSDKLoginKit
 
-class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDelegate {
+class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDelegate, CLLocationManagerDelegate {
+    //filled in with Facebook data
+    var about = ""
+    var birthday = ""
+    var email = ""
+    var first_name = ""
+    var gender = ""
+    var last_name = ""
+    var name = ""
+    var id = ""
     
-    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
-        print("did Complete")
-        //exchange token for firebase credential
-        let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
-        
-        Auth.auth().signIn(with: credential) { (user, error) in
-            if let error = error {
-                print("error signing in")
-                // ...
-                return
-            }
-            // User is signed in
-            print("signed in user")
-            self.fetchFacebookProfile()
-        }
-    }
+    var currentCity = ""
+    var currentStateCode = ""
     
-    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
-        print("did log out")
-    }
-    
-    func loginButtonWillLogin(_ loginButton: FBSDKLoginButton!) -> Bool {
-        print("will Login")
-        return true
-    }
+    var locationManager = CLLocationManager()
+    var geocoder = CLGeocoder()
+    var userLocation: CLLocation = CLLocation()
     
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var emailTextField: UITextField!
@@ -50,6 +41,45 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
         emailTextField.isHidden = false
         nextButton.isHidden = false
         signUpWithEmailButton.isHidden = true
+    }
+    
+    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
+        print("did Complete")
+        
+        //exchange token for firebase credential
+        let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+        
+        Auth.auth().signIn(with: credential) { (user, error) in
+            
+            if let error = error {
+                print("error signing in")
+                return
+            }
+            
+            // generating profile
+            print("signed in user")
+            self.locationManager.delegate = self
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
+            self.locationManager.requestWhenInUseAuthorization()
+            self.locationManager.startUpdatingLocation()
+            self.fetchFacebookProfile()
+        }
+    }
+    
+    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
+        do {
+            print("signing out")
+            try Auth.auth().signOut()
+            
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+        }
+        print("did log out")
+    }
+    
+    func loginButtonWillLogin(_ loginButton: FBSDKLoginButton!) -> Bool {
+        print("will Login")
+        return true
     }
     
     @IBAction func signInClicked(_ sender: Any) {
@@ -87,52 +117,159 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
             })
     }
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadUIStuff()
         autoLogin()
     }
     
-    
-    
     func autoLogin() {
-        if let token = FBSDKAccessToken.current() {
-            print(token)
-            print("nothing", token)
-            fetchFacebookProfile()
+        
+        if Auth.auth().currentUser?.uid != nil {
+            
+            print("user logged in")
+            
+            performSegue(withIdentifier: "phoneToFeed", sender: nil)
+        } else {
+            
+            print("user not logged in")
+            
         }
     }
   
     func fetchFacebookProfile() {
-        print("fetch profile")
-        
-        let uid = Auth.auth().currentUser?.uid
-        print("facebook", uid)
-        
-        let parameters = ["fields":"email, gender"]
-        FBSDKGraphRequest(graphPath: "me", parameters: nil).start { (connection, result, error) -> Void in
-            
-            if error != nil {
-                print(error)
-                return
-            }
-            
-            print(result, "RESULT")
-            
-//            if let picture = result["picture"] as? NSDictionary, let data = picture["data"] as? Dictionary, let url = data["url"] as? String {
-//
-//                print(url)
-//
-//            }
-//
-//            if let email = result["email"] as? String {
-//                print(email)
-//            }
+        if((FBSDKAccessToken.current()) != nil){
+            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "about,birthday,email,first_name,gender,id,last_name, picture.width(1080).height(1080)"]).start(completionHandler: { (connection, result, error) -> Void in
+                if (error != nil){
+                   print(error, "error")
+                }
+                
+                if let dictionary = result as? [String: Any] {
+                    print(dictionary, "dictionary")
+                    
+                    if let about = dictionary["about"] as? String {
+                        self.about = about
+                    }
+                    
+                    if let birthday = dictionary["birthday"] as? String {
+                        self.birthday = birthday
+                    }
+                    
+                    if let email = dictionary["email"] as? String {
+                        self.email = email
+                    }
+                    if let first_name = dictionary["first_name"] as? String {
+//                        self.first_name = first_name
+                    }
+                    if let gender = dictionary["gender"] as? String {
+                        self.gender = gender
+                    }
+                    if let id = dictionary["id"] as? String {
+                        self.id = id
+                    }
+                    if let last_name = dictionary["last_name"] as? String {
+                        self.name = last_name
+                    }
+                    if let picture = dictionary["picture"] as? [String: Any] {
+                        if let data = picture["data"] as? [String: Any] {
+                            if let url = data["url"] as? String {
+                                let photoUrlString: String! = url
+                                self.downloadAndStoreImageAsFirebaseUrl(photoUrl: photoUrlString)
+                                
+                            }
+                        }
+                    }
+                }
+                
+            })
         }
     }
     
+    func downloadAndStoreImageAsFirebaseUrl(photoUrl: String) {
+        let myUrl = URL(string: photoUrl);
+        var request = URLRequest(url:myUrl!)
+        request.httpMethod = "GET"
+        
+        let task = URLSession.shared.dataTask(with: request) {
+            data, response, error in
+            print("HERE6")
+            if let err = error {
+                print(err, "some error occured")
+            } else {
+                print("HERE7")
+                if(response as? HTTPURLResponse) != nil {
+                    print("HERE8")
+                    if let imageData = data {
+                        print("HERE9")
+                        let imageName = NSUUID().uuidString
+                        let storageRef = Storage.storage().reference().child("profileImages").child("\(imageName).png")
+                        print("HERE10")
+                            
+                            storageRef.putData(imageData, metadata: nil, completion: { (metadata, error) in
+                                if error != nil {
+                                    print(error ?? "error")
+                                    return
+                                }
+                                
+                                if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
+                                    let values = [ "bio": self.about, "birthday": self.birthday,"currentCity": self.currentCity, "currentState": self.currentStateCode, "name": self.name,"profilePic": profileImageUrl]
+                                    
+                                    let uid = Auth.auth().currentUser?.uid
+                                    
+                                    self.registerUserIntoDatabaseWithUid(uid: uid!, values: values as [String : AnyObject])
+                                }
+                            })
+                    } else {
+                        print("no image found")
+                    }
+                } else {
+                    print("no response from url server")
+                }
+            }
+        }
+        task.resume()
+    }
     
+    func registerUserIntoDatabaseWithUid(uid: String, values:[String: AnyObject]) {
+        print("HERE5")
+        print(values, "Values")
+        var ref: DatabaseReference!
+        ref = Database.database().reference()
+        print("HERE6")
+        ref.child("users").child(uid).setValue(values) { (err, ref) in
+            
+            if err != nil {
+                
+                print(err!)
+                
+            } else {
+                print("made it to the end")
+                
+                self.performSegue(withIdentifier: "phoneToFeed", sender: nil)
+            }
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        self.userLocation = locations[0]
+        print(userLocation)
+        
+        geocoder.reverseGeocodeLocation(userLocation,
+                                        completionHandler: { (placemarks, error) in
+                                            if error == nil {
+                                                let location = placemarks?[0]
+                                                print(location!)
+                                                self.currentCity = (location?.locality)!
+                                                print(self.currentCity)
+                                                self.currentStateCode = (location?.administrativeArea)!
+                                                print(self.currentStateCode)
+                                            }
+                                            else {
+                                                // An error occurred during geocoding.
+                                                print("couldnt get users location")
+                                            }
+        })
+    }
     
     func loadUIStuff() {
         //main middle sign up button and next button if email is clicked//
@@ -148,7 +285,6 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
         facebookLoginButton.frame.size.height = 50
         facebookLoginButton.layer.cornerRadius = 3
         facebookLoginButton.center = view.center
-        
         view.addSubview(facebookLoginButton)
     }
     
@@ -157,8 +293,8 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
     }
     
     func handleCreateUser() {
-        var ref: DatabaseReference!
         
+        var ref: DatabaseReference!
         ref = Database.database().reference()
         
         let userInfo = Auth.auth().currentUser
