@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		6C5ECBF9AE0EC31A0D117A70 /* Pods_corkbored.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE112B83570EAD111C300F68 /* Pods_corkbored.framework */; };
+		850BCE9B2059108A0059138A /* SearchBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850BCE9A2059108A0059138A /* SearchBarViewController.swift */; };
+		850BCEA5205A13C20059138A /* MessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850BCEA4205A13C20059138A /* MessagesTableViewController.swift */; };
+		850BCEA7205A4E190059138A /* messagesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850BCEA6205A4E190059138A /* messagesTableViewCell.swift */; };
 		851D041D20327400006986E6 /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 851D041A203273FF006986E6 /* circle.png */; };
 		851D041E20327400006986E6 /* crying.png in Resources */ = {isa = PBXBuildFile; fileRef = 851D041B20327400006986E6 /* crying.png */; };
 		851D041F20327400006986E6 /* praise.png in Resources */ = {isa = PBXBuildFile; fileRef = 851D041C20327400006986E6 /* praise.png */; };
@@ -29,6 +32,10 @@
 		8529032F1FD75602005477CE /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8529032E1FD75602005477CE /* LoginViewController.swift */; };
 		852903311FD75675005477CE /* PhoneEmailRegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852903301FD75675005477CE /* PhoneEmailRegistrationViewController.swift */; };
 		852903331FD7BC75005477CE /* UsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852903321FD7BC75005477CE /* UsernameViewController.swift */; };
+		8539FE9620413E1700A2D0EF /* RulesAndInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8539FE9520413E1700A2D0EF /* RulesAndInfoViewController.swift */; };
+		8539FE9E20454A1C00A2D0EF /* tabbedCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8539FE9D20454A1C00A2D0EF /* tabbedCameraViewController.swift */; };
+		85424E04205E1AD700191BF3 /* quickMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85424E03205E1AD700191BF3 /* quickMessageViewController.swift */; };
+		85424E06205E273300191BF3 /* OtherProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85424E05205E273300191BF3 /* OtherProfileViewController.swift */; };
 		85430BE21FD229A300DB35B6 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85430BE01FD229A300DB35B6 /* FBSDKCoreKit.framework */; };
 		85430BE31FD229A300DB35B6 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85430BE11FD229A300DB35B6 /* FBSDKLoginKit.framework */; };
 		854824AA1FE8B3370046DD4C /* createPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854824A91FE8B3370046DD4C /* createPostViewController.swift */; };
@@ -48,6 +55,9 @@
 
 /* Begin PBXFileReference section */
 		405C5784881BC669CDAE8EBA /* Pods-corkbored.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-corkbored.debug.xcconfig"; path = "Pods/Target Support Files/Pods-corkbored/Pods-corkbored.debug.xcconfig"; sourceTree = "<group>"; };
+		850BCE9A2059108A0059138A /* SearchBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarViewController.swift; sourceTree = "<group>"; };
+		850BCEA4205A13C20059138A /* MessagesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesTableViewController.swift; sourceTree = "<group>"; };
+		850BCEA6205A4E190059138A /* messagesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = messagesTableViewCell.swift; sourceTree = "<group>"; };
 		850CF6B61FD71958000184CA /* corkbored.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = corkbored.entitlements; sourceTree = "<group>"; };
 		851D041A203273FF006986E6 /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
 		851D041B20327400006986E6 /* crying.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crying.png; sourceTree = "<group>"; };
@@ -72,6 +82,10 @@
 		8529032E1FD75602005477CE /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		852903301FD75675005477CE /* PhoneEmailRegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneEmailRegistrationViewController.swift; sourceTree = "<group>"; };
 		852903321FD7BC75005477CE /* UsernameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameViewController.swift; sourceTree = "<group>"; };
+		8539FE9520413E1700A2D0EF /* RulesAndInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesAndInfoViewController.swift; sourceTree = "<group>"; };
+		8539FE9D20454A1C00A2D0EF /* tabbedCameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tabbedCameraViewController.swift; sourceTree = "<group>"; };
+		85424E03205E1AD700191BF3 /* quickMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = quickMessageViewController.swift; sourceTree = "<group>"; };
+		85424E05205E273300191BF3 /* OtherProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileViewController.swift; sourceTree = "<group>"; };
 		85430BE01FD229A300DB35B6 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../DOCUMENTS/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		85430BE11FD229A300DB35B6 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../DOCUMENTS/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		854824A91FE8B3370046DD4C /* createPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createPostViewController.swift; sourceTree = "<group>"; };
@@ -133,7 +147,6 @@
 				85A5361F1FDB9B7C0096E054 /* fonts */,
 				850CF6B61FD71958000184CA /* corkbored.entitlements */,
 				85D513271FE8C54000DF4BC4 /* login */,
-				852197211FCFC5AE0013D76C /* AppDelegate.swift */,
 				85FD8720202D7B2800143339 /* appTabController.swift */,
 				854824A91FE8B3370046DD4C /* createPostViewController.swift */,
 				851D04302033E459006986E6 /* PostCommentsViewController.swift */,
@@ -143,6 +156,14 @@
 				85FCC26E203804750091B9AC /* HashtagCollectionViewCell.swift */,
 				85FCC270203812700091B9AC /* HashtagViewController.swift */,
 				8526E2A6203024D400BD3F1A /* tabbedProfileViewController.swift */,
+				85424E03205E1AD700191BF3 /* quickMessageViewController.swift */,
+				8539FE9520413E1700A2D0EF /* RulesAndInfoViewController.swift */,
+				852197211FCFC5AE0013D76C /* AppDelegate.swift */,
+				8539FE9D20454A1C00A2D0EF /* tabbedCameraViewController.swift */,
+				850BCE9A2059108A0059138A /* SearchBarViewController.swift */,
+				850BCEA4205A13C20059138A /* MessagesTableViewController.swift */,
+				850BCEA6205A4E190059138A /* messagesTableViewCell.swift */,
+				85424E05205E273300191BF3 /* OtherProfileViewController.swift */,
 				852197251FCFC5AE0013D76C /* Main.storyboard */,
 				85FD8722202E16B900143339 /* LaunchScreen.storyboard */,
 				8521972B1FCFC5AE0013D76C /* Assets.xcassets */,
@@ -350,6 +371,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-corkbored/Pods-corkbored-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/ASIACheckmarkView/ASIACheckmarkView.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/BoringSSL/openssl.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
@@ -357,6 +379,8 @@
 				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/ImagePicker/ImagePicker.framework",
+				"${BUILT_PRODUCTS_DIR}/JTHamburgerButton/JTHamburgerButton.framework",
 				"${BUILT_PRODUCTS_DIR}/Nuke/Nuke.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/RSKImageCropper/RSKImageCropper.framework",
@@ -371,6 +395,7 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ASIACheckmarkView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
@@ -378,6 +403,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ImagePicker.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JTHamburgerButton.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nuke.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RSKImageCropper.framework",
@@ -421,21 +448,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				85FD8721202D7B2800143339 /* appTabController.swift in Sources */,
+				850BCEA5205A13C20059138A /* MessagesTableViewController.swift in Sources */,
+				85424E06205E273300191BF3 /* OtherProfileViewController.swift in Sources */,
 				8529032F1FD75602005477CE /* LoginViewController.swift in Sources */,
+				850BCE9B2059108A0059138A /* SearchBarViewController.swift in Sources */,
 				854824AA1FE8B3370046DD4C /* createPostViewController.swift in Sources */,
 				8526E2A7203024D400BD3F1A /* tabbedProfileViewController.swift in Sources */,
 				85FD872B202EF63500143339 /* Comment.swift in Sources */,
 				85F4665C1FE391CC00D46D5C /* Post.swift in Sources */,
 				85A5361A1FD91D7B0096E054 /* User.swift in Sources */,
+				850BCEA7205A4E190059138A /* messagesTableViewCell.swift in Sources */,
+				85424E04205E1AD700191BF3 /* quickMessageViewController.swift in Sources */,
 				852197241FCFC5AE0013D76C /* ViewController.swift in Sources */,
 				851D0433203574F5006986E6 /* PostCommentTableViewCell.swift in Sources */,
 				8521972A1FCFC5AE0013D76C /* corkbored.xcdatamodeld in Sources */,
 				85FCC26F203804750091B9AC /* HashtagCollectionViewCell.swift in Sources */,
+				8539FE9E20454A1C00A2D0EF /* tabbedCameraViewController.swift in Sources */,
 				85CEB66E202AA76E00636D88 /* ProfileViewController.swift in Sources */,
 				852903311FD75675005477CE /* PhoneEmailRegistrationViewController.swift in Sources */,
 				852903331FD7BC75005477CE /* UsernameViewController.swift in Sources */,
 				851D04312033E459006986E6 /* PostCommentsViewController.swift in Sources */,
 				85A5361C1FDB8B2A0096E054 /* FeedViewController.swift in Sources */,
+				8539FE9620413E1700A2D0EF /* RulesAndInfoViewController.swift in Sources */,
 				85FCC271203812700091B9AC /* HashtagViewController.swift in Sources */,
 				85F466621FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift in Sources */,
 				852197221FCFC5AE0013D76C /* AppDelegate.swift in Sources */,

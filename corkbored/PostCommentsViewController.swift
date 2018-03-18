@@ -28,6 +28,18 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
     
     @IBAction func sendCommentButtonClicked(_ sender: Any) {
         var PostRef = Database.database().reference().child("posts").child(currentCity).child(postUid).child("comments")
+        var PostRefForNumberOfComments = Database.database().reference().child("posts").child(currentCity).child(postUid).child("numberOfComments")
+        
+        
+        PostRefForNumberOfComments.observeSingleEvent(of: .value, with: { (snapshot) in
+            let valString = snapshot.value as! String
+            if let value = Int(valString) {
+                var newValue = value + 1
+                PostRefForNumberOfComments.setValue("\(newValue)")
+            }
+        })
+        
+        
         let replyRef = PostRef.childByAutoId()
 
         var typedComment = commentTextField.text!
@@ -36,6 +48,7 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
         
         let comment = Comment(pinnedTimeAsInterval: nowish, ownerUid: ownerUid, commentMessage: typedComment, postUid: postUid)
         let commentObject = comment.toAnyObject()
+        
         replyRef.setValue(commentObject)
         
         commentTextField.text = ""
@@ -76,7 +89,6 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
         
         cell.commentCellMessageBody.text = comment.commentMessage
         cell.commentCellTimeLabel.text = stringTimeStamp
-        
         
         return cell
     }
@@ -152,13 +164,11 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
         refExists.observeSingleEvent(of: .value, with: { (snapshot) in
             
             if snapshot.hasChild(self.currentCity) {
-                print("Comment2")
                 self.commentsTableView.isHidden = false
                 
                 refExists.child(self.currentCity).child(self.postUid).child("comments").observe(.childAdded) { (snapshot) in
-                    print("Comment3")
+                
                     if let dictionary = snapshot.value as? [AnyHashable: AnyObject] {
-                        print("Comment4")
                         let comment = Comment(snapshot: snapshot)
                         self.commentsArray.insert(comment, at: self.commentsArray.endIndex)
                         DispatchQueue.main.async {

@@ -9,7 +9,6 @@
 import UIKit
 import Firebase
 
-
 class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +31,7 @@ class ViewController: UIViewController {
 }
 
     @objc func login() {
-        performSegue(withIdentifier: "toTabViewControllerFromInitialVC", sender: self)
+        performSegue(withIdentifier: "toNavigationalController", sender: self)
     }
 }
 

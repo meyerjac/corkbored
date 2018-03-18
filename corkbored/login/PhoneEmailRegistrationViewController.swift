@@ -16,17 +16,21 @@ import FBSDKLoginKit
 
 class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDelegate, CLLocationManagerDelegate {
     //filled in with Facebook data
-    var about = ""
-    var birthday = ""
-    var email = ""
-    var first_name = ""
-    var gender = ""
-    var last_name = ""
-    var name = ""
-    var id = ""
     
+    var acceptedTerms = false
+    var bio = ""
+    var birthday = ""
     var currentCity = ""
-    var currentStateCode = ""
+    var currentState = ""
+    var dms = [String]()
+    var email = ""
+    var facebookId = ""
+    var firstName = ""
+    var hashtags = [String]()
+    var lastName = ""
+    var posts = [String]()
+    var profilePic = ""
+    var replies = [String]()
     
     var locationManager = CLLocationManager()
     var geocoder = CLGeocoder()
@@ -44,7 +48,7 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
     }
     
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
-        print("did Complete")
+        print("did Complete With result")
         
         //exchange token for firebase credential
         let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
@@ -52,12 +56,12 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
         Auth.auth().signIn(with: credential) { (user, error) in
             
             if let error = error {
-                print("error signing in")
+                print("error signing in didCompleteWith Result")
                 return
             }
             
             // generating profile
-            print("signed in user")
+            print("generating profile")
             self.locationManager.delegate = self
             self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
             self.locationManager.requestWhenInUseAuthorization()
@@ -66,23 +70,9 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
         }
     }
     
-    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
-        do {
-            print("signing out")
-            try Auth.auth().signOut()
-            
-        } catch let signOutError as NSError {
-            print ("Error signing out: %@", signOutError)
-        }
-        print("did log out")
-    }
-    
-    func loginButtonWillLogin(_ loginButton: FBSDKLoginButton!) -> Bool {
-        print("will Login")
-        return true
-    }
-    
     @IBAction func signInClicked(_ sender: Any) {
+        
+        
         let vc = LoginViewController()
         self.present(vc, animated: true, completion: nil)
     }
@@ -90,9 +80,10 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
     @IBAction func nextButtonClicked(_ sender: Any) {
         nextButton.isEnabled = false
 
-            let email: String = emailTextField.text!
+            self.email = emailTextField.text!
+        print(self.email, "EMAIL1")
             let password: String = passwordTextField.text!
-            Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
+            Auth.auth().createUser(withEmail: self.email, password: password, completion: { (user, error) in
                 if error != nil {
                     print(error!)
                     let alert = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
@@ -124,16 +115,11 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
     }
     
     func autoLogin() {
-        
         if Auth.auth().currentUser?.uid != nil {
-            
-            print("user logged in")
-            
+            print("user auto logged in")
             performSegue(withIdentifier: "phoneToFeed", sender: nil)
         } else {
-            
             print("user not logged in")
-            
         }
     }
   
@@ -148,7 +134,7 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
                     print(dictionary, "dictionary")
                     
                     if let about = dictionary["about"] as? String {
-                        self.about = about
+                        self.bio = about
                     }
                     
                     if let birthday = dictionary["birthday"] as? String {
@@ -159,16 +145,13 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
                         self.email = email
                     }
                     if let first_name = dictionary["first_name"] as? String {
-//                        self.first_name = first_name
+                        self.firstName = first_name
                     }
-                    if let gender = dictionary["gender"] as? String {
-                        self.gender = gender
-                    }
-                    if let id = dictionary["id"] as? String {
-                        self.id = id
+                    if let facebookId = dictionary["id"] as? String {
+                        self.facebookId = facebookId
                     }
                     if let last_name = dictionary["last_name"] as? String {
-                        self.name = last_name
+                        self.lastName = last_name
                     }
                     if let picture = dictionary["picture"] as? [String: Any] {
                         if let data = picture["data"] as? [String: Any] {
@@ -212,11 +195,13 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
                                 }
                                 
                                 if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
-                                    let values = [ "bio": self.about, "birthday": self.birthday,"currentCity": self.currentCity, "currentState": self.currentStateCode, "name": self.name,"profilePic": profileImageUrl]
+                                    var type = "facebook"
                                     
+                                    let values = ["acceptedTerms": self.acceptedTerms, "bio": self.bio, "birthday": self.birthday, "currentCity": self.currentCity, "currentState": self.currentState, "dms": self.dms, "email": self.email, "facebookId": self.facebookId, "firstName": self.firstName, "hashtags": self.hashtags, "lastName": self.lastName, "posts": self.posts, "profilePic": profileImageUrl, "replies": self.replies] as [String : Any]
+             
                                     let uid = Auth.auth().currentUser?.uid
                                     
-                                    self.registerUserIntoDatabaseWithUid(uid: uid!, values: values as [String : AnyObject])
+                                    self.registerUserIntoDatabaseWithUid(uid: uid!, values: values as [String : AnyObject], type: type)
                                 }
                             })
                     } else {
@@ -230,12 +215,10 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
         task.resume()
     }
     
-    func registerUserIntoDatabaseWithUid(uid: String, values:[String: AnyObject]) {
-        print("HERE5")
-        print(values, "Values")
+    func registerUserIntoDatabaseWithUid(uid: String, values:[String: AnyObject], type: String) {
         var ref: DatabaseReference!
         ref = Database.database().reference()
-        print("HERE6")
+     
         ref.child("users").child(uid).setValue(values) { (err, ref) in
             
             if err != nil {
@@ -245,24 +228,28 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
             } else {
                 print("made it to the end")
                 
-                self.performSegue(withIdentifier: "phoneToFeed", sender: nil)
+                if type == "facebook" {
+                    print("facebook")
+                    self.performSegue(withIdentifier: "facebookSignInToHashtags", sender: nil)
+                    
+                } else {
+                    print("email")
+                    self.performSegue(withIdentifier: "toProfileSetUpPage", sender: nil)
             }
         }
     }
+}
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         self.userLocation = locations[0]
-        print(userLocation)
-        
+
         geocoder.reverseGeocodeLocation(userLocation,
                                         completionHandler: { (placemarks, error) in
                                             if error == nil {
                                                 let location = placemarks?[0]
-                                                print(location!)
+                                                //setting current city/state
                                                 self.currentCity = (location?.locality)!
-                                                print(self.currentCity)
-                                                self.currentStateCode = (location?.administrativeArea)!
-                                                print(self.currentStateCode)
+                                                self.currentState = (location?.administrativeArea)!
                                             }
                                             else {
                                                 // An error occurred during geocoding.
@@ -293,28 +280,35 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
     }
     
     func handleCreateUser() {
+       let uid = Auth.auth().currentUser?.uid
+        print(self.email, "EMAIL")
+        var type = "email"
+            
+        let values = ["acceptedTerms": self.acceptedTerms, "bio": self.bio, "birthday": self.birthday, "currentCity": self.currentCity, "currentState": self.currentState, "dms": self.dms, "email": self.email, "facebookId": self.facebookId, "firstName": self.firstName, "hashtags": self.hashtags, "lastName": self.lastName, "posts": self.posts, "profilePic": self.profilePic, "replies": self.replies] as [String : Any]
         
-        var ref: DatabaseReference!
-        ref = Database.database().reference()
-        
-        let userInfo = Auth.auth().currentUser
-        let uid = userInfo?.uid
-        let email = userInfo?.email
-        
-        let delimiter = "@"
-        var token = email?.components(separatedBy: delimiter)
-        let username = token![0]
-        
-        let emptyArray = [String]()
-        
-        let newUser = User(name: "", username: username, currentCity: "", profilePic: "", posts: emptyArray, birthday: "", bio: "")
-
-        ref.child("users").child(uid!).setValue(newUser.toAnyObject())
-        self.performSegue(withIdentifier: "toProfile", sender: nil)
+        self.registerUserIntoDatabaseWithUid(uid: uid!, values: values as [String : AnyObject], type: type)
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    
+    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
+        do {
+            print("signing out")
+            try Auth.auth().signOut()
+            
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+        }
+        print("did log out")
+    }
+    
+    func loginButtonWillLogin(_ loginButton: FBSDKLoginButton!) -> Bool {
+        print("login button will Login")
+        return true
     }
 }
