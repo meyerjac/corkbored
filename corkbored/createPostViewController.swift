@@ -102,6 +102,7 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
         }
         whatsOnYourMindTextField.text = ""
         newPostImageView.isHidden = true
+        dismiss(animated: true, completion: nil)
         self.tabBarController?.selectedIndex = 0
     }
     

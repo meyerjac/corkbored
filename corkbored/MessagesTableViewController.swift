@@ -10,7 +10,7 @@ import UIKit
 
 class MessagesTableViewController: UITableViewController {
 
-    var messages = ["jackson", "megan", "juneau"]
+    var messages = [Message]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +37,7 @@ class MessagesTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "messagesCell", for: indexPath) as! messagesTableViewCell
         
-        cell.messagesName.text = messages[indexPath.row]
+//        cell.messagesName.text = messages[indexPath.row]
         cell.messagesProfileView.image = UIImage(named: "praise.png")
         cell.messagesProfileView.contentMode = .scaleAspectFit
         cell.messagesProfileView.layer.cornerRadius = cell.messagesProfileView.frame.size.width / 2

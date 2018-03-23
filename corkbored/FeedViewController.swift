@@ -24,8 +24,9 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     var clickedPostOwnerUid = ""
     var clickedPostUid = ""
     
+    
     //passing profile data
-    var clickedNameUid = ""
+    var clickedProfilePicOwnerUid = ""
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -80,6 +81,7 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
             
             let textAndImageCell = tableView.dequeueReusableCell(withIdentifier: "postCellWithPhoto", for: indexPath) as! FeedViewControllerTableViewCell
             textAndImageCell.selectionStyle = .none
+            textAndImageCell.separatorInset = UIEdgeInsetsMake(0, textAndImageCell.bounds.size.width, 0, 0)
             
             //getting Profile picture and username
             var ref: DatabaseReference!
@@ -127,15 +129,19 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         } else {
             
             let textOnlyCell = tableView.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as! FeedViewControllerTableViewCell
+            textOnlyCell.separatorInset = UIEdgeInsetsMake(0, textOnlyCell.bounds.size.width, 0, 0)
             textOnlyCell.selectionStyle = .none
             
+            //setting tag for comment button
             textOnlyCell.commentButton.tag = indexPath.row
             textOnlyCell.commentButton.addTarget(self, action: #selector(handleComment), for: .touchUpInside)
-            textOnlyCell.usernameTextField.tag = indexPath.row
             
+            //setting tag for profile image and username
             let nameTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleProfile))
-            textOnlyCell.usernameTextField.isUserInteractionEnabled = true
-            textOnlyCell.usernameTextField.addGestureRecognizer(nameTapGesture)
+            textOnlyCell.profilePhotoImageView.tag = indexPath.row
+            textOnlyCell.profilePhotoImageView.addGestureRecognizer(nameTapGesture)
+            textOnlyCell.profilePhotoImageView.isUserInteractionEnabled = true
+            
             
             //react Image
 //            textOnlyCell.reactButton.tag = indexPath.row
@@ -189,11 +195,21 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     }
     
     @objc func handleProfile(sender: UIGestureRecognizer) {
+        
+        clickedProfilePicOwnerUid = posts[(sender.view?.tag)!].ownerUid
+        let uid = Auth.auth().currentUser?.uid
+        
         print("handleProfile")
-        
-        self.performSegue(withIdentifier: "toOtherProfile", sender: self)
-        
-    }
+
+        if clickedProfilePicOwnerUid == uid {
+            print("your UID")
+            self.tabBarController?.selectedIndex = 1
+        } else {
+            self.performSegue(withIdentifier: "toOtherProfile", sender: self)
+            print("not your uid")
+        }
+
+}
     
     
 //    @objc func handleReaction(sender: UIButton) {
@@ -333,8 +349,8 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
             controller.postUid = clickedPostUid
         } else if segue.identifier == "toOtherProfile" {
             let controller = segue.destination as! OtherProfileViewController
+            controller.ownerUid = clickedProfilePicOwnerUid
         }
-
     }
     
     override func didReceiveMemoryWarning() {
