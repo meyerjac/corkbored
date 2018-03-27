@@ -21,17 +21,29 @@ class quickMessageViewController: UIViewController, UITableViewDelegate, UITable
         
         let uid = (Auth.auth().currentUser?.uid)!
         
-        let profileRef = Database.database().reference().child("users").child(uid).child("messaging").child(self.POIUid)
+        let UserOneMessagingRef = Database.database().reference().child("users").child(uid).child("messaging").child(self.POIUid)
+        let UserTwoMessagingRef = Database.database().reference().child("users").child(self.POIUid).child("messaging").child(uid)
         
-        let profRef = profileRef.childByAutoId()
+        let messagingProfileOne = UserOneMessagingRef.childByAutoId()
+        let messagingProfileTwo = UserTwoMessagingRef.childByAutoId()
         
-        let newMessage = Message(ownerUid: uid, pinnedTimeAsInterval: nowish, postMessage: messageText!)
-            
+        let messagingRefOneUid = messagingProfileOne.key
+        let messagingRefTwoUid = messagingProfileTwo.key
+        
+        let uids = [messagingRefOneUid, messagingRefTwoUid]
+        let refs = [messagingProfileOne, messagingProfileTwo]
+        
+        let newMessage = Message(userOneUid: uid, userTwoUid: POIUid, pinnedTimeAsInterval: nowish, postMessage: messageText!)
         let message = newMessage.toAnyObject()
         
-        profRef.setValue(message)
+        for i in 0 ... 1 {
+            
+            refs[i].setValue(message)
+            
+        }
         
         messageTextField.text = ""
+
     }
     
     var dmProfileNavImage: UIImage!
@@ -57,11 +69,8 @@ class quickMessageViewController: UIViewController, UITableViewDelegate, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
-         print("hello1")
         loadMessages()
-         print("hello3")
         loadTitleImage()
-         print("hello4")
         addKeyboardObservers()
         
         let dismissKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
@@ -74,11 +83,8 @@ class quickMessageViewController: UIViewController, UITableViewDelegate, UITable
         var messagingRef: DatabaseReference!
         
         messagingRef = Database.database().reference().child("users").child(uid).child("messaging").child(POIUid)
-         print("hello6")
         messagingRef.observeSingleEvent(of: .value, with: { (snapshot) in
-                 print("hello7")
                 messagingRef.observe(.childAdded) { (snapshot) in
-                     print("hello8")
                     if let dictionary = snapshot.value as? [AnyHashable: AnyObject] {
                         let message = Message(snapshot: snapshot)
                         self.messageArray.insert(message, at: self.messageArray.endIndex)
@@ -95,13 +101,11 @@ class quickMessageViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func addKeyboardObservers() {
-         print("hello5")
         NotificationCenter.default.addObserver(self, selector: #selector(quickMessageViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(quickMessageViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     func loadTitleImage() {
-        print("hello4")
         let image = dmProfileNavImage
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFit
@@ -126,15 +130,14 @@ class quickMessageViewController: UIViewController, UITableViewDelegate, UITable
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCellText", for: indexPath)
         
         cell.textLabel?.text = messageArray[indexPath.row].postMessage
-        print(messageArray[indexPath.row], "MESSAGE")
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
     return messageArray.count
+        
     }
-    
-
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)

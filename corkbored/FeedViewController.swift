@@ -224,6 +224,7 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         fetchUserLocation()
     }
     
+    
     func fetchUserLocation() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
@@ -300,7 +301,7 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
                 self.tableView.isHidden = false
                
                 Database.database().reference().child("posts").child(self.currentCity).observe(.childAdded) { (snapshot) in
-                    
+                    print(snapshot, "SNAP")
                     if let dictionary = snapshot.value as? [AnyHashable: AnyObject] {
                         let post = Post(snapshot: snapshot)
                         self.posts.insert(post, at: self.posts.startIndex)

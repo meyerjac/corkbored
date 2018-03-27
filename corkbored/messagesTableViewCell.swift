@@ -13,4 +13,5 @@ class messagesTableViewCell: UITableViewCell {
     @IBOutlet weak var messagesName: UILabel!
     @IBOutlet weak var messagesLastMessagePeek: UILabel!
     @IBOutlet weak var messagesLastMessageSent: UILabel!
+    @IBOutlet weak var messageSeenIndicator: UILabel!
 }

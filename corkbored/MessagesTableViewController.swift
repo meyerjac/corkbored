@@ -1,54 +1,108 @@
-//
-//  MessagesTableViewController.swift
-//  corkbored
-//
-//  Created by Jackson Meyer on 3/14/18.
-//  Copyright © 2018 Jackson Meyer. All rights reserved.
-//
-
 import UIKit
+import Firebase
+import Nuke
 
 class MessagesTableViewController: UITableViewController {
-
+    
     var messages = [Message]()
-
+    var allMessageProfileUid = [String]()
+    var ref: DatabaseReference!
+    var usersRef: DatabaseReference!
+    var uid: String!
+    var manager = Nuke.Manager.shared
+    var messageSelectedUid: String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        uid = (Auth.auth().currentUser?.uid)!
+        loadMessages()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    
+    func loadMessages() {
+        ref = Database.database().reference().child("users").child(self.uid).child("messaging")
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            if ( snapshot.value is NSNull ) {
+                print("not found")
+            } else {
+                for messageOwnerUid in (snapshot.children) { //iterate over each user node child
+                    //assign the user_child enumerator to a snapshot
+                    let allMessagesFromOwnerUidSnapshot = messageOwnerUid as! DataSnapshot
+                    
+                    self.allMessageProfileUid.insert(allMessagesFromOwnerUidSnapshot.key, at: self.messages.startIndex)
+                    
+                        for messages in allMessagesFromOwnerUidSnapshot.children { //now iterate over each messObject
+                    
+                        let messageSnapshot = messages as! DataSnapshot
+                        if let dictionary = messageSnapshot.value as? [AnyHashable: AnyObject] {
+                        let message = Message(snapshot: messageSnapshot)
+                        self.messages.insert(message, at: self.messages.startIndex)
+                    }
+                }
+            }
+        }
+            print(self.allMessageProfileUid.count)
+            print(self.messages.count)
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+    })
+}
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return messages.count
+        return allMessageProfileUid.count
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 110
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "messagesCell", for: indexPath) as! messagesTableViewCell
         
-//        cell.messagesName.text = messages[indexPath.row]
-        cell.messagesProfileView.image = UIImage(named: "praise.png")
+        let otherUserUid = allMessageProfileUid[indexPath.row]
+        let message = messages[indexPath.row]
+        
+        usersRef = Database.database().reference().child("users").child(otherUserUid)
+        
+        
+        usersRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            print(snapshot, "SNAP")
+            let value = snapshot.value as? NSDictionary
+            let postProfilePictureStringURL = value?["profilePic"] as? String ?? ""
+            print(postProfilePictureStringURL, "URL")
+            let usersName = value?["firstName"] as? String ?? ""
+            print(usersName, "USERNAME")
+            cell.messagesName.text = usersName
+            cell.messagesLastMessageSent.text = "11:37am"
+
+            if let url = URL.init(string: postProfilePictureStringURL) {
+                self.manager.loadImage(with: url, into: cell.messagesProfileView)
+            }
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+        
         cell.messagesProfileView.contentMode = .scaleAspectFit
         cell.messagesProfileView.layer.cornerRadius = cell.messagesProfileView.frame.size.width / 2
         cell.messagesProfileView.clipsToBounds = true
-        cell.messagesLastMessageSent.text = "14 h"
-        cell.messagesLastMessagePeek.text = "Hey man, do you want to grab coffee and talk about collaboration and a bunch of stuff, anything you want?"
+        cell.messagesLastMessageSent.text = messages[indexPath.row].pinnedTimeAsInterval
+        cell.messagesLastMessagePeek.text = messages[indexPath.row].postMessage
+        
+        cell.messageSeenIndicator.backgroundColor = UIColor.red
         
         return cell
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            let controller = segue.destination as! SingleMessageViewController
+            controller.messageUid = String(messageSelectedUid)
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+         messageSelectedUid = allMessageProfileUid[indexPath.row]
+        print("just after messageSelected")
          self.performSegue(withIdentifier: "toSelectedDm", sender: self)
     }
 }

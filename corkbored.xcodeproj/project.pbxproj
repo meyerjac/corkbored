@@ -37,6 +37,8 @@
 		85424E04205E1AD700191BF3 /* quickMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85424E03205E1AD700191BF3 /* quickMessageViewController.swift */; };
 		85424E06205E273300191BF3 /* OtherProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85424E05205E273300191BF3 /* OtherProfileViewController.swift */; };
 		85424E0A2064D21A00191BF3 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85424E092064D21A00191BF3 /* Message.swift */; };
+		85424E122066379600191BF3 /* SingleMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85424E112066379600191BF3 /* SingleMessageViewController.swift */; };
+		85424E1420663E0700191BF3 /* MessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85424E1320663E0700191BF3 /* MessageCollectionViewCell.swift */; };
 		85430BE21FD229A300DB35B6 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85430BE01FD229A300DB35B6 /* FBSDKCoreKit.framework */; };
 		85430BE31FD229A300DB35B6 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85430BE11FD229A300DB35B6 /* FBSDKLoginKit.framework */; };
 		854824AA1FE8B3370046DD4C /* createPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854824A91FE8B3370046DD4C /* createPostViewController.swift */; };
@@ -88,6 +90,8 @@
 		85424E03205E1AD700191BF3 /* quickMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = quickMessageViewController.swift; sourceTree = "<group>"; };
 		85424E05205E273300191BF3 /* OtherProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileViewController.swift; sourceTree = "<group>"; };
 		85424E092064D21A00191BF3 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		85424E112066379600191BF3 /* SingleMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleMessageViewController.swift; sourceTree = "<group>"; };
+		85424E1320663E0700191BF3 /* MessageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCollectionViewCell.swift; sourceTree = "<group>"; };
 		85430BE01FD229A300DB35B6 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../DOCUMENTS/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		85430BE11FD229A300DB35B6 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../DOCUMENTS/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		854824A91FE8B3370046DD4C /* createPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createPostViewController.swift; sourceTree = "<group>"; };
@@ -151,20 +155,22 @@
 				85D513271FE8C54000DF4BC4 /* login */,
 				85FD8720202D7B2800143339 /* appTabController.swift */,
 				854824A91FE8B3370046DD4C /* createPostViewController.swift */,
-				851D04302033E459006986E6 /* PostCommentsViewController.swift */,
-				85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */,
 				85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */,
-				851D0432203574F5006986E6 /* PostCommentTableViewCell.swift */,
+				85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */,
 				85FCC26E203804750091B9AC /* HashtagCollectionViewCell.swift */,
 				85FCC270203812700091B9AC /* HashtagViewController.swift */,
+				85424E1320663E0700191BF3 /* MessageCollectionViewCell.swift */,
+				850BCEA6205A4E190059138A /* messagesTableViewCell.swift */,
+				850BCEA4205A13C20059138A /* MessagesTableViewController.swift */,
+				85424E05205E273300191BF3 /* OtherProfileViewController.swift */,
+				851D0432203574F5006986E6 /* PostCommentTableViewCell.swift */,
+				851D04302033E459006986E6 /* PostCommentsViewController.swift */,
 				8526E2A6203024D400BD3F1A /* tabbedProfileViewController.swift */,
 				85424E03205E1AD700191BF3 /* quickMessageViewController.swift */,
 				8539FE9520413E1700A2D0EF /* RulesAndInfoViewController.swift */,
-				8539FE9D20454A1C00A2D0EF /* tabbedCameraViewController.swift */,
 				850BCE9A2059108A0059138A /* SearchBarViewController.swift */,
-				850BCEA4205A13C20059138A /* MessagesTableViewController.swift */,
-				850BCEA6205A4E190059138A /* messagesTableViewCell.swift */,
-				85424E05205E273300191BF3 /* OtherProfileViewController.swift */,
+				85424E112066379600191BF3 /* SingleMessageViewController.swift */,
+				8539FE9D20454A1C00A2D0EF /* tabbedCameraViewController.swift */,
 				852197251FCFC5AE0013D76C /* Main.storyboard */,
 				85FD8722202E16B900143339 /* LaunchScreen.storyboard */,
 				852197211FCFC5AE0013D76C /* AppDelegate.swift */,
@@ -458,12 +464,14 @@
 				854824AA1FE8B3370046DD4C /* createPostViewController.swift in Sources */,
 				8526E2A7203024D400BD3F1A /* tabbedProfileViewController.swift in Sources */,
 				85FD872B202EF63500143339 /* Comment.swift in Sources */,
+				85424E1420663E0700191BF3 /* MessageCollectionViewCell.swift in Sources */,
 				85F4665C1FE391CC00D46D5C /* Post.swift in Sources */,
 				85A5361A1FD91D7B0096E054 /* User.swift in Sources */,
 				850BCEA7205A4E190059138A /* messagesTableViewCell.swift in Sources */,
 				85424E04205E1AD700191BF3 /* quickMessageViewController.swift in Sources */,
 				852197241FCFC5AE0013D76C /* ViewController.swift in Sources */,
 				851D0433203574F5006986E6 /* PostCommentTableViewCell.swift in Sources */,
+				85424E122066379600191BF3 /* SingleMessageViewController.swift in Sources */,
 				8521972A1FCFC5AE0013D76C /* corkbored.xcdatamodeld in Sources */,
 				85FCC26F203804750091B9AC /* HashtagCollectionViewCell.swift in Sources */,
 				8539FE9E20454A1C00A2D0EF /* tabbedCameraViewController.swift in Sources */,
