@@ -55,7 +55,7 @@ class MessagesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 110
+        return 100
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -64,6 +64,10 @@ class MessagesTableViewController: UITableViewController {
         let otherUserUid = allMessageProfileUid[indexPath.row]
         let message = messages[indexPath.row]
         
+        cell.messageSeenIndicator.layer.cornerRadius = cell.messageSeenIndicator.frame.size.height / 2
+        cell.messageSeenIndicator.clipsToBounds = true
+        
+        //Database Ref
         usersRef = Database.database().reference().child("users").child(otherUserUid)
         
         
@@ -85,7 +89,7 @@ class MessagesTableViewController: UITableViewController {
         }
         
         cell.messagesProfileView.contentMode = .scaleAspectFit
-        cell.messagesProfileView.layer.cornerRadius = cell.messagesProfileView.frame.size.width / 2
+        cell.messagesProfileView.layer.cornerRadius = cell.messagesProfileView.frame.size.height / 2
         cell.messagesProfileView.clipsToBounds = true
         cell.messagesLastMessageSent.text = messages[indexPath.row].pinnedTimeAsInterval
         cell.messagesLastMessagePeek.text = messages[indexPath.row].postMessage
