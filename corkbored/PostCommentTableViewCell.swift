@@ -9,7 +9,8 @@
 import UIKit
 
 class PostCommentTableViewCell: UITableViewCell {
-    @IBOutlet weak var commentCellMessageBody: UILabel!
+
+    @IBOutlet weak var messageBody: UITextView!
     @IBOutlet weak var commentCellTimeLabel: UILabel!
     @IBOutlet weak var commentProfileImageVIew: UIImageView!
     

@@ -8,7 +8,10 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseDatabase
 import Firebase
+import UIKit
+import Nuke
 
 class PostCommentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     //getting all these from previous view controller on a prepare for sender
@@ -22,10 +25,16 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
     var clickedPostMedia = UIImage()
     var commentsArray = [Comment]()
     
+    var manager = Nuke.Manager.shared
+    var myProfilePictureUrl = String()
+    
+    //commentProfilesRef
+    var ref: DatabaseReference = Database.database().reference()
+    
     @IBOutlet weak var commentTextField: UITextField!
     @IBOutlet weak var commentsTableView: UITableView!
     @IBOutlet weak var sendCommentButton: UIButton!
-    @IBOutlet weak var messageBodyLabel: UILabel!
+    @IBOutlet weak var PostMessageTextView: UITextView!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var postUserProfileImageView: UIImageView!
@@ -62,10 +71,23 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 59
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = commentsTableView.dequeueReusableCell(withIdentifier: "commentsCell", for: indexPath) as! PostCommentTableViewCell
+        
+        ref.child("users").child(commentsArray[indexPath.row].ownerUid).observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            
+            let value = snapshot.value as? NSDictionary
+            
+            let postProfilePictureStringURL = value?["profilePic"] as? String ?? ""
+            
+            if let urlUrl = URL.init(string: postProfilePictureStringURL) {
+                self.manager.loadImage(with: urlUrl, into: cell.commentProfileImageVIew)
+            }
+        })
         
         //getting time stamp of users device to to compare to stamp of post
         let nowish = Double(Date().timeIntervalSinceReferenceDate)
@@ -90,11 +112,10 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
             let hours = minutesSince!/60
         }
         
-        let cell = commentsTableView.dequeueReusableCell(withIdentifier: "commentsCell", for: indexPath) as! PostCommentTableViewCell
-        
-        cell.commentCellMessageBody.text = comment.commentMessage
+        cell.messageBody.text = comment.commentMessage
         cell.commentCellTimeLabel.text = stringTimeStamp
-         print(stringTimeStamp, "timeStamp")
+        
+        print(stringTimeStamp, "timeStamp")
         
         return cell
     }
@@ -103,6 +124,7 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
         super.viewDidLoad()
         loadPost()
         fetchComments()
+    
     
         commentTextField.delegate = self
         
@@ -115,7 +137,7 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func loadPost() {
-        messageBodyLabel.text = clickedPostMessageBody
+        PostMessageTextView.text = clickedPostMessageBody
         usernameLabel.text = clickedUsername
         timeLabel.text = clickedPostTimeStamp
         

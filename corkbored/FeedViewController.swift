@@ -30,6 +30,13 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     var clickedProfilePicOwnerUid = ""
 
     @IBOutlet weak var tableView: UITableView!
+    @IBAction func createPost(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let myModalViewController = storyboard.instantiateViewController(withIdentifier: "createPostViewController")
+        myModalViewController.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+        myModalViewController.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+        self.present(myModalViewController, animated: true, completion: nil)
+    }
    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return posts.count

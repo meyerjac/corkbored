@@ -41,8 +41,8 @@ class MessagesTableViewController: UITableViewController {
                 }
             }
         }
-            print(self.allMessageProfileUid.count)
-            print(self.messages.count)
+            print(self.allMessageProfileUid.count, "AllmessagesUid")
+            print(self.messages.count, "# of messages")
             
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -106,7 +106,6 @@ class MessagesTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
          messageSelectedUid = allMessageProfileUid[indexPath.row]
-        print("just after messageSelected")
          self.performSegue(withIdentifier: "toSelectedDm", sender: self)
     }
 }
