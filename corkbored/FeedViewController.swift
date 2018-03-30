@@ -10,7 +10,7 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     var locationManager = CLLocationManager()
     var geocoder = CLGeocoder()
     var userLocation: CLLocation = CLLocation()
-    var currentCity: String = ""
+    var clickedCurrentCity: String = ""
     var messageBody: String = ""
     var profilePhotoFileName: String = ""
     var activeUser = Auth.auth().currentUser
@@ -19,21 +19,17 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     
     //passing messageData
     var clickedPostMessageBody = ""
-    var clickedTimeLabel = ""
+    var clickedPostTimeStamp = ""
     var clickedUsername = ""
     var clickedPostOwnerUid = ""
     var clickedPostUid = ""
-    
+    var clickedPostProfilePicture: UIImage! = UIImage()
+    var clickedPostMedia: UIImage! = UIImage()
     
     //passing profile data
     var clickedProfilePicOwnerUid = ""
 
     @IBOutlet weak var tableView: UITableView!
-    
-//    //TABLE VIEW FUNCTIONS
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-////            print(posts[indexPath.row].postUid)
-//    }
    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return posts.count
@@ -41,9 +37,9 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if posts[indexPath.row].pinnedMediaFileName != "null" {
-            return 450
+            return 455
         } else {
-            return 200
+            return 130
         }
     }
     
@@ -70,7 +66,11 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         } else if minutesSince! > 60 {
             let hours = minutesSince!/60
             if hours >= 24 {
-                deletePostFromFeed(postUid: post.postUid)
+                
+                //choosing not to delete from Feed
+                
+//                deletePostFromFeed(postUid: post.postUid)
+                 stringTimeStamp = "\(hours) hr"
             } else {
                 stringTimeStamp = "\(hours) hr"
             }
@@ -93,7 +93,6 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
                 let value = snapshot.value as? NSDictionary
                 
                 let postProfilePictureStringURL = value?["profilePic"] as? String ?? ""
-                print(postProfilePictureStringURL, "URL")
                 let firstName = value?["firstName"] as? String ?? ""
                 
                 if let urlUrl = URL.init(string: postProfilePictureStringURL) {
@@ -101,7 +100,6 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
                 }
                 
                 textAndImageCell.usernameTextField.text = firstName
-                print(firstName, "NAME")
                 
             }) { (error) in
                 print(error.localizedDescription)
@@ -121,7 +119,6 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
             
             textAndImageCell.timePosted.text = stringTimeStamp
             textAndImageCell.messageBody.text = post.postMessage
-            print(post.numberOfComments, "POST")
             textAndImageCell.numberOfComments.text = post.numberOfComments
             
             return textAndImageCell
@@ -185,11 +182,15 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     }
     
     @objc func handleComment(sender: UIButton) {
+        let indexPath = IndexPath(row: sender.tag, section: 0)
+        let cell = tableView.cellForRow(at: indexPath) as! FeedViewControllerTableViewCell
+        
         clickedPostMessageBody = posts[sender.tag].postMessage
-        clickedUsername = "workingOnUserName"
-        clickedTimeLabel = posts[sender.tag].pinnedTimeAsInterval
+        clickedUsername = cell.usernameTextField.text!
+        clickedPostTimeStamp = cell.timePosted.text!
         clickedPostOwnerUid = posts[sender.tag].ownerUid
         clickedPostUid = posts[sender.tag].postUid
+        clickedPostProfilePicture =  cell.profilePhotoImageView.image
         
         performSegue(withIdentifier: "toComments", sender: nil)
     }
@@ -198,17 +199,12 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         
         clickedProfilePicOwnerUid = posts[(sender.view?.tag)!].ownerUid
         let uid = Auth.auth().currentUser?.uid
-        
-        print("handleProfile")
-
+    
         if clickedProfilePicOwnerUid == uid {
-            print("your UID")
             self.tabBarController?.selectedIndex = 1
         } else {
             self.performSegue(withIdentifier: "toOtherProfile", sender: self)
-            print("not your uid")
         }
-
 }
     
     
@@ -246,9 +242,9 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
                                                 
                                                 UserDefaults.standard.set(retreivedCity, forKey: "currentUserLocation")
                                                 
-                                                self.currentCity = retreivedCity
+                                                self.clickedCurrentCity = retreivedCity
                                                 
-                                                self.fetchPosts(city: self.currentCity)
+                                                self.fetchPosts(city: self.clickedCurrentCity)
                                             }
                                                 
                                             else {
@@ -261,14 +257,12 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     }
 
     func deletePostFromFeed(postUid: String) {
-        print("trying to delete")
         var ref: DatabaseReference!
         ref = Database.database().reference()
-        let postReference = ref.child("posts").child(currentCity).child(postUid)
+        let postReference = ref.child("posts").child(clickedCurrentCity).child(postUid)
         
         // Remove the post from the DB
          postReference.removeValue()
-         print("trying to delete after remove")
         return
     }
 //
@@ -297,25 +291,62 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
 
         refExists.child("posts").observeSingleEvent(of: .value, with: { (snapshot) in
 
-            if snapshot.hasChild(self.currentCity) {
+            if snapshot.hasChild(self.clickedCurrentCity) {
                 self.tableView.isHidden = false
                
-                Database.database().reference().child("posts").child(self.currentCity).observe(.childAdded) { (snapshot) in
-                    print(snapshot, "SNAP")
+                Database.database().reference().child("posts").child(self.clickedCurrentCity).observe(.childAdded) { (snapshot) in
+                    print("child added1")
                     if let dictionary = snapshot.value as? [AnyHashable: AnyObject] {
                         let post = Post(snapshot: snapshot)
                         self.posts.insert(post, at: self.posts.startIndex)
-                        DispatchQueue.main.async {
+                                                DispatchQueue.main.async {
                             self.tableView.reloadData()
                         }
                     }
                 }
+                Database.database().reference().child("posts").child(self.clickedCurrentCity).observe(.childChanged, with: { (snapshot) in
+                    print("child added2")
+                    self.foundSnapshot(snapshot)
+                })
             }else{
-                print("city doesn't exist")
                 self.tableView.isHidden = true
                 self.handleAlertWhenNoTableViewItemsExist()
             }
         })
+    }
+    
+    //commentchanged
+    func foundSnapshot(_ snapshot: DataSnapshot){
+        let idChanged = snapshot.key
+        print(idChanged, "ID")
+        var numberOfIt = 0
+        
+        if let dictionary = snapshot.value as? [AnyHashable: AnyObject] {
+            print(numberOfIt, "NUMBER")
+            print(posts.count, "POSTS")
+        let post = Post(snapshot: snapshot)
+            
+                for i in 0 ... posts.count {
+                    if numberOfIt >= 1 {
+                        //nothing
+                        print(idChanged, "NOTHING")
+                        numberOfIt += 1
+                    } else {
+                        if posts[i].postUid == idChanged {
+                            print("yes")
+                            self.posts.remove(at: i)
+                            self.posts.insert(post, at: i)
+                             numberOfIt += 1
+                        } else {
+                            print("nope")
+                        }
+                    }
+                }
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
     
     func handleAlertWhenNoTableViewItemsExist() {
@@ -342,12 +373,15 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toComments" {
             let controller = segue.destination as! PostCommentsViewController
-            controller.messageBodyText = clickedPostMessageBody
-            controller.postOwnerUid = clickedPostOwnerUid
-            controller.username = clickedUsername
-            controller.timeSincePost = clickedTimeLabel
-            controller.currentCity = currentCity
-            controller.postUid = clickedPostUid
+            controller.clickedPostMessageBody = clickedPostMessageBody
+            controller.clickedPostOwnerUid = clickedPostOwnerUid
+            controller.clickedUsername = clickedUsername
+            controller.clickedPostTimeStamp = clickedPostTimeStamp
+            controller.clickedCurrentCity = clickedCurrentCity
+            controller.clickedPostTimeStamp = clickedPostTimeStamp
+            controller.clickedPostUid = clickedPostUid
+            controller.clickedPostProfilePicture = clickedPostProfilePicture
+            
         } else if segue.identifier == "toOtherProfile" {
             let controller = segue.destination as! OtherProfileViewController
             controller.ownerUid = clickedProfilePicOwnerUid

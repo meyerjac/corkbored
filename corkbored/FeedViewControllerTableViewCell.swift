@@ -10,7 +10,8 @@ import UIKit
 
 class FeedViewControllerTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var messageBody: UILabel!
+    @IBOutlet weak var messageBody: UITextView!
+    
     @IBOutlet weak var usernameTextField: UILabel!
     @IBOutlet weak var profilePhotoImageView: UIImageView!
     @IBOutlet weak var timePosted: UILabel!

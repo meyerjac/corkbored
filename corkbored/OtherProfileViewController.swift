@@ -22,7 +22,6 @@ class OtherProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadProfile()
-
     }
 
     override func didReceiveMemoryWarning() {

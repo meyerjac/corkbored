@@ -11,12 +11,15 @@ import FirebaseAuth
 import Firebase
 
 class PostCommentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
-    var messageBodyText = String()
-    var username = String()
-    var timeSincePost = String()
-    var postOwnerUid = String()
-    var currentCity = String()
-    var postUid = String()
+    //getting all these from previous view controller on a prepare for sender
+    var clickedPostMessageBody = String()
+    var clickedUsername = String()
+    var clickedPostTimeStamp = String()
+    var clickedPostOwnerUid = String()
+    var clickedCurrentCity = String()
+    var clickedPostUid = String()
+    var clickedPostProfilePicture = UIImage()
+    var clickedPostMedia = UIImage()
     var commentsArray = [Comment]()
     
     @IBOutlet weak var commentTextField: UITextField!
@@ -25,16 +28,16 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var messageBodyLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var postUserProfileImageView: UIImageView!
     
     @IBAction func sendCommentButtonClicked(_ sender: Any) {
-        var PostRef = Database.database().reference().child("posts").child(currentCity).child(postUid).child("comments")
-        var PostRefForNumberOfComments = Database.database().reference().child("posts").child(currentCity).child(postUid).child("numberOfComments")
-        
+        let PostRef = Database.database().reference().child("posts").child(clickedCurrentCity).child(clickedPostUid).child("comments")
+        let PostRefForNumberOfComments = Database.database().reference().child("posts").child(clickedCurrentCity).child(clickedPostUid).child("numberOfComments")
         
         PostRefForNumberOfComments.observeSingleEvent(of: .value, with: { (snapshot) in
             let valString = snapshot.value as! String
             if let value = Int(valString) {
-                var newValue = value + 1
+                let newValue = value + 1
                 PostRefForNumberOfComments.setValue("\(newValue)")
             }
         })
@@ -42,11 +45,11 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
         
         let replyRef = PostRef.childByAutoId()
 
-        var typedComment = commentTextField.text!
-        var nowish = String(Date().timeIntervalSinceReferenceDate)
-        var ownerUid = (Auth.auth().currentUser?.uid)!
+        let typedComment = commentTextField.text!
+        let nowish = String(Date().timeIntervalSinceReferenceDate)
+        let ownerUid = (Auth.auth().currentUser?.uid)!
         
-        let comment = Comment(pinnedTimeAsInterval: nowish, ownerUid: ownerUid, commentMessage: typedComment, postUid: postUid)
+        let comment = Comment(pinnedTimeAsInterval: nowish, ownerUid: ownerUid, commentMessage: typedComment, postUid: clickedPostUid)
         let commentObject = comment.toAnyObject()
         
         replyRef.setValue(commentObject)
@@ -55,9 +58,11 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(commentsArray)
         return commentsArray.count
-        
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -70,6 +75,7 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
         
         //getting the correct timestamp label for post
         let postDate = Double(comment.pinnedTimeAsInterval)
+        print(postDate, "Post date")
         let difference = ((nowish - postDate!)/60)
         let stringDifference = String(difference)
         let delimiter = "."
@@ -84,11 +90,11 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
             let hours = minutesSince!/60
         }
         
-        
         let cell = commentsTableView.dequeueReusableCell(withIdentifier: "commentsCell", for: indexPath) as! PostCommentTableViewCell
         
         cell.commentCellMessageBody.text = comment.commentMessage
         cell.commentCellTimeLabel.text = stringTimeStamp
+         print(stringTimeStamp, "timeStamp")
         
         return cell
     }
@@ -96,7 +102,7 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         loadPost()
-        fetchPosts()
+        fetchComments()
     
         commentTextField.delegate = self
         
@@ -109,29 +115,16 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func loadPost() {
-        messageBodyLabel.text = messageBodyText
-        usernameLabel.text = username
+        messageBodyLabel.text = clickedPostMessageBody
+        usernameLabel.text = clickedUsername
+        timeLabel.text = clickedPostTimeStamp
         
-        //getting time stamp of users device to to compare to stamp of post
-        let nowish = Double(Date().timeIntervalSinceReferenceDate)
-        
-        //getting the correct timestamp label for post
-        let postDate = Double(self.timeSincePost)
-        
-        let difference = ((nowish - postDate!)/60)
-        let stringDifference = String(difference)
-        let delimiter = "."
-        var numbers = stringDifference.components(separatedBy: delimiter)
-        let minutesSince = Int(numbers[0])
-        var stringTimeStamp = ""
-        if minutesSince! < 1 {
-            stringTimeStamp = "just now"
-        } else if minutesSince! <= 60 {
-            stringTimeStamp = "\(minutesSince ?? 23) min"
-        } else if minutesSince! > 60 {
-            let hours = minutesSince!/60
-        }
-         timeLabel.text = stringTimeStamp
+        postUserProfileImageView.image = clickedPostProfilePicture
+        postUserProfileImageView.contentMode = .scaleAspectFill
+        postUserProfileImageView.layer.borderWidth = 1.0
+        postUserProfileImageView.layer.masksToBounds = true
+        postUserProfileImageView.layer.borderColor = UIColor.white.cgColor
+        postUserProfileImageView.layer.cornerRadius = postUserProfileImageView.frame.size.width / 2
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -158,15 +151,14 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
         },completion: nil)
     }
     
-    func fetchPosts() {
+    func fetchComments() {
         var refExists: DatabaseReference!
         refExists = Database.database().reference().child("posts")
         refExists.observeSingleEvent(of: .value, with: { (snapshot) in
             
-            if snapshot.hasChild(self.currentCity) {
+            if snapshot.hasChild(self.clickedCurrentCity) {
                 self.commentsTableView.isHidden = false
-                
-                refExists.child(self.currentCity).child(self.postUid).child("comments").observe(.childAdded) { (snapshot) in
+                refExists.child(self.clickedCurrentCity).child(self.clickedPostUid).child("comments").observe(.childAdded) { (snapshot) in
                 
                     if let dictionary = snapshot.value as? [AnyHashable: AnyObject] {
                         let comment = Comment(snapshot: snapshot)

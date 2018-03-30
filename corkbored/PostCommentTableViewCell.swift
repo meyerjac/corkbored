@@ -11,6 +11,7 @@ import UIKit
 class PostCommentTableViewCell: UITableViewCell {
     @IBOutlet weak var commentCellMessageBody: UILabel!
     @IBOutlet weak var commentCellTimeLabel: UILabel!
+    @IBOutlet weak var commentProfileImageVIew: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
