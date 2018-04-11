@@ -74,47 +74,65 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
     }
     
     @IBAction func submitButton(_ sender: Any) {
-
-            goButton.isEnabled = false
             bio = (bioTextField.text)!
             var name = firstAndLastNametextView.text!
-            
+        
             let delimiter = " "
             var token = name.components(separatedBy: delimiter)
             firstName = token[0]
-            lastName = token[1]
-            
-            SVProgressHUD.setDefaultAnimationType(.flat)
-            SVProgressHUD.setDefaultStyle(.dark)
-            SVProgressHUD.setForegroundColor(UIColor.cyan)           //Ring Color
-            SVProgressHUD.setBackgroundColor(UIColor.black)        //HUD Color
-            SVProgressHUD.setBackgroundLayerColor(UIColor.clear) //Background Color
-            SVProgressHUD.setDefaultMaskType(.clear)
-            SVProgressHUD.showProgress(0.1, status: "Creating your profile...")
-            SVProgressHUD.showProgress(0.2, status: "Creating your profile...")
-            
-            let userInfo = Auth.auth().currentUser
-            let uid = userInfo?.uid
-            let imageName = NSUUID().uuidString
-            let storageRef = Storage.storage().reference().child("profileImages").child("\(imageName).png")
-            
-            if let uploadData = UIImagePNGRepresentation(self.mainImage.image!) {
+            let lastnamePresent = token.indices.contains(1)
+        
+            if lastnamePresent == false {
+                let alert = UIAlertController(title: "Whoopsie daisy", message: "you must enter your last name", preferredStyle: UIAlertControllerStyle.alert)
+                self.present(alert, animated: true, completion: nil)
                 
-                storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
-                    
-                    if error != nil {
-                        print(error ?? "error")
-                        return
-                    }
-                    SVProgressHUD.showProgress(0.4, status: "Creating your profile...")
-                    if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
-                        SVProgressHUD.showProgress(0.6, status: "Creating your profile...")
-                        let values = [ "bio": self.bio, "birthday": self.birthday,"currentCity": self.currentCity, "currentState": self.currentStateCode, "firstName": self.firstName, "lastName": self.lastName,"profilePic": profileImageUrl]
+                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { action in
+                    switch action.style{
                         
-                        self.registerUserIntoDatabaseWithUid(uid: uid!, values: values as [String : AnyObject])
+                    case .default:
+                        print("default")
+                        
+                    case .cancel:
+                        print("cancel")
+                        
+                    case .destructive:
+                        print("destructive")
+                    }}))
+                
+            } else {
+                goButton.isEnabled = false
+                SVProgressHUD.setDefaultAnimationType(.flat)
+                SVProgressHUD.setDefaultStyle(.dark)
+                SVProgressHUD.setForegroundColor(UIColor.cyan)           //Ring Color
+                SVProgressHUD.setBackgroundColor(UIColor.black)        //HUD Color
+                SVProgressHUD.setBackgroundLayerColor(UIColor.clear) //Background Color
+                SVProgressHUD.setDefaultMaskType(.clear)
+                SVProgressHUD.showProgress(0.1, status: "Creating your profile...")
+                SVProgressHUD.showProgress(0.2, status: "Creating your profile...")
+                
+                let userInfo = Auth.auth().currentUser
+                let uid = userInfo?.uid
+                let imageName = NSUUID().uuidString
+                let storageRef = Storage.storage().reference().child("profileImages").child("\(imageName).png")
+                
+                if let uploadData = UIImagePNGRepresentation(self.mainImage.image!) {
+                    
+                    storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
+                        
+                        if error != nil {
+                            print(error ?? "error")
+                            return
+                        }
+                        SVProgressHUD.showProgress(0.4, status: "Creating your profile...")
+                        if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
+                            SVProgressHUD.showProgress(0.6, status: "Creating your profile...")
+                            let values = [ "bio": self.bio, "birthday": self.birthday,"currentCity": self.currentCity, "currentState": self.currentStateCode, "firstName": self.firstName, "lastName": self.lastName,"profilePic": profileImageUrl]
+                            
+                            self.registerUserIntoDatabaseWithUid(uid: uid!, values: values as [String : AnyObject])
+                        }
                     }
-                }
-            )}
+                )}
+            }
         }
     
     func registerUserIntoDatabaseWithUid(uid: String, values:[String: AnyObject]) {
@@ -173,6 +191,7 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
         
         if let selectedImage = selectedImageFromPicker {
             mainImage.image = selectedImage
+            mainImage.clipsToBounds = true
         }
         dismiss(animated: true, completion: nil)
     }

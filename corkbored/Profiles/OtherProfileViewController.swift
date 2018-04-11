@@ -18,6 +18,7 @@ class OtherProfileViewController: UIViewController {
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var bioTextLabel: UILabel!
     @IBOutlet weak var nameAndAge: UILabel!
+    @IBOutlet weak var quickMessage: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,6 +61,10 @@ class OtherProfileViewController: UIViewController {
                 //assign bio and birthday text views
                 self.bioTextLabel.text = bio
                 self.nameAndAge.text = nameAndAgeText
+                
+                //messageButton
+                self.quickMessage.layer.cornerRadius = self.quickMessage.frame.size.height / 2
+                self.quickMessage.clipsToBounds = true
                 
                 if let urlUrl = URL.init(string: postProfilePictureStringURL) {
                     self.manager.loadImage(with: urlUrl, into: self.profileImageView)

@@ -36,15 +36,32 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
     var geocoder = CLGeocoder()
     var userLocation: CLLocation = CLLocation()
     
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var facebookLogButton: FBSDKButton!
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var signUpWithEmailButton: UIButton!
+    
     @IBAction func signUpWithEmailButton(_ sender: Any) {
-        passwordTextField.isHidden = false
-        emailTextField.isHidden = false
-        nextButton.isHidden = false
-        signUpWithEmailButton.isHidden = true
+        let duration = 0.50
+        //animate
+        UIView.animate(withDuration: duration as! TimeInterval, animations: {
+            self.signUpWithEmailButton.alpha = 0
+        }, completion: {(completed) in
+            
+        })
+        
+        UIView.animate(withDuration: duration as! TimeInterval, delay: 0.25, animations: {
+            self.passwordTextField.alpha = 1
+            self.emailTextField.alpha = 1
+            self.nextButton.alpha = 1
+            
+        }, completion: {(completed) in
+            print("in completition 1")
+            
+        })
+        
     }
     
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
@@ -111,16 +128,12 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
     override func viewDidLoad() {
         super.viewDidLoad()
         loadUIStuff()
-        autoLogin()
     }
     
-    func autoLogin() {
-        if Auth.auth().currentUser?.uid != nil {
-            print("user auto logged in")
-            performSegue(withIdentifier: "phoneToFeed", sender: nil)
-        } else {
-            print("user not logged in")
-        }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
   
     func fetchFacebookProfile() {
@@ -260,20 +273,17 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
     
     func loadUIStuff() {
         //main middle sign up button and next button if email is clicked//
+        
+        facebookLogButton.removeConstraints(facebookLogButton.constraints)
+        facebookLogButton.frame.size.height = 50
+        facebookLogButton.layer.cornerRadius = 3
+        
         nextButton.layer.cornerRadius = 3
         signUpWithEmailButton.layer.cornerRadius = 3
         
-        //set facebook button in middle and set read permissions
-        
-        let facebookLoginButton = FBSDKLoginButton()
-        facebookLoginButton.readPermissions = ["public_profile", "email", "user_friends"];
-        facebookLoginButton.delegate = self
-        facebookLoginButton.frame.size.width = view.frame.width - 32
-        facebookLoginButton.frame.size.height = 50
-        facebookLoginButton.layer.cornerRadius = 3
-        facebookLoginButton.center = view.center
-        view.addSubview(facebookLoginButton)
+        titleLabel.frame = CGRect(x: facebookLogButton.frame.origin.x, y: facebookLogButton.frame.origin.y - 50, width: view.frame.width, height: 50)
     }
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -288,14 +298,7 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
         
         self.registerUserIntoDatabaseWithUid(uid: uid!, values: values as [String : AnyObject], type: type)
     }
-    
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
     func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
         do {
             print("signing out")

@@ -6,6 +6,11 @@ import CoreLocation
 
 class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource {
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+
+        guard let tableViewCell = cell as? FeedViewControllerTableViewCell else { return }
+    }
+    
     //CORELOCATION, VARIABLES, STORAGE
     var locationManager = CLLocationManager()
     var geocoder = CLGeocoder()
@@ -16,6 +21,7 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     var activeUser = Auth.auth().currentUser
     var manager = Nuke.Manager.shared
     var posts = [Post]()
+    var reactionEmojiArray = [#imageLiteral(resourceName: "Image"), #imageLiteral(resourceName: "Image-1"), #imageLiteral(resourceName: "Image-2"), #imageLiteral(resourceName: "Image-3"), #imageLiteral(resourceName: "Image-4"), #imageLiteral(resourceName: "Image-5")]
     
     //passing messageData
     var clickedPostMessageBody = ""
@@ -28,27 +34,36 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     
     //passing profile data
     var clickedProfilePicOwnerUid = ""
-
+    
     @IBOutlet weak var tableView: UITableView!
-    @IBAction func createPost(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let myModalViewController = storyboard.instantiateViewController(withIdentifier: "createPostViewController")
-        myModalViewController.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-        myModalViewController.modalTransitionStyle = UIModalTransitionStyle.coverVertical
-        self.present(myModalViewController, animated: true, completion: nil)
-    }
-   
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return posts.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        let messageText = self.posts[indexPath.row].postMessage as? String
+        let size = CGSize(width: view.frame.size.width - 32, height: 600)
+        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        let attributes = [NSAttributedStringKey.font:  UIFont.systemFont(ofSize: 14)]
+        let estimatedFrame = NSString(string: messageText!).boundingRect(with: size, options: options, attributes: attributes, context: nil)
+
         if posts[indexPath.row].pinnedMediaFileName != "null" {
-            return 455
-        } else {
-            return 130
+            if estimatedFrame.height < 20 {
+                    return 485
+                } else {
+                    return 485 + estimatedFrame.height - 16.7
+                }
+            } else {
+                if estimatedFrame.height < 20 {
+                    return 130
+                } else {
+                    print(estimatedFrame.height, indexPath.row)
+                    return 130 + estimatedFrame.height - 16.7
+                                }
+                }
         }
-    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -76,12 +91,14 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
                 
                 //choosing not to delete from Feed
                 
-//                deletePostFromFeed(postUid: post.postUid)
-                 stringTimeStamp = "\(hours) hr"
+                //                deletePostFromFeed(postUid: post.postUid)
+                stringTimeStamp = "\(hours) hr"
             } else {
                 stringTimeStamp = "\(hours) hr"
             }
         }
+        
+    
         
         //my two type of table cell
         if post.pinnedMediaFileName != "null" {
@@ -111,14 +128,14 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
             }) { (error) in
                 print(error.localizedDescription)
             }
-   
+            
             textAndImageCell.profilePhotoImageView?.contentMode = .scaleAspectFill
             textAndImageCell.profilePhotoImageView?.layer.borderWidth = 1.0
             textAndImageCell.profilePhotoImageView?.layer.masksToBounds = false
             textAndImageCell.profilePhotoImageView.layer.borderColor = UIColor.white.cgColor
             textAndImageCell.profilePhotoImageView?.layer.cornerRadius = textAndImageCell.profilePhotoImageView.frame.size.width / 2
             textAndImageCell.profilePhotoImageView?.clipsToBounds = true
-        
+            
             
             //setting picture field
             let postPhotoString = URL.init(string: post.pinnedMediaFileName)
@@ -128,11 +145,17 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
             textAndImageCell.messageBody.text = post.postMessage
             textAndImageCell.numberOfComments.text = post.numberOfComments
             
+            let height = textAndImageCell.messageBody.frame.size.height + 92
+            
+            textAndImageCell.frame.size.height = height
+            textAndImageCell.frame = CGRect(x: textAndImageCell.frame.origin.x, y: textAndImageCell.frame.origin.y, width: textAndImageCell.frame.size.width, height: height)
+            
             return textAndImageCell
             
         } else {
             
             let textOnlyCell = tableView.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as! FeedViewControllerTableViewCell
+            
             textOnlyCell.separatorInset = UIEdgeInsetsMake(0, textOnlyCell.bounds.size.width, 0, 0)
             textOnlyCell.selectionStyle = .none
             
@@ -146,12 +169,10 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
             textOnlyCell.profilePhotoImageView.addGestureRecognizer(nameTapGesture)
             textOnlyCell.profilePhotoImageView.isUserInteractionEnabled = true
             
+            //reaction
+//            textOnlyCell.feedCellReactButton.tag = indexPath.row
+//            textOnlyCell.feedCellReactButton.addTarget(self, action: #selector(handleReaction), for: .touchUpInside)
             
-            //react Image
-//            textOnlyCell.reactButton.tag = indexPath.row
-//            textOnlyCell.reactButton.addTarget(self, action: #selector(handleReaction), for: .touchUpInside)
-            
-            //getting Profile picture and username
             var ref: DatabaseReference!
             ref = Database.database().reference()
             
@@ -183,7 +204,7 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
             textOnlyCell.timePosted.text = stringTimeStamp
             textOnlyCell.numberOfComments.text = post.numberOfComments
             textOnlyCell.messageBody.text = post.postMessage
-            
+        
             return textOnlyCell
         }
     }
@@ -206,25 +227,26 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         
         clickedProfilePicOwnerUid = posts[(sender.view?.tag)!].ownerUid
         let uid = Auth.auth().currentUser?.uid
-    
+        
         if clickedProfilePicOwnerUid == uid {
             self.tabBarController?.selectedIndex = 1
         } else {
             self.performSegue(withIdentifier: "toOtherProfile", sender: self)
         }
-}
+    }
     
-    
-//    @objc func handleReaction(sender: UIButton) {
-//       print("clicked")
+//        @objc func handleReaction(sender: UIButton) {
+//           print("clicked", sender.tag)
 //
-//        //cue horizontal scroll view/collectionview of emojis
-//
-//    }
+//        }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchUserLocation()
+        loadBarButtonIcon()
+    }
+    
+    func loadBarButtonIcon() {
     }
     
     
@@ -262,57 +284,38 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
                                             }
         })
     }
-
+    
     func deletePostFromFeed(postUid: String) {
         var ref: DatabaseReference!
         ref = Database.database().reference()
         let postReference = ref.child("posts").child(clickedCurrentCity).child(postUid)
         
         // Remove the post from the DB
-         postReference.removeValue()
+        postReference.removeValue()
         return
     }
-//
-//    func fetchCurrentPosition() {
-//        let userInfo = Auth.auth().currentUser
-//        let uid = userInfo?.uid
-//
-//        var ref: DatabaseReference!
-//        ref = Database.database().reference()
-//
-//        ref.child("users").child(uid!).observeSingleEvent(of: .value, with: { (snapshot) in
-//            // Get user value
-//            let value = snapshot.value as? NSDictionary
-//            self.currentCity = value?["currentCity"] as? String ?? ""
-//            self.fetchPosts(city: self.currentCity)
-//        }) { (error) in
-//            print(error.localizedDescription)
-//        }
-//    }
     
     func fetchPosts(city: String) {
-
+        
         var refExists: DatabaseReference!
         
         refExists = Database.database().reference()
-
+        
         refExists.child("posts").observeSingleEvent(of: .value, with: { (snapshot) in
-
+            
             if snapshot.hasChild(self.clickedCurrentCity) {
                 self.tableView.isHidden = false
-               
+                
                 Database.database().reference().child("posts").child(self.clickedCurrentCity).observe(.childAdded) { (snapshot) in
-                    print("child added1")
                     if let dictionary = snapshot.value as? [AnyHashable: AnyObject] {
                         let post = Post(snapshot: snapshot)
                         self.posts.insert(post, at: self.posts.startIndex)
-                                                DispatchQueue.main.async {
+                        DispatchQueue.main.async {
                             self.tableView.reloadData()
                         }
                     }
                 }
                 Database.database().reference().child("posts").child(self.clickedCurrentCity).observe(.childChanged, with: { (snapshot) in
-                    print("child added2")
                     self.foundSnapshot(snapshot)
                 })
             }else{
@@ -325,30 +328,24 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     //commentchanged
     func foundSnapshot(_ snapshot: DataSnapshot){
         let idChanged = snapshot.key
-        print(idChanged, "ID")
         var numberOfIt = 0
         
         if let dictionary = snapshot.value as? [AnyHashable: AnyObject] {
-            print(numberOfIt, "NUMBER")
-            print(posts.count, "POSTS")
-        let post = Post(snapshot: snapshot)
+            let post = Post(snapshot: snapshot)
             
-                for i in 0 ... posts.count {
-                    if numberOfIt >= 1 {
-                        //nothing
-                        print(idChanged, "NOTHING")
+            for i in 0 ... posts.count {
+                if numberOfIt >= 1 {
+                    //nothing
+                    numberOfIt += 1
+                } else {
+                    if posts[i].postUid == idChanged {
+                        self.posts.remove(at: i)
+                        self.posts.insert(post, at: i)
                         numberOfIt += 1
                     } else {
-                        if posts[i].postUid == idChanged {
-                            print("yes")
-                            self.posts.remove(at: i)
-                            self.posts.insert(post, at: i)
-                             numberOfIt += 1
-                        } else {
-                            print("nope")
-                        }
                     }
                 }
+            }
             
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -371,7 +368,7 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
             }
         }))
     }
-  
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         //failed to get one data point
         print("failed")
@@ -400,3 +397,21 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         // Dispose of any resources that can be recreated.
     }
 }
+
+//extension FeedViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+//    
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
+//                                                      for: indexPath) as! ReactionCollectionViewCell
+//        
+//        cell.reactButton.setBackgroundImage(reactionEmojiArray[indexPath.section], for: .selected)
+//        return cell
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView,
+//                        numberOfItemsInSection section: Int) -> Int {
+//        
+//        return reactionEmojiArray.count
+//    }
+//}

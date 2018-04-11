@@ -45,6 +45,7 @@
 		859450B9201A886B00DBC726 /* back.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 859450B8201A886B00DBC726 /* back.jpg */; };
 		85A5361A1FD91D7B0096E054 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A536191FD91D7B0096E054 /* User.swift */; };
 		85A5361C1FDB8B2A0096E054 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */; };
+		85C1BEBC2074A1F90002B065 /* ReactionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1BEBB2074A1F90002B065 /* ReactionCollectionViewCell.swift */; };
 		85CEB66E202AA76E00636D88 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CEB66D202AA76E00636D88 /* ProfileViewController.swift */; };
 		85F4665C1FE391CC00D46D5C /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F4665B1FE391CC00D46D5C /* Post.swift */; };
 		85F466621FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */; };
@@ -99,6 +100,7 @@
 		859450B8201A886B00DBC726 /* back.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = back.jpg; path = ../../../../../back.jpg; sourceTree = "<group>"; };
 		85A536191FD91D7B0096E054 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
+		85C1BEBB2074A1F90002B065 /* ReactionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionCollectionViewCell.swift; sourceTree = "<group>"; };
 		85CEB66D202AA76E00636D88 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		85F4665B1FE391CC00D46D5C /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewControllerTableViewCell.swift; sourceTree = "<group>"; };
@@ -147,37 +149,24 @@
 		852197201FCFC5AE0013D76C /* corkbored */ = {
 			isa = PBXGroup;
 			children = (
+				8521972B1FCFC5AE0013D76C /* Assets.xcassets */,
+				850CF6B61FD71958000184CA /* corkbored.entitlements */,
+				852197281FCFC5AE0013D76C /* corkbored.xcdatamodeld */,
+				851D042E20327A8C006986E6 /* GoogleService-Info.plist */,
+				852197301FCFC5AE0013D76C /* Info.plist */,
+				852197211FCFC5AE0013D76C /* AppDelegate.swift */,
 				859450A02019C29000DBC726 /* icons */,
 				85F466711FE601F600D46D5C /* models */,
 				85F466541FE3918F00D46D5C /* photos */,
 				85A5361F1FDB9B7C0096E054 /* fonts */,
-				850CF6B61FD71958000184CA /* corkbored.entitlements */,
 				85D513271FE8C54000DF4BC4 /* login */,
-				85FD8720202D7B2800143339 /* appTabController.swift */,
-				854824A91FE8B3370046DD4C /* createPostViewController.swift */,
-				85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */,
-				85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */,
-				85FCC26E203804750091B9AC /* HashtagCollectionViewCell.swift */,
-				85FCC270203812700091B9AC /* HashtagViewController.swift */,
-				85424E1320663E0700191BF3 /* MessageCollectionViewCell.swift */,
-				850BCEA6205A4E190059138A /* messagesTableViewCell.swift */,
-				850BCEA4205A13C20059138A /* MessagesTableViewController.swift */,
-				85424E05205E273300191BF3 /* OtherProfileViewController.swift */,
-				851D0432203574F5006986E6 /* PostCommentTableViewCell.swift */,
-				851D04302033E459006986E6 /* PostCommentsViewController.swift */,
-				8526E2A6203024D400BD3F1A /* tabbedProfileViewController.swift */,
-				85424E03205E1AD700191BF3 /* quickMessageViewController.swift */,
-				8539FE9520413E1700A2D0EF /* RulesAndInfoViewController.swift */,
-				850BCE9A2059108A0059138A /* SearchBarViewController.swift */,
-				85424E112066379600191BF3 /* SingleMessageViewController.swift */,
+				85C1BEBA20749A4B0002B065 /* Feed */,
+				85C1BEB920749A470002B065 /* Messaging */,
+				85C1BEB820749A410002B065 /* Profiles */,
+				85C1BEB420749A2A0002B065 /* Search */,
 				8539FE9D20454A1C00A2D0EF /* tabbedCameraViewController.swift */,
 				852197251FCFC5AE0013D76C /* Main.storyboard */,
 				85FD8722202E16B900143339 /* LaunchScreen.storyboard */,
-				852197211FCFC5AE0013D76C /* AppDelegate.swift */,
-				8521972B1FCFC5AE0013D76C /* Assets.xcassets */,
-				852197301FCFC5AE0013D76C /* Info.plist */,
-				851D042E20327A8C006986E6 /* GoogleService-Info.plist */,
-				852197281FCFC5AE0013D76C /* corkbored.xcdatamodeld */,
 			);
 			path = corkbored;
 			sourceTree = "<group>";
@@ -197,6 +186,49 @@
 			path = fonts;
 			sourceTree = "<group>";
 		};
+		85C1BEB420749A2A0002B065 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				850BCE9A2059108A0059138A /* SearchBarViewController.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		85C1BEB820749A410002B065 /* Profiles */ = {
+			isa = PBXGroup;
+			children = (
+				8526E2A6203024D400BD3F1A /* tabbedProfileViewController.swift */,
+				85424E05205E273300191BF3 /* OtherProfileViewController.swift */,
+			);
+			path = Profiles;
+			sourceTree = "<group>";
+		};
+		85C1BEB920749A470002B065 /* Messaging */ = {
+			isa = PBXGroup;
+			children = (
+				85424E1320663E0700191BF3 /* MessageCollectionViewCell.swift */,
+				850BCEA6205A4E190059138A /* messagesTableViewCell.swift */,
+				850BCEA4205A13C20059138A /* MessagesTableViewController.swift */,
+				85424E03205E1AD700191BF3 /* quickMessageViewController.swift */,
+				85424E112066379600191BF3 /* SingleMessageViewController.swift */,
+			);
+			path = Messaging;
+			sourceTree = "<group>";
+		};
+		85C1BEBA20749A4B0002B065 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				85FD8720202D7B2800143339 /* appTabController.swift */,
+				854824A91FE8B3370046DD4C /* createPostViewController.swift */,
+				85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */,
+				85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */,
+				851D0432203574F5006986E6 /* PostCommentTableViewCell.swift */,
+				851D04302033E459006986E6 /* PostCommentsViewController.swift */,
+				85C1BEBB2074A1F90002B065 /* ReactionCollectionViewCell.swift */,
+			);
+			path = Feed;
+			sourceTree = "<group>";
+		};
 		85D513271FE8C54000DF4BC4 /* login */ = {
 			isa = PBXGroup;
 			children = (
@@ -205,6 +237,9 @@
 				852903301FD75675005477CE /* PhoneEmailRegistrationViewController.swift */,
 				85CEB66D202AA76E00636D88 /* ProfileViewController.swift */,
 				852903321FD7BC75005477CE /* UsernameViewController.swift */,
+				85FCC270203812700091B9AC /* HashtagViewController.swift */,
+				85FCC26E203804750091B9AC /* HashtagCollectionViewCell.swift */,
+				8539FE9520413E1700A2D0EF /* RulesAndInfoViewController.swift */,
 			);
 			path = login;
 			sourceTree = "<group>";
@@ -468,6 +503,7 @@
 				85F4665C1FE391CC00D46D5C /* Post.swift in Sources */,
 				85A5361A1FD91D7B0096E054 /* User.swift in Sources */,
 				850BCEA7205A4E190059138A /* messagesTableViewCell.swift in Sources */,
+				85C1BEBC2074A1F90002B065 /* ReactionCollectionViewCell.swift in Sources */,
 				85424E04205E1AD700191BF3 /* quickMessageViewController.swift in Sources */,
 				852197241FCFC5AE0013D76C /* ViewController.swift in Sources */,
 				851D0433203574F5006986E6 /* PostCommentTableViewCell.swift in Sources */,
@@ -626,6 +662,7 @@
 					/Users/jacksonmeyer/Desktop/DOCUMENTS/FacebookSDK,
 				);
 				INFOPLIST_FILE = corkbored/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jacksonmeyer.corkbored;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -652,6 +689,7 @@
 					/Users/jacksonmeyer/Desktop/DOCUMENTS/FacebookSDK,
 				);
 				INFOPLIST_FILE = corkbored/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jacksonmeyer.corkbored;
 				PRODUCT_NAME = "$(TARGET_NAME)";

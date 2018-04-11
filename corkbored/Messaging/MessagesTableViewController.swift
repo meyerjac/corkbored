@@ -31,25 +31,25 @@ class MessagesTableViewController: UITableViewController {
                     
                     self.allMessageProfileUid.insert(allMessagesFromOwnerUidSnapshot.key, at: self.messages.startIndex)
                     
-                        for messages in allMessagesFromOwnerUidSnapshot.children { //now iterate over each messObject
-                    
+                    for messages in allMessagesFromOwnerUidSnapshot.children { //now iterate over each messObject
+                        
                         let messageSnapshot = messages as! DataSnapshot
                         if let dictionary = messageSnapshot.value as? [AnyHashable: AnyObject] {
-                        let message = Message(snapshot: messageSnapshot)
-                        self.messages.insert(message, at: self.messages.startIndex)
+                            let message = Message(snapshot: messageSnapshot)
+                            self.messages.insert(message, at: self.messages.startIndex)
+                        }
                     }
                 }
             }
-        }
-            print(self.allMessageProfileUid.count, "AllmessagesUid")
-            print(self.messages.count, "# of messages")
+            print(self.allMessageProfileUid.count)
+            print(self.messages.count)
             
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
-    })
-}
-
+        })
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return allMessageProfileUid.count
     }
@@ -57,7 +57,7 @@ class MessagesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "messagesCell", for: indexPath) as! messagesTableViewCell
         
@@ -80,7 +80,7 @@ class MessagesTableViewController: UITableViewController {
             print(usersName, "USERNAME")
             cell.messagesName.text = usersName
             cell.messagesLastMessageSent.text = "11:37am"
-
+            
             if let url = URL.init(string: postProfilePictureStringURL) {
                 self.manager.loadImage(with: url, into: cell.messagesProfileView)
             }
@@ -100,12 +100,13 @@ class MessagesTableViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            let controller = segue.destination as! SingleMessageViewController
-            controller.messageUid = String(messageSelectedUid)
+        let controller = segue.destination as! SingleMessageViewController
+        controller.messageUid = String(messageSelectedUid)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-         messageSelectedUid = allMessageProfileUid[indexPath.row]
-         self.performSegue(withIdentifier: "toSelectedDm", sender: self)
+        messageSelectedUid = allMessageProfileUid[indexPath.row]
+        print("just after messageSelected")
+        self.performSegue(withIdentifier: "toSelectedDm", sender: self)
     }
 }

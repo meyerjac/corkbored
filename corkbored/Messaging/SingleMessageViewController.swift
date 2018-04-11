@@ -16,14 +16,14 @@ class SingleMessageViewController: UIViewController, UICollectionViewDataSource,
     var individualMessageArray = [Message]()
     var messageUid = ""
     var currentUserUid: String = ""
+    var bottomConstraintTextView: NSLayoutConstraint?
+    var bottomConstraintSendButton: NSLayoutConstraint?
+    var cornerRadius = Int(8)
     
     @IBOutlet weak var messageCollectionView: UICollectionView!
     @IBOutlet weak var messageTextView: UITextView!
     @IBOutlet weak var sendMessageButton: UIButton!
-    
     @IBAction func sendMessageButton(_ sender: Any) {
-        
-        
         
         let nowish = String(Date().timeIntervalSinceReferenceDate)
         
@@ -31,8 +31,12 @@ class SingleMessageViewController: UIViewController, UICollectionViewDataSource,
         
         let uid = (Auth.auth().currentUser?.uid)!
         
-        let UserOneMessagingRef = Database.database().reference().child("users").child(uid).child("messaging").child(self.messageUid)
-        let UserTwoMessagingRef = Database.database().reference().child("users").child(self.messageUid).child("messaging").child(uid)
+        
+        //getting Profile picture and username
+        var UserOneMessagingRef: DatabaseReference!
+        UserOneMessagingRef = Database.database().reference().child("users").child(uid).child("messaging").child(self.messageUid)
+        var UserTwoMessagingRef: DatabaseReference!
+        UserTwoMessagingRef = Database.database().reference().child("users").child(self.messageUid).child("messaging").child(uid)
         
         let messagingProfileOne = UserOneMessagingRef.childByAutoId()
         let messagingProfileTwo = UserTwoMessagingRef.childByAutoId()
@@ -64,7 +68,6 @@ class SingleMessageViewController: UIViewController, UICollectionViewDataSource,
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if let count = individualMessageArray.count as Int?  {
             return count
-            print(count, "Count")
         }
         return 0
     }
@@ -88,7 +91,7 @@ class SingleMessageViewController: UIViewController, UICollectionViewDataSource,
             cell.messageView.layer.borderWidth = 1.0
             cell.messageView.layer.borderColor = UIColor.red.cgColor
             cell.messageView.layer.masksToBounds = true
-            cell.messageView.layer.cornerRadius = 14
+            cell.messageView.layer.cornerRadius = CGFloat(cornerRadius)
             cell.messageView.backgroundColor = UIColor.white
             
             cell.messageView.frame = CGRect(x: self.view.frame.width - estimatedFrame.width - 16 - 12, y: 0, width: estimatedFrame.width + 12, height: estimatedFrame.height + 16)
@@ -96,12 +99,12 @@ class SingleMessageViewController: UIViewController, UICollectionViewDataSource,
         } else {
             //current users message
             cell.messageView.layer.masksToBounds = true
-            cell.messageView.layer.cornerRadius = 14
+            cell.messageView.layer.cornerRadius = CGFloat(cornerRadius)
             cell.messageView.backgroundColor = UIColor.red
             
             cell.messageView.frame = CGRect(x: 8, y: 0, width: estimatedFrame.width + 12, height: estimatedFrame.height + 16)
             
-        }
+        } 
         
         return cell
         
@@ -142,13 +145,17 @@ class SingleMessageViewController: UIViewController, UICollectionViewDataSource,
         
         messageCollectionView.dataSource = self
         messageCollectionView.delegate = self
+        
     }
     
     func fetchMessages() {
         currentUserUid = (Auth.auth().currentUser?.uid)!
         var messagingRef: DatabaseReference!
         
+        print(self.currentUserUid, "a")
+        print(messageUid, "s")
         messagingRef = Database.database().reference().child("users").child(self.currentUserUid).child("messaging").child(messageUid)
+        
         messagingRef.observeSingleEvent(of: .value, with: { (snapshot) in
             messagingRef.observe(.childAdded) { (snapshot) in
                 if let dictionary = snapshot.value as? [AnyHashable: AnyObject] {
@@ -163,18 +170,69 @@ class SingleMessageViewController: UIViewController, UICollectionViewDataSource,
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
+        let duration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y == 0{
-                self.view.frame.origin.y -= keyboardSize.height
-            }
+            
+            //messageView
+            let xPosition = messageTextView.frame.origin.x
+            let yPosition = messageTextView.frame.origin.y - (keyboardSize.height - (navigationController?.navigationBar.frame.height)!)
+            let height = messageTextView.frame.size.height
+            let width = messageTextView.frame.size.width
+            
+            //sendMessageButton
+            let sendButtonxPosition = sendMessageButton.frame.origin.x
+            let sendButtonyPosition = sendMessageButton.frame.origin.y - (keyboardSize.height - (navigationController?.navigationBar.frame.height)!)
+            let sendButtonHeight = sendMessageButton.frame.size.height
+            let sendButtonWidth = sendMessageButton.frame.size.width
+            
+            //CollectionView
+            let collectionViewxPosition = messageCollectionView.frame.origin.x
+            let collectionViewyPosition = messageCollectionView.frame.origin.y
+            let collectionViewHeight = messageCollectionView.frame.size.height - (keyboardSize.height - (navigationController?.navigationBar.frame.height)!)
+            let collectionViewWidth = messageCollectionView.frame.size.width
+            
+            UIView.animate(withDuration: duration as! TimeInterval, animations: {
+                
+            self.messageTextView.frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+            self.sendMessageButton.frame = CGRect(x: sendButtonxPosition, y: sendButtonyPosition, width: sendButtonWidth, height: sendButtonHeight)
+            self.messageCollectionView.frame = CGRect(x: collectionViewxPosition, y: collectionViewyPosition, width: collectionViewWidth, height: collectionViewHeight)
+                
+            }, completion: {(completed) in
+                print("in completition")
+                let indexPath = NSIndexPath(item: 0, section: self.individualMessageArray.count - 1)
+                self.messageCollectionView.scrollToItem(at: indexPath as IndexPath, at: .bottom, animated: true)
+            })
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
+        let duration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y != 0{
-                self.view.frame.origin.y += keyboardSize.height
-            }
+            
+            //messageView
+            let xPosition = messageTextView.frame.origin.x
+            let yPosition = messageTextView.frame.origin.y + (keyboardSize.height - (navigationController?.navigationBar.frame.height)!)
+            let height = messageTextView.frame.size.height
+            let width = messageTextView.frame.size.width
+            
+            //sendButtonView
+            let sendButtonxPosition = sendMessageButton.frame.origin.x
+            let sendButtonyPosition = sendMessageButton.frame.origin.y + (keyboardSize.height - (navigationController?.navigationBar.frame.height)!)
+            let sendButtonHeight = sendMessageButton.frame.size.height
+            let sendButtonWidth = sendMessageButton.frame.size.width
+            
+            //CollectionView
+            let collectionViewxPosition = messageCollectionView.frame.origin.x
+            let collectionViewyPosition = messageCollectionView.frame.origin.y
+            let collectionViewHeight = messageCollectionView.frame.size.height + (keyboardSize.height - (navigationController?.navigationBar.frame.height)!)
+            let collectionViewWidth = messageCollectionView.frame.size.width
+            
+            UIView.animate(withDuration: duration as! TimeInterval, animations: {
+                
+                self.messageTextView.frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+                self.sendMessageButton.frame = CGRect(x: sendButtonxPosition, y: sendButtonyPosition, width: sendButtonWidth, height: sendButtonHeight)
+                self.messageCollectionView.frame = CGRect(x: collectionViewxPosition, y: collectionViewyPosition, width: collectionViewWidth, height: collectionViewHeight)
+            })
         }
     }
     
