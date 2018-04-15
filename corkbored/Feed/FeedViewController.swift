@@ -242,6 +242,7 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         fetchUserLocation()
         loadBarButtonIcon()
     }

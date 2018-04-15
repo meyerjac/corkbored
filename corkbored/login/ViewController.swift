@@ -15,7 +15,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadViews()

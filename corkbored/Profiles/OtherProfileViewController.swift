@@ -14,15 +14,46 @@ class OtherProfileViewController: UIViewController {
     var ownerUid = ""
     var hashtagArray = [String]()
     var manager = Nuke.Manager.shared
-
+    
+    @IBOutlet weak var snapchatLogo: UIImageView!
+    @IBOutlet weak var instagramLogo: UIImageView!
+    @IBOutlet weak var backButton: UIImageView!
+    @IBOutlet weak var ageLabel: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var bioTextLabel: UILabel!
-    @IBOutlet weak var nameAndAge: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var quickMessage: UIButton!
+    @IBOutlet weak var snapchatSocialHandle: UILabel!
+    @IBOutlet weak var instagramSocialHandle: UILabel!
+    @IBOutlet weak var favoriteQuoteLabel: UILabel!
+    @IBOutlet weak var majorInSchoolLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.isNavigationBarHidden = true
+        self.tabBarController?.tabBar.isHidden = true
+        
+        loadViews()
         loadProfile()
+    }
+    
+    func loadViews() {
+        let width = view.frame.size.width
+        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        
+        profileImageView.frame = CGRect(x: width / 4, y: view.frame.size.height / 6, width: width / 2, height: width / 2)
+        profileImageView.layer.cornerRadius = 5
+        profileImageView.clipsToBounds = true
+        
+        //nameLabel
+        nameLabel.center = CGPoint(x: width / 2, y: profileImageView.frame.origin.y + profileImageView.frame.size.height + 8 + (nameLabel.frame.size.height / 2))
+        
+        //ageLabel
+        ageLabel.center = CGPoint(x: width / 2, y: nameLabel.frame.origin.y + nameLabel.frame.size.height + 8 + ageLabel.frame.size.height / 2)
+        
+        //backButton
+        backButton.frame = CGRect(x: 8, y: statusBarHeight + 8, width: 30, height: 30)
+    
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,10 +74,8 @@ class OtherProfileViewController: UIViewController {
             ref = Database.database().reference()
             
             ref.child("users").child(self.ownerUid).observeSingleEvent(of: .value, with: { (snapshot) in
-                // Get user value
-                
+                // Get users value
                 let value = snapshot.value as? NSDictionary
-                
                 let postProfilePictureStringURL = value?["profilePic"] as? String ?? ""
                 let firstName = value?["firstName"] as? String ?? ""
                 let lastName = value?["lastName"] as? String ?? ""
@@ -56,14 +85,30 @@ class OtherProfileViewController: UIViewController {
                     self.hashtagArray = hashes as! [String]
                 }
                 
-                var nameAndAgeText = firstName + " " + lastName + "," + " 25"
+                var nameAndAgeText = firstName + " " + lastName
                 
                 //assign bio and birthday text views
                 self.bioTextLabel.text = bio
-                self.nameAndAge.text = nameAndAgeText
+                self.nameLabel.text = nameAndAgeText
+                
+                
+                //social handles
+                self.instagramSocialHandle.sizeToFit()
+                self.snapchatSocialHandle.sizeToFit()
+
+
+                self.instagramLogo.frame = CGRect(x: self.view.frame.size.width / 2 + 16, y: self.ageLabel.frame.origin.y + self.ageLabel.frame.size.height + 16, width: 30, height: 30)
+                
+                self.instagramSocialHandle.frame = CGRect(x: self.instagramLogo.frame.origin.x + self.instagramLogo.frame.size.width + 8, y: self.instagramLogo.frame.origin.y + self.instagramSocialHandle.frame.size.height / 2, width: self.instagramSocialHandle.frame.size.width, height: 20)
+                
+                 self.snapchatSocialHandle.frame = CGRect(x: self.view.frame.size.width / 2 - 16 - self.snapchatSocialHandle.frame.size.width, y: self.ageLabel.frame.origin.y + self.ageLabel.frame.size.height + 16 + self.snapchatSocialHandle.frame.size.height / 2, width: self.snapchatSocialHandle.frame.size.width, height: 20)
+                
+                self.snapchatLogo.frame = CGRect(x: self.snapchatSocialHandle.frame.origin.x - 8 - self.snapchatLogo.frame.size.width, y: self.ageLabel.frame.origin.y + self.ageLabel.frame.size.height + 16, width: 30, height: 30)
                 
                 //messageButton
-                self.quickMessage.layer.cornerRadius = self.quickMessage.frame.size.height / 2
+                self.quickMessage.layer.cornerRadius = 5
+                self.quickMessage.layer.borderColor = UIColor.white.cgColor
+                self.quickMessage.layer.borderWidth = 1
                 self.quickMessage.clipsToBounds = true
                 
                 if let urlUrl = URL.init(string: postProfilePictureStringURL) {

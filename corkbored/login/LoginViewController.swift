@@ -12,22 +12,18 @@ import Firebase
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var emailTextView: UITextField!
-    
     @IBOutlet weak var passwordTextField: UITextField!
-    
     @IBOutlet weak var loginButton: UIButton!
-    
     @IBAction func loginButtonClicked(_ sender: Any) {
        handleLogin()
     }
-
+    
     @IBAction func dontHaveAnAccount(_ sender: Any) {
-        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        loginButton.layer.cornerRadius = 3
         // Do any additional setup after loading the view.
     }
     

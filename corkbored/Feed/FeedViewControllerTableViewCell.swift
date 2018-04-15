@@ -17,7 +17,6 @@ class FeedViewControllerTableViewCell: UITableViewCell {
     @IBOutlet weak var postPhoto: UIImageView!
     @IBOutlet weak var commentButton: UIButton!
     @IBOutlet weak var numberOfComments: UILabel!
-    @IBOutlet weak var feedCellReactButton: UIButton!
     
     
     

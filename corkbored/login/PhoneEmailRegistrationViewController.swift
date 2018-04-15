@@ -16,7 +16,6 @@ import FBSDKLoginKit
 
 class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDelegate, CLLocationManagerDelegate {
     //filled in with Facebook data
-    
     var acceptedTerms = false
     var bio = ""
     var birthday = ""
@@ -37,11 +36,13 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
     var userLocation: CLLocation = CLLocation()
     
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var facebookLogButton: FBSDKButton!
+    @IBOutlet weak var facebookLogButton: FBSDKLoginButton!
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var signUpWithEmailButton: UIButton!
+    @IBAction func signInClicked(_ sender: Any) {
+    }
     
     @IBAction func signUpWithEmailButton(_ sender: Any) {
         let duration = 0.50
@@ -61,73 +62,79 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
             print("in completition 1")
             
         })
-        
-    }
-    
-    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
-        print("did Complete With result")
-        
-        //exchange token for firebase credential
-        let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
-        
-        Auth.auth().signIn(with: credential) { (user, error) in
-            
-            if let error = error {
-                print("error signing in didCompleteWith Result")
-                return
-            }
-            
-            // generating profile
-            print("generating profile")
-            self.locationManager.delegate = self
-            self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
-            self.locationManager.requestWhenInUseAuthorization()
-            self.locationManager.startUpdatingLocation()
-            self.fetchFacebookProfile()
-        }
-    }
-    
-    @IBAction func signInClicked(_ sender: Any) {
-        
-        
-        let vc = LoginViewController()
-        self.present(vc, animated: true, completion: nil)
     }
     
     @IBAction func nextButtonClicked(_ sender: Any) {
         nextButton.isEnabled = false
-
-            self.email = emailTextField.text!
-        print(self.email, "EMAIL1")
-            let password: String = passwordTextField.text!
-            Auth.auth().createUser(withEmail: self.email, password: password, completion: { (user, error) in
-                if error != nil {
-                    print(error!)
-                    let alert = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-                    self.present(alert, animated: true, completion: nil)
-                    
-                    alert.addAction(UIAlertAction(title: "Try again", style: .cancel, handler: { action in
-                        switch action.style{
-                        case .cancel:
-                            self.nextButton.isEnabled = true
-                            print("cancel")
-                        case .default:
-                            self.nextButton.isEnabled = true
-                            print("default case")
-                        case .destructive:
-                            self.nextButton.isEnabled = true
-                            print("destructive case")
-                        }
-                    }))
+        
+        self.email = emailTextField.text!
+        let password: String = passwordTextField.text!
+        Auth.auth().createUser(withEmail: self.email, password: password, completion: { (user, error) in
+            if error != nil {
+                print(error!)
+                let alert = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                self.present(alert, animated: true, completion: nil)
+                
+                alert.addAction(UIAlertAction(title: "Try again", style: .cancel, handler: { action in
+                    switch action.style{
+                    case .cancel:
+                        self.nextButton.isEnabled = true
+                        print("cancel")
+                    case .default:
+                        self.nextButton.isEnabled = true
+                        print("default case")
+                    case .destructive:
+                        self.nextButton.isEnabled = true
+                        print("destructive case")
+                    }
+                }))
+            } else {
+                self.handleCreateUser()
+            }
+        })
+    }
+    
+    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
+        
+        if (error == nil) {
+            let fbloginresult : FBSDKLoginManagerLoginResult = result
+            if result.isCancelled {
+                return
                 } else {
-                    self.handleCreateUser()
+                //not cancelled
+                //exchange token for firebase credential
+                let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+                
+                Auth.auth().signIn(with: credential) { (user, error) in
+                    
+                    // generating profile
+                    print("generating profile")
+                    self.locationManager.delegate = self
+                    self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
+                    self.locationManager.requestWhenInUseAuthorization()
+                    self.locationManager.startUpdatingLocation()
+                    self.fetchFacebookProfile()
                 }
-            })
+            }
+        } else {
+            //print error
+        }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadUIStuff()
+        facebookLogButton.removeConstraints(facebookLogButton.constraints)
+        facebookLogButton.frame.size.height = 50
+        facebookLogButton.layer.cornerRadius = 3
+        facebookLogButton.delegate = self
+        let buttonText = NSAttributedString(string: "Sign Up With Facebook")
+        facebookLogButton.setAttributedTitle(buttonText, for: .normal)
+         facebookLogButton.titleLabel?.font =  UIFont(name: "system", size: 12)
+        
+        nextButton.layer.cornerRadius = 3
+        signUpWithEmailButton.layer.cornerRadius = 3
+        
+        titleLabel.frame = CGRect(x: facebookLogButton.frame.origin.x, y: facebookLogButton.frame.origin.y - 50, width: view.frame.width, height: 50)
     }
     
     
@@ -137,9 +144,12 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
     }
   
     func fetchFacebookProfile() {
+        print("yup1")
         if((FBSDKAccessToken.current()) != nil){
+             print("yup2")
             FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "about,birthday,email,first_name,gender,id,last_name, picture.width(1080).height(1080)"]).start(completionHandler: { (connection, result, error) -> Void in
                 if (error != nil){
+                    return
                    print(error, "error")
                 }
                 
@@ -270,21 +280,7 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
                                             }
         })
     }
-    
-    func loadUIStuff() {
-        //main middle sign up button and next button if email is clicked//
-        
-        facebookLogButton.removeConstraints(facebookLogButton.constraints)
-        facebookLogButton.frame.size.height = 50
-        facebookLogButton.layer.cornerRadius = 3
-        
-        nextButton.layer.cornerRadius = 3
-        signUpWithEmailButton.layer.cornerRadius = 3
-        
-        titleLabel.frame = CGRect(x: facebookLogButton.frame.origin.x, y: facebookLogButton.frame.origin.y - 50, width: view.frame.width, height: 50)
-    }
-    
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
@@ -311,7 +307,6 @@ class PhoneEmailRegistrationViewController: UIViewController, FBSDKLoginButtonDe
     }
     
     func loginButtonWillLogin(_ loginButton: FBSDKLoginButton!) -> Bool {
-        print("login button will Login")
         return true
     }
 }

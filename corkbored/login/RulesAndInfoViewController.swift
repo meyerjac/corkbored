@@ -11,6 +11,8 @@ import FirebaseAuth
 import FirebaseDatabase
 
 class RulesAndInfoViewController: UIViewController {
+    @IBOutlet weak var agreeButton: UIButton!
+    @IBOutlet weak var disagreeButton: UIButton!
     @IBAction func disagreeButton(_ sender: Any) {
         let alert = UIAlertController(title: "Awkward...", message: "you must agree to our terms of service and rules to be part of the family!", preferredStyle: UIAlertControllerStyle.alert)
         self.present(alert, animated: true, completion: nil)
@@ -43,6 +45,7 @@ class RulesAndInfoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
     }
 
     override func didReceiveMemoryWarning() {
