@@ -10,6 +10,10 @@ import UIKit
 import Firebase
 
 class quickMessageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
+    var dmProfileNavImage: UIImage!
+    var POIUid = ""
+    var messageArray = [Message]()
+    
     @IBOutlet weak var messageTextField: UITextField!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var sendButton: UIButton!
@@ -45,11 +49,6 @@ class quickMessageViewController: UIViewController, UITableViewDelegate, UITable
         messageTextField.text = ""
 
     }
-    
-    var dmProfileNavImage: UIImage!
-    var POIUid = ""
-    
-    var messageArray = [Message]()
 
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
@@ -69,6 +68,9 @@ class quickMessageViewController: UIViewController, UITableViewDelegate, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        
+        
         loadMessages()
         loadTitleImage()
         addKeyboardObservers()
@@ -106,23 +108,34 @@ class quickMessageViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func loadTitleImage() {
-        let image = dmProfileNavImage
-        let imageView = UIImageView(image: image)
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = 15
-        imageView.layer.masksToBounds = true
-    
-        let navController = navigationController!
-
-        let bannerWidth = navController.navigationBar.frame.size.width
-        let bannerHeight = navController.navigationBar.frame.size.height
+        let containView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        let imageview = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        imageview.image = dmProfileNavImage
+        imageview.contentMode = UIViewContentMode.scaleAspectFit
+        imageview.layer.cornerRadius = 5
+        imageview.layer.masksToBounds = true
+        containView.addSubview(imageview)
+//        let centerBarButton = UIBarButtonItem(customView: containView)
+        self.navigationItem.titleView = containView
         
-        let bannerX = bannerWidth / 2 - (image?.size.width)! / 2
-        let bannerY = bannerHeight / 2 - (image?.size.height)! / 2
-        
-        imageView.frame = CGRect(x: bannerX, y: bannerY, width: bannerWidth, height: bannerHeight)
-       
-        navigationItem.titleView = imageView
+//        let image = dmProfileNavImage
+//        let imageView = UIImageView(image: image)
+//        imageView.contentMode = .scaleAspectFit
+//        imageView.layer.cornerRadius = 15
+//        imageView.clipsToBounds = true
+//
+//
+//        let navController = navigationController!
+//
+//        let bannerWidth = navController.navigationBar.frame.size.width
+//        let bannerHeight = navController.navigationBar.frame.size.height
+//
+//        let bannerX = bannerWidth / 2 - (image?.size.width)! / 2
+//        let bannerY = bannerHeight / 2 - (image?.size.height)! / 2
+//
+//        imageView.frame = CGRect(x: bannerX, y: bannerY, width: bannerWidth, height: bannerHeight)
+//
+//        navigationItem.titleView = imageView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

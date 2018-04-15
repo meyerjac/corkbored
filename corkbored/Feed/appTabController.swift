@@ -13,7 +13,7 @@ class appTabController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tabBar.barTintColor = UIColor(red: 66/255, green: 165/255, blue: 245/255, alpha:1.0)
+        self.tabBar.barTintColor = UIColor(red: 160/255, green: 218/255, blue: 245/255, alpha:1.0)
         
         let tabBarFrame = CGRect(x: self.tabBar.frame.origin.x, y: self.tabBar.frame.origin.y, width: self.view.frame.width - 100, height: self.tabBar.frame.height)
         self.tabBar.frame = tabBarFrame

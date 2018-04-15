@@ -205,7 +205,7 @@ connect more.</string>
             </objects>
             <point key="canvasLocation" x="-590" y="1652"/>
         </scene>
-        <!--Home-->
+        <!--Feed-->
         <scene sceneID="dj8-ia-JVk">
             <objects>
                 <viewController id="MId-aA-XIQ" customClass="FeedViewController" customModule="corkbored" sceneMemberID="viewController">
@@ -459,7 +459,7 @@ connect more.</string>
                     </view>
                     <tabBarItem key="tabBarItem" title="Feed" id="We0-la-Qi6"/>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Home" id="eKt-rv-bVW">
+                    <navigationItem key="navigationItem" id="eKt-rv-bVW">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="IUg-gn-qiH">
                             <connections>
                                 <action selector="createPost:" destination="MId-aA-XIQ" id="RHR-MS-Wc3"/>
@@ -1106,7 +1106,7 @@ connect more.</string>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="6Qx-Z6-fCc">
                                 <rect key="frame" x="0.0" y="64" width="375" height="547"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.62755725340000001" green="0.85322201789999996" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="messageCellText" rowHeight="62" id="zuq-OK-eMn">
                                         <rect key="frame" x="0.0" y="28" width="375" height="62"/>
@@ -1115,6 +1115,7 @@ connect more.</string>
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="61.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.62745098040000002" green="0.85490196080000003" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -1176,7 +1177,7 @@ connect more.</string>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.62755725340000001" green="0.85322201789999996" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Send message">
-                                    <color key="titleColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleColor" red="0.0" green="0.039215686270000001" blue="0.098039215690000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <segue destination="nFX-in-GKH" kind="push" identifier="toQuickMessage" id="Scx-eq-fa1"/>
@@ -1237,9 +1238,10 @@ connect more.</string>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="0.62755725340000001" green="0.85322201789999996" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.62745098039215685" green="0.85490196078431369" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="eXW-40-qLT"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="ageLabel" destination="k2j-MM-EAD" id="Msi-NF-0b5"/>
                         <outlet property="backButton" destination="5MK-FE-IxL" id="qQa-zI-MNg"/>

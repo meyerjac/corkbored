@@ -30,7 +30,7 @@ class OtherProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.isNavigationBarHidden = true
+//        self.navigationController?.isNavigationBarHidden = true
         self.tabBarController?.tabBar.isHidden = true
         
         loadViews()
@@ -42,7 +42,7 @@ class OtherProfileViewController: UIViewController {
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
         
         profileImageView.frame = CGRect(x: width / 4, y: view.frame.size.height / 6, width: width / 2, height: width / 2)
-        profileImageView.layer.cornerRadius = 5
+        profileImageView.layer.cornerRadius = 15
         profileImageView.clipsToBounds = true
         
         //nameLabel
@@ -107,7 +107,7 @@ class OtherProfileViewController: UIViewController {
                 
                 //messageButton
                 self.quickMessage.layer.cornerRadius = 5
-                self.quickMessage.layer.borderColor = UIColor.white.cgColor
+                self.quickMessage.layer.borderColor = UIColor.black.cgColor
                 self.quickMessage.layer.borderWidth = 1
                 self.quickMessage.clipsToBounds = true
                 
