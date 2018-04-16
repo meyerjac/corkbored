@@ -160,8 +160,8 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
         
         newPostImageView.contentMode = .scaleAspectFit
         nowish = String(Date().timeIntervalSinceReferenceDate)
-        
     }
+    
     
     @objc func cancelBackToFeed() {
             self.dismiss(animated: true, completion: nil)

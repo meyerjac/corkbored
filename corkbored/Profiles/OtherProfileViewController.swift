@@ -30,9 +30,7 @@ class OtherProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.navigationController?.isNavigationBarHidden = true
-        self.tabBarController?.tabBar.isHidden = true
-        
+        animateTabBarControllerDown()
         loadViews()
         loadProfile()
     }
@@ -40,6 +38,11 @@ class OtherProfileViewController: UIViewController {
     func loadViews() {
         let width = view.frame.size.width
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        
+        self.navigationItem.hidesBackButton = true
+        let newBackButton = UIBarButtonItem(image: #imageLiteral(resourceName: "back"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(OtherProfileViewController.back(sender:)))
+        
+        self.navigationItem.leftBarButtonItem = newBackButton
         
         profileImageView.frame = CGRect(x: width / 4, y: view.frame.size.height / 6, width: width / 2, height: width / 2)
         profileImageView.layer.cornerRadius = 15
@@ -53,7 +56,13 @@ class OtherProfileViewController: UIViewController {
         
         //backButton
         backButton.frame = CGRect(x: 8, y: statusBarHeight + 8, width: 30, height: 30)
+    }
     
+    @objc func back(sender: UIBarButtonItem) {
+        // Perform your custom actions
+           animateTabBarControllerUp()
+        // Go back to the previous ViewController
+        self.navigationController?.popViewController(animated: true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -66,6 +75,50 @@ class OtherProfileViewController: UIViewController {
             let controller = segue.destination as! quickMessageViewController
             controller.dmProfileNavImage = profileImageView.image
             controller.POIUid = self.ownerUid
+        }
+    }
+    
+    func animateTabBarControllerDown() {
+        let duration = 0.25
+        
+        if let nav = self.tabBarController?.tabBar {
+            
+            //TabBarController
+            let xPosition = nav.frame.origin.x
+            let yPosition = nav.frame.origin.y + nav.frame.size.height
+            let height = nav.frame.size.height
+            let width = nav.frame.size.width
+            
+            UIView.animate(withDuration: duration as! TimeInterval, animations: {
+                
+                nav.frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+                
+                }, completion: {(completed) in
+                    print("in completition")
+                })
+            } else {
+        }
+    }
+    
+    func animateTabBarControllerUp() {
+        let duration = 0.25
+        
+        if let nav = self.tabBarController?.tabBar {
+            
+            //TabBarController
+            let xPosition = nav.frame.origin.x
+            let yPosition = nav.frame.origin.y - nav.frame.size.height
+            let height = nav.frame.size.height
+            let width = nav.frame.size.width
+            
+            UIView.animate(withDuration: duration as! TimeInterval, animations: {
+                
+                nav.frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+                
+            }, completion: {(completed) in
+                print("in completition")
+            })
+        } else {
         }
     }
     

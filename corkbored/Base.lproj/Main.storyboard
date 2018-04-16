@@ -208,7 +208,7 @@ connect more.</string>
         <!--Feed-->
         <scene sceneID="dj8-ia-JVk">
             <objects>
-                <viewController id="MId-aA-XIQ" customClass="FeedViewController" customModule="corkbored" sceneMemberID="viewController">
+                <viewController extendedLayoutIncludesOpaqueBars="YES" id="MId-aA-XIQ" customClass="FeedViewController" customModule="corkbored" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="UUZ-Sy-ZcJ"/>
                         <viewControllerLayoutGuide type="bottom" id="yxm-7f-5ey"/>
@@ -521,7 +521,7 @@ connect more.</string>
                                 </subviews>
                                 <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9HJ-Go-BFv">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" springLoaded="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9HJ-Go-BFv">
                                 <rect key="frame" x="0.0" y="204" width="375" height="417"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
@@ -1087,6 +1087,7 @@ connect more.</string>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="message here...." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FCa-yB-jNf">
                                 <rect key="frame" x="16" y="619" width="292" height="40"/>
+                                <color key="backgroundColor" red="0.62745098040000002" green="0.85490196080000003" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="LQJ-Qo-u7v"/>
                                 </constraints>
@@ -1096,17 +1097,20 @@ connect more.</string>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bGr-b4-9Zt">
                                 <rect key="frame" x="313" y="624" width="46" height="30"/>
+                                <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="46" id="81J-Im-L8S"/>
                                 </constraints>
-                                <state key="normal" title="send"/>
+                                <state key="normal" title="send">
+                                    <color key="titleColor" red="0.62745098040000002" green="0.85490196080000003" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="sendButton:" destination="nFX-in-GKH" eventType="touchUpInside" id="KnC-ho-HkV"/>
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="6Qx-Z6-fCc">
                                 <rect key="frame" x="0.0" y="64" width="375" height="547"/>
-                                <color key="backgroundColor" red="0.62755725340000001" green="0.85322201789999996" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="messageCellText" rowHeight="62" id="zuq-OK-eMn">
                                         <rect key="frame" x="0.0" y="28" width="375" height="62"/>
@@ -1115,7 +1119,7 @@ connect more.</string>
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="61.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.62745098040000002" green="0.85490196080000003" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -1124,7 +1128,7 @@ connect more.</string>
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.62745098040000002" green="0.85490196080000003" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="6Qx-Z6-fCc" secondAttribute="trailing" id="1PY-8N-98V"/>
                             <constraint firstItem="6Qx-Z6-fCc" firstAttribute="leading" secondItem="u6U-XA-Llv" secondAttribute="leading" id="HW3-Hh-5it"/>
