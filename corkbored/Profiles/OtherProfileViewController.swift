@@ -17,7 +17,6 @@ class OtherProfileViewController: UIViewController {
     
     @IBOutlet weak var snapchatLogo: UIImageView!
     @IBOutlet weak var instagramLogo: UIImageView!
-    @IBOutlet weak var backButton: UIImageView!
     @IBOutlet weak var ageLabel: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var bioTextLabel: UILabel!
@@ -41,7 +40,6 @@ class OtherProfileViewController: UIViewController {
         
         self.navigationItem.hidesBackButton = true
         let newBackButton = UIBarButtonItem(image: #imageLiteral(resourceName: "back"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(OtherProfileViewController.back(sender:)))
-        
         self.navigationItem.leftBarButtonItem = newBackButton
         
         profileImageView.frame = CGRect(x: width / 4, y: view.frame.size.height / 6, width: width / 2, height: width / 2)
@@ -53,9 +51,6 @@ class OtherProfileViewController: UIViewController {
         
         //ageLabel
         ageLabel.center = CGPoint(x: width / 2, y: nameLabel.frame.origin.y + nameLabel.frame.size.height + 8 + ageLabel.frame.size.height / 2)
-        
-        //backButton
-        backButton.frame = CGRect(x: 8, y: statusBarHeight + 8, width: 30, height: 30)
     }
     
     @objc func back(sender: UIBarButtonItem) {
@@ -74,6 +69,7 @@ class OtherProfileViewController: UIViewController {
         if segue.identifier == "toQuickMessage" {
             let controller = segue.destination as! quickMessageViewController
             controller.dmProfileNavImage = profileImageView.image
+            controller.userName = self.nameLabel.text!
             controller.POIUid = self.ownerUid
         }
     }

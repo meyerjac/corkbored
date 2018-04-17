@@ -9,24 +9,50 @@
 import UIKit
 import Firebase
 
-class quickMessageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
+class quickMessageViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
+    
+    //variables
     var dmProfileNavImage: UIImage!
     var POIUid = ""
+    var userName = ""
     var messageArray = [Message]()
+    var currentUserUid = ""
     
-    @IBOutlet weak var messageTextField: UITextField!
+    @IBAction func textFieldEditingInProgress(_ sender: Any) {
+
+//        let size:CGSize = messageTextField.attributedText!.size()
+//        let textHeight = size.height
+//        let textWidth = size.width
+//        let messageTextFieldHeight = messageTextField.frame.size.height
+//        let messageTextFieldWidth = messageTextField.frame.size.width
+//        var currentFontSize = messageTextField.font?.pointSize
+//
+//        if messageTextFieldWidth - textWidth <= 20 {
+//            //text is getting close to edge, shift up
+//
+//        } else {
+//            let duration = 1.0
+//            UIView.animate(withDuration: duration as! TimeInterval, animations: {
+//
+//            }, completion: {(completed) in
+//                print("in completition")
+//            })
+//        }
+    }
+    
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var messageTextField: UITextField!
     @IBOutlet weak var sendButton: UIButton!
     @IBAction func sendButton(_ sender: Any) {
-        
+
         let nowish = String(Date().timeIntervalSinceReferenceDate)
         
         let messageText = messageTextField.text
         
-        let uid = (Auth.auth().currentUser?.uid)!
+        currentUserUid = (Auth.auth().currentUser?.uid)!
         
-        let UserOneMessagingRef = Database.database().reference().child("users").child(uid).child("messaging").child(self.POIUid)
-        let UserTwoMessagingRef = Database.database().reference().child("users").child(self.POIUid).child("messaging").child(uid)
+        let UserOneMessagingRef = Database.database().reference().child("users").child(currentUserUid).child("messaging").child(self.POIUid)
+        let UserTwoMessagingRef = Database.database().reference().child("users").child(self.POIUid).child("messaging").child(currentUserUid)
         
         let messagingProfileOne = UserOneMessagingRef.childByAutoId()
         let messagingProfileTwo = UserTwoMessagingRef.childByAutoId()
@@ -37,7 +63,7 @@ class quickMessageViewController: UIViewController, UITableViewDelegate, UITable
         let uids = [messagingRefOneUid, messagingRefTwoUid]
         let refs = [messagingProfileOne, messagingProfileTwo]
         
-        let newMessage = Message(userOneUid: uid, userTwoUid: POIUid, pinnedTimeAsInterval: nowish, postMessage: messageText!)
+        let newMessage = Message(userOneUid: currentUserUid, userTwoUid: POIUid, pinnedTimeAsInterval: nowish, postMessage: messageText!)
         let message = newMessage.toAnyObject()
         
         for i in 0 ... 1 {
@@ -45,11 +71,101 @@ class quickMessageViewController: UIViewController, UITableViewDelegate, UITable
             refs[i].setValue(message)
             
         }
-        
         messageTextField.text = ""
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return messageArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "quickMessageCell") as! quickMessageCustomCell
+        cell.messageLabel.text = messageArray[indexPath.row].postMessage
+        cell.messageLabel.numberOfLines = 0
+       
+        cell.messageProfileView.image = self.dmProfileNavImage
+        cell.messageProfileView.layer.cornerRadius = 5
+        cell.messageProfileView.clipsToBounds = true
+    
+        cell.messageContainerViewLabel.layer.borderWidth = 1.0
+        cell.messageContainerViewLabel.layer.borderColor = UIColor.gray.cgColor
+        cell.messageContainerViewLabel.layer.masksToBounds = true
+        cell.messageContainerViewLabel.layer.cornerRadius = 5
+        
 
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension;
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        currentUserUid = (Auth.auth().currentUser?.uid)!
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyle.none
+        messageTextField.delegate = self
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
+        
+        loadMessages()
+        loadTitle()
+        loadViews()
+        addKeyboardObservers()
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        
+        //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
+        //tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    func loadMessages() {
+        var messagingRef: DatabaseReference!
+        
+        messagingRef = Database.database().reference().child("users").child(self.currentUserUid).child("messaging").child(POIUid)
+        messagingRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                messagingRef.observe(.childAdded) { (snapshot) in
+                    if let dictionary = snapshot.value as? [AnyHashable: AnyObject] {
+                        let message = Message(snapshot: snapshot)
+                        self.messageArray.insert(message, at: self.messageArray.endIndex)
+                        DispatchQueue.main.async {
+                                self.tableView.reloadData()
+                        }
+                    }
+                }
+        })
+    }
+    
+    func loadTitle() {
+        
+        self.navigationItem.title = self.userName
+    }
+    
+    func loadViews() {
+        self.navigationItem.hidesBackButton = true
+        let newBackButton = UIBarButtonItem(image: #imageLiteral(resourceName: "back"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(OtherProfileViewController.back(sender:)))
+        self.navigationItem.leftBarButtonItem = newBackButton
+    }
+    
+    @objc func back(sender: UIBarButtonItem) {
+        // Go back to the previous ViewController
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    func addKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(quickMessageViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(quickMessageViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0{
@@ -64,96 +180,6 @@ class quickMessageViewController: UIViewController, UITableViewDelegate, UITable
                 self.view.frame.origin.y += keyboardSize.height
             }
         }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    
-        
-        
-        loadMessages()
-        loadTitleImage()
-        addKeyboardObservers()
-        
-        let dismissKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        dismissKeyboardGesture.cancelsTouchesInView = false
-        tableView.addGestureRecognizer(dismissKeyboardGesture)
-    }
-    
-    func loadMessages() {
-        let uid = (Auth.auth().currentUser?.uid)!
-        var messagingRef: DatabaseReference!
-        
-        messagingRef = Database.database().reference().child("users").child(uid).child("messaging").child(POIUid)
-        messagingRef.observeSingleEvent(of: .value, with: { (snapshot) in
-                messagingRef.observe(.childAdded) { (snapshot) in
-                    if let dictionary = snapshot.value as? [AnyHashable: AnyObject] {
-                        let message = Message(snapshot: snapshot)
-                        self.messageArray.insert(message, at: self.messageArray.endIndex)
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
-                    }
-                }
-        })
-    }
-    
-    @objc func hideKeyboard() {
-        view.endEditing(true)
-    }
-    
-    func addKeyboardObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(quickMessageViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(quickMessageViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-    }
-    
-    func loadTitleImage() {
-        let containView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        let imageview = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        imageview.image = dmProfileNavImage
-        imageview.contentMode = UIViewContentMode.scaleAspectFit
-        imageview.layer.cornerRadius = 5
-        imageview.layer.masksToBounds = true
-        containView.addSubview(imageview)
-//        let centerBarButton = UIBarButtonItem(customView: containView)
-        self.navigationItem.titleView = containView
-        
-//        let image = dmProfileNavImage
-//        let imageView = UIImageView(image: image)
-//        imageView.contentMode = .scaleAspectFit
-//        imageView.layer.cornerRadius = 15
-//        imageView.clipsToBounds = true
-//
-//
-//        let navController = navigationController!
-//
-//        let bannerWidth = navController.navigationBar.frame.size.width
-//        let bannerHeight = navController.navigationBar.frame.size.height
-//
-//        let bannerX = bannerWidth / 2 - (image?.size.width)! / 2
-//        let bannerY = bannerHeight / 2 - (image?.size.height)! / 2
-//
-//        imageView.frame = CGRect(x: bannerX, y: bannerY, width: bannerWidth, height: bannerHeight)
-//
-//        navigationItem.titleView = imageView
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("hello")
-        let cell = tableView.dequeueReusableCell(withIdentifier: "messageCellText", for: indexPath)
-        
-        cell.textLabel?.text = messageArray[indexPath.row].postMessage
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-    return messageArray.count
-        
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
     }
 
     override func didReceiveMemoryWarning() {

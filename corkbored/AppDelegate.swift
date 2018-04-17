@@ -21,10 +21,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
          FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
+        //navbar style
         UINavigationBar.appearance().barTintColor = UIColor(red: 160/255, green: 218/255, blue: 245/255, alpha:1.0)
         UINavigationBar.appearance().tintColor = .black
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.black]
-        UINavigationBar.appearance().isTranslucent = true
+        UINavigationBar.appearance().isTranslucent = false
+        //navbar border
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
         
         return true
     }

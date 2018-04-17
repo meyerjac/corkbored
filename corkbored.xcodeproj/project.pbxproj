@@ -46,6 +46,7 @@
 		85A5361A1FD91D7B0096E054 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A536191FD91D7B0096E054 /* User.swift */; };
 		85A5361C1FDB8B2A0096E054 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */; };
 		85C1BEBC2074A1F90002B065 /* ReactionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1BEBB2074A1F90002B065 /* ReactionCollectionViewCell.swift */; };
+		85C3EC05208484830071B336 /* quickMessageCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C3EC04208484830071B336 /* quickMessageCustomCell.swift */; };
 		85CEB66E202AA76E00636D88 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CEB66D202AA76E00636D88 /* ProfileViewController.swift */; };
 		85F4665C1FE391CC00D46D5C /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F4665B1FE391CC00D46D5C /* Post.swift */; };
 		85F466621FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */; };
@@ -101,6 +102,7 @@
 		85A536191FD91D7B0096E054 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		85C1BEBB2074A1F90002B065 /* ReactionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionCollectionViewCell.swift; sourceTree = "<group>"; };
+		85C3EC04208484830071B336 /* quickMessageCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = quickMessageCustomCell.swift; sourceTree = "<group>"; };
 		85CEB66D202AA76E00636D88 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		85F4665B1FE391CC00D46D5C /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewControllerTableViewCell.swift; sourceTree = "<group>"; };
@@ -206,11 +208,12 @@
 		85C1BEB920749A470002B065 /* Messaging */ = {
 			isa = PBXGroup;
 			children = (
+				85424E112066379600191BF3 /* SingleMessageViewController.swift */,
 				85424E1320663E0700191BF3 /* MessageCollectionViewCell.swift */,
 				850BCEA6205A4E190059138A /* messagesTableViewCell.swift */,
 				850BCEA4205A13C20059138A /* MessagesTableViewController.swift */,
 				85424E03205E1AD700191BF3 /* quickMessageViewController.swift */,
-				85424E112066379600191BF3 /* SingleMessageViewController.swift */,
+				85C3EC04208484830071B336 /* quickMessageCustomCell.swift */,
 			);
 			path = Messaging;
 			sourceTree = "<group>";
@@ -505,6 +508,7 @@
 				850BCEA7205A4E190059138A /* messagesTableViewCell.swift in Sources */,
 				85C1BEBC2074A1F90002B065 /* ReactionCollectionViewCell.swift in Sources */,
 				85424E04205E1AD700191BF3 /* quickMessageViewController.swift in Sources */,
+				85C3EC05208484830071B336 /* quickMessageCustomCell.swift in Sources */,
 				852197241FCFC5AE0013D76C /* ViewController.swift in Sources */,
 				851D0433203574F5006986E6 /* PostCommentTableViewCell.swift in Sources */,
 				85424E122066379600191BF3 /* SingleMessageViewController.swift in Sources */,

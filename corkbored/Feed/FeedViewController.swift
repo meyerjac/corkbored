@@ -59,7 +59,6 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
                 if estimatedFrame.height < 20 {
                     return 130
                 } else {
-                    print(estimatedFrame.height, indexPath.row)
                     return 130 + estimatedFrame.height - 16.7
                                 }
                 }
@@ -104,8 +103,9 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         if post.pinnedMediaFileName != "null" {
             
             let textAndImageCell = tableView.dequeueReusableCell(withIdentifier: "postCellWithPhoto", for: indexPath) as! FeedViewControllerTableViewCell
-            textAndImageCell.selectionStyle = .none
+            
             textAndImageCell.separatorInset = UIEdgeInsetsMake(0, textAndImageCell.bounds.size.width, 0, 0)
+            textAndImageCell.selectionStyle = .none
             
             //getting Profile picture and username
             var ref: DatabaseReference!
@@ -156,9 +156,6 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
             
             let textOnlyCell = tableView.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as! FeedViewControllerTableViewCell
             
-            textOnlyCell.separatorInset = UIEdgeInsetsMake(0, textOnlyCell.bounds.size.width, 0, 0)
-            textOnlyCell.selectionStyle = .none
-            
             //setting tag for comment button
             textOnlyCell.commentButton.tag = indexPath.row
             textOnlyCell.commentButton.addTarget(self, action: #selector(handleComment), for: .touchUpInside)
@@ -168,10 +165,6 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
             textOnlyCell.profilePhotoImageView.tag = indexPath.row
             textOnlyCell.profilePhotoImageView.addGestureRecognizer(nameTapGesture)
             textOnlyCell.profilePhotoImageView.isUserInteractionEnabled = true
-            
-            //reaction
-//            textOnlyCell.feedCellReactButton.tag = indexPath.row
-//            textOnlyCell.feedCellReactButton.addTarget(self, action: #selector(handleReaction), for: .touchUpInside)
             
             var ref: DatabaseReference!
             ref = Database.database().reference()
@@ -235,19 +228,15 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         }
     }
     
-//        @objc func handleReaction(sender: UIButton) {
-//           print("clicked", sender.tag)
-//
-//        }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyle.none
         fetchUserLocation()
         loadBarButtonIcon()
     }
     
     func loadBarButtonIcon() {
+        
     }
     
     
@@ -398,21 +387,3 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         // Dispose of any resources that can be recreated.
     }
 }
-
-//extension FeedViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-//    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
-//                                                      for: indexPath) as! ReactionCollectionViewCell
-//        
-//        cell.reactButton.setBackgroundImage(reactionEmojiArray[indexPath.section], for: .selected)
-//        return cell
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView,
-//                        numberOfItemsInSection section: Int) -> Int {
-//        
-//        return reactionEmojiArray.count
-//    }
-//}
