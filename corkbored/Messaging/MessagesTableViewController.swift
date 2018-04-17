@@ -13,10 +13,68 @@ class MessagesTableViewController: UITableViewController {
     var messageSelectedUid: String = ""
     
     override func viewDidLoad() {
+        animateTabBarControllerDown()
         super.viewDidLoad()
         uid = (Auth.auth().currentUser?.uid)!
         loadMessages()
+        
+        self.navigationItem.hidesBackButton = true
+        let newBackButton = UIBarButtonItem(image: #imageLiteral(resourceName: "back"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(OtherProfileViewController.back(sender:)))
+        self.navigationItem.leftBarButtonItem = newBackButton
     }
+    
+    @objc func back(sender: UIBarButtonItem) {
+        // Perform your custom actions
+        animateTabBarControllerUp()
+        // Go back to the previous ViewController
+        self.navigationController?.popViewController(animated: true)
+    }
+
+    
+    func animateTabBarControllerDown() {
+        let duration = 0.25
+        
+        if let nav = self.tabBarController?.tabBar {
+            
+            //TabBarController
+            let xPosition = nav.frame.origin.x
+            let yPosition = nav.frame.origin.y + nav.frame.size.height
+            let height = nav.frame.size.height
+            let width = nav.frame.size.width
+            
+            UIView.animate(withDuration: duration as! TimeInterval, animations: {
+                
+                nav.frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+                
+            }, completion: {(completed) in
+                print("in completition")
+            })
+        } else {
+        }
+    }
+    
+    func animateTabBarControllerUp() {
+        let duration = 0.25
+        
+        if let nav = self.tabBarController?.tabBar {
+            
+            //TabBarController
+            let xPosition = nav.frame.origin.x
+            let yPosition = nav.frame.origin.y - nav.frame.size.height
+            let height = nav.frame.size.height
+            let width = nav.frame.size.width
+            
+            UIView.animate(withDuration: duration as! TimeInterval, animations: {
+                
+                nav.frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+                
+            }, completion: {(completed) in
+                print("in completition")
+            })
+        } else {
+        }
+    }
+    
     
     func loadMessages() {
         ref = Database.database().reference().child("users").child(self.uid).child("messaging")

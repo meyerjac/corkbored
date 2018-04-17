@@ -28,24 +28,6 @@ class quickMessageViewController: UIViewController, UITextViewDelegate, UITextFi
             sendButton.isEnabled = true
         }
 
-//        let size:CGSize = messageTextField.attributedText!.size()
-//        let textHeight = size.height
-//        let textWidth = size.width
-//        let messageTextFieldHeight = messageTextField.frame.size.height
-//        let messageTextFieldWidth = messageTextField.frame.size.width
-//        var currentFontSize = messageTextField.font?.pointSize
-//
-//        if messageTextFieldWidth - textWidth <= 20 {
-//            //text is getting close to edge, shift up
-//
-//        } else {
-//            let duration = 1.0
-//            UIView.animate(withDuration: duration as! TimeInterval, animations: {
-//
-//            }, completion: {(completed) in
-//                print("in completition")
-//            })
-//        }
     }
     
     @IBOutlet weak var tableView: UITableView!
@@ -92,30 +74,26 @@ class quickMessageViewController: UIViewController, UITextViewDelegate, UITextFi
         let cell = tableView.dequeueReusableCell(withIdentifier: "quickMessageCell") as! quickMessageCustomCell
         cell.messageLabel.text = messageArray[indexPath.row].postMessage
         cell.messageLabel.numberOfLines = 0
+        cell.messageProfileView.image = self.dmProfileNavImage
+        cell.messageProfileView.layer.cornerRadius = 5
+        cell.messageProfileView.clipsToBounds = true
+
+   
+//        cell.messageLabel.frame.size = cell.messageLabel.intrinsicContentSize
+        let newFrame = CGRect(x: view.frame.origin.x, y: view.frame.origin.y, width: cell.messageLabel.intrinsicContentSize.width, height: cell.messageLabel.intrinsicContentSize.height)
         
+        cell.messageLabel.frame = newFrame
         
-        if indexPath.row == 0 {
-            //first message shown
-            cell.messageProfileView.image = self.dmProfileNavImage
-            cell.messageProfileView.layer.cornerRadius = 5
-            cell.messageProfileView.clipsToBounds = true
-            
-        } else {
-            
-            if (messageArray[indexPath.row - 1].userOneUid == self.currentUserUid) {
-                cell.messageProfileView.isHidden = true
-            } else {
-                cell.messageProfileView.image = self.dmProfileNavImage
-                cell.messageProfileView.layer.cornerRadius = 5
-                cell.messageProfileView.clipsToBounds = true
-            }
-            
-        }
+//        cell.messageLabel.frame = CGRect(x: view.frame.origin.x + (view.frame.size.height / 2), y: view.frame.origin.y, width: cell.messageLabel.intrinsicContentSize.width, height: cell.messageLabel.intrinsicContentSize.height)
+      
+        cell.messageLabel.layer.borderWidth = 1.0
+        cell.messageLabel.layer.borderColor = UIColor.gray.cgColor
+        cell.messageLabel.layer.masksToBounds = true
+        cell.messageLabel.layer.cornerRadius = 5
         
-        cell.messageContainerViewLabel.layer.borderWidth = 1.0
-        cell.messageContainerViewLabel.layer.borderColor = UIColor.gray.cgColor
-        cell.messageContainerViewLabel.layer.masksToBounds = true
-        cell.messageContainerViewLabel.layer.cornerRadius = 5
+//
+//        cell.messageContainerViewLabel.setNeedsLayout()
+//        cell.messageContainerViewLabel.layoutIfNeeded()
         
         return cell
     }
@@ -132,8 +110,8 @@ class quickMessageViewController: UIViewController, UITextViewDelegate, UITextFi
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableViewAutomaticDimension
+//        tableView.estimatedRowHeight = 100
+//        tableView.rowHeight = UITableViewAutomaticDimension
         
         loadMessages()
         loadTitle()
@@ -158,8 +136,8 @@ class quickMessageViewController: UIViewController, UITextViewDelegate, UITextFi
                         self.messageArray.insert(message, at: self.messageArray.endIndex)
                         DispatchQueue.main.async {
                                 self.tableView.reloadData()
-                            let indexPath = IndexPath(row: self.messageArray.count-1, section: 0)
-                            self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+//                            let indexPath = IndexPath(row: self.messageArray.count-1, section: 0)
+//                            self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
                         }
                     }
                 }
@@ -219,8 +197,12 @@ class quickMessageViewController: UIViewController, UITextViewDelegate, UITextFi
                 self.tableView.frame = CGRect(x: tableViewxPosition, y: tableViewyPosition, width: tableViewWidth, height: tableViewHeight)
                 
             }, completion: {(completed) in
+                if self.messageArray.count == 0 {
+                    
+                } else {
                 let indexPath = IndexPath(row: self.messageArray.count-1, section: 0)
                 self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                }
             })
         }
     }

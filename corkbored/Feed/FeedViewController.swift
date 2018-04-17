@@ -6,6 +6,13 @@ import CoreLocation
 
 class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource {
     
+    @IBAction func toMessagingBarButton(_ sender: Any) {
+          self.performSegue(withIdentifier: "feedToMessagingSegue", sender: self)
+    }
+    
+    @IBAction func createPostBarButton(_ sender: Any) {
+        
+    }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 
         guard let tableViewCell = cell as? FeedViewControllerTableViewCell else { return }
@@ -232,11 +239,6 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         super.viewDidLoad()
         self.tableView.separatorStyle = UITableViewCellSeparatorStyle.none
         fetchUserLocation()
-        loadBarButtonIcon()
-    }
-    
-    func loadBarButtonIcon() {
-        
     }
     
     

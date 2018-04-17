@@ -5,6 +5,7 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -352,9 +353,14 @@ connect more.</string>
                     <tabBarItem key="tabBarItem" title="Feed" id="We0-la-Qi6"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="eKt-rv-bVW">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="message" id="Nwa-u1-cSB">
+                            <connections>
+                                <action selector="toMessagingBarButton:" destination="MId-aA-XIQ" id="Hnq-3S-ehf"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="IUg-gn-qiH">
                             <connections>
-                                <action selector="createPost:" destination="MId-aA-XIQ" id="RHR-MS-Wc3"/>
+                                <action selector="createPostBarButton:" destination="MId-aA-XIQ" id="r2p-2a-QBU"/>
                                 <segue destination="scR-eE-JyV" kind="modal" id="FCm-GJ-bud"/>
                             </connections>
                         </barButtonItem>
@@ -364,11 +370,12 @@ connect more.</string>
                         <outlet property="tableView" destination="iWe-ya-uIp" id="jXg-bb-EP2"/>
                         <segue destination="lUo-kf-VOf" kind="push" identifier="toComments" id="cEv-p8-qsZ"/>
                         <segue destination="2sT-zq-dzN" kind="push" identifier="toOtherProfile" id="Ans-jN-HOy"/>
+                        <segue destination="hBK-gU-9za" kind="push" identifier="feedToMessagingSegue" id="63u-pU-8CM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BSk-Cy-8cp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-94.5" y="1650.5"/>
+            <point key="canvasLocation" x="-28" y="1652"/>
         </scene>
         <!--Post Comments View Controller-->
         <scene sceneID="ZLy-nk-33l">
@@ -489,7 +496,7 @@ connect more.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JBD-2o-I6P" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="402.5" y="1651.5"/>
+            <point key="canvasLocation" x="536" y="1349"/>
         </scene>
         <!--App Tab Controller-->
         <scene sceneID="kPx-aL-qPI">
@@ -518,7 +525,7 @@ connect more.</string>
                     <connections>
                         <segue destination="XPD-UD-PBZ" kind="relationship" relationship="viewControllers" id="eMI-AW-Owl"/>
                         <segue destination="8Iu-6j-3kt" kind="relationship" relationship="viewControllers" id="vaz-mD-ggo"/>
-                        <segue destination="EWw-It-bns" kind="relationship" relationship="viewControllers" id="gnT-N6-s0i"/>
+                        <segue destination="kAN-ZL-FEH" kind="relationship" relationship="viewControllers" id="ohh-R4-gGn"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PXH-2f-sUM" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -540,7 +547,7 @@ connect more.</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CoE-YC-aOr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-590" y="2327"/>
+            <point key="canvasLocation" x="-591" y="2413"/>
         </scene>
         <!--Profile-->
         <scene sceneID="y93-pe-PTQ">
@@ -610,30 +617,13 @@ connect more.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n5L-mk-2vu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-94" y="2349"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="aFI-I8-U2J">
-            <objects>
-                <navigationController id="EWw-It-bns" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="message" selectedImage="messageSelected" id="jBF-3v-fUK"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ytI-FN-zg8">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="hBK-gU-9za" kind="relationship" relationship="rootViewController" id="iRF-jX-YpO"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Upe-ie-xVp" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-590" y="3037"/>
+            <point key="canvasLocation" x="-28" y="2413"/>
         </scene>
         <!--DM-->
         <scene sceneID="XCm-a4-xZy">
             <objects>
-                <tableViewController id="hBK-gU-9za" customClass="MessagesTableViewController" customModule="corkbored" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Y9m-er-zHO">
+                <tableViewController extendedLayoutIncludesOpaqueBars="YES" id="hBK-gU-9za" customClass="MessagesTableViewController" customModule="corkbored" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Y9m-er-zHO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -696,18 +686,19 @@ connect more.</string>
                     </tableView>
                     <tabBarItem key="tabBarItem" title="Messages" id="Zr7-LK-WIV"/>
                     <navigationItem key="navigationItem" title="DM" id="Y7Z-k8-TN6"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <segue destination="xdG-fH-tyL" kind="push" identifier="toSelectedDm" id="Lhf-jM-guE"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AKq-ih-xsf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-99" y="3037"/>
+            <point key="canvasLocation" x="536" y="2095"/>
         </scene>
         <!--Single Message View Controller-->
         <scene sceneID="r3C-XX-dU3">
             <objects>
-                <viewController id="xdG-fH-tyL" customClass="SingleMessageViewController" customModule="corkbored" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController extendedLayoutIncludesOpaqueBars="YES" id="xdG-fH-tyL" customClass="SingleMessageViewController" customModule="corkbored" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bpl-Zd-2B0"/>
                         <viewControllerLayoutGuide type="bottom" id="oIQ-Zp-JIj"/>
@@ -716,10 +707,12 @@ connect more.</string>
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="nHo-uw-U1z">
-                                <rect key="frame" x="0.0" y="64" width="375" height="508"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="nHo-uw-U1z">
+                                <rect key="frame" x="0.0" y="64" width="375" height="547"/>
                                 <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="547" id="yQo-F2-gj2"/>
+                                </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="OjS-vH-9H1">
                                     <size key="itemSize" width="70" height="44"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -734,15 +727,20 @@ connect more.</string>
                                             <rect key="frame" x="0.0" y="0.0" width="70" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p9u-ih-cSu">
-                                                    <rect key="frame" x="20" y="8" width="30" height="28"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p9u-ih-cSu">
+                                                    <rect key="frame" x="7" y="5" width="56" height="35"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 </textView>
                                             </subviews>
                                         </view>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="p9u-ih-cSu" secondAttribute="bottom" constant="4" id="4eB-9E-gZd"/>
+                                            <constraint firstItem="p9u-ih-cSu" firstAttribute="centerX" secondItem="2hd-b9-d1M" secondAttribute="centerX" id="U5T-TX-XTF"/>
+                                            <constraint firstItem="p9u-ih-cSu" firstAttribute="leading" secondItem="2hd-b9-d1M" secondAttribute="leadingMargin" constant="-1" id="tMm-yg-HAV"/>
+                                            <constraint firstItem="p9u-ih-cSu" firstAttribute="top" secondItem="2hd-b9-d1M" secondAttribute="top" constant="4.5" id="yLd-Sw-EqM"/>
+                                        </constraints>
                                         <connections>
                                             <outlet property="messageView" destination="p9u-ih-cSu" id="aqQ-Nn-Giu"/>
                                         </connections>
@@ -754,34 +752,46 @@ connect more.</string>
                                 </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ymm-6U-SLL">
-                                <rect key="frame" x="323" y="580" width="36" height="30"/>
+                                <rect key="frame" x="315" y="619" width="36" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Send"/>
+                                <state key="normal" title="Send">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
                                 <connections>
                                     <action selector="sendMessageButton:" destination="xdG-fH-tyL" eventType="touchUpInside" id="64h-lp-aDN"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Hello there" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="a7c-ep-ly3">
-                                <rect key="frame" x="16" y="581" width="299" height="28"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Collaborate Here..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5GA-oZ-Uom">
+                                <rect key="frame" x="16" y="619" width="291" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="textViewEditingBegan:" destination="xdG-fH-tyL" eventType="editingDidBegin" id="jg7-6q-fBP"/>
+                                    <outlet property="delegate" destination="xdG-fH-tyL" id="o9K-ES-gi5"/>
+                                </connections>
+                            </textField>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.62745098040000002" green="0.85490196080000003" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="nHo-uw-U1z" firstAttribute="leading" secondItem="IAG-pT-PmX" secondAttribute="leading" id="5PV-gY-I3X"/>
+                            <constraint firstItem="nHo-uw-U1z" firstAttribute="top" secondItem="bpl-Zd-2B0" secondAttribute="bottom" id="Nti-es-Aaa"/>
+                            <constraint firstAttribute="trailing" secondItem="nHo-uw-U1z" secondAttribute="trailing" id="aFH-hW-eCE"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="a3h-MU-weR"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="messageCollectionView" destination="nHo-uw-U1z" id="PAE-KF-CBq"/>
-                        <outlet property="messageTextView" destination="a7c-ep-ly3" id="TTQ-nL-8ru"/>
+                        <outlet property="messageTextField" destination="5GA-oZ-Uom" id="MVf-RK-4g4"/>
                         <outlet property="sendMessageButton" destination="ymm-6U-SLL" id="S71-Kd-FQT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wLI-qL-qLi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="425" y="3037"/>
+            <point key="canvasLocation" x="1010.5" y="2094.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="1Yp-3z-jeA">
@@ -800,7 +810,7 @@ connect more.</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nkw-pY-TO7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-590" y="3751"/>
+            <point key="canvasLocation" x="-592" y="3201"/>
         </scene>
         <!--New Post-->
         <scene sceneID="6PO-fa-LCK">
@@ -867,7 +877,53 @@ connect more.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="So0-py-F6b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-99.5" y="3750.5"/>
+            <point key="canvasLocation" x="-28" y="3201"/>
+        </scene>
+        <!--Root View Controller-->
+        <scene sceneID="Z0f-Uv-wFf">
+            <objects>
+                <tableViewController id="YZL-Z7-NQe" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="awE-24-n8k">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="rve-LJ-ezB">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rve-LJ-ezB" id="FR5-rx-HMC">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="YZL-Z7-NQe" id="FUy-2l-lJE"/>
+                            <outlet property="delegate" destination="YZL-Z7-NQe" id="z3v-By-stI"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Root View Controller" id="SKa-TT-bDb"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OvG-QQ-WYw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-27" y="3972"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="J08-V1-QOW">
+            <objects>
+                <navigationController id="kAN-ZL-FEH" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="" image="search" id="Sii-Af-7ys"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="AzC-Oh-asc">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="YZL-Z7-NQe" kind="relationship" relationship="rootViewController" id="kuB-ae-tuq"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QTQ-Vv-SZz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-623" y="3972"/>
         </scene>
         <!--Quick Message View Controller-->
         <scene sceneID="mgn-7B-Yio">
@@ -915,8 +971,8 @@ connect more.</string>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kSP-cy-Erx">
                                                     <rect key="frame" x="58" y="6" width="200" height="42"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oqR-ak-b0n">
-                                                            <rect key="frame" x="7" y="7" width="185" height="28"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oqR-ak-b0n">
+                                                            <rect key="frame" x="7" y="7" width="186" height="28"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -927,7 +983,7 @@ connect more.</string>
                                                         <constraint firstAttribute="bottom" secondItem="oqR-ak-b0n" secondAttribute="bottom" constant="7" id="PN8-GP-AS8"/>
                                                         <constraint firstItem="oqR-ak-b0n" firstAttribute="leading" secondItem="kSP-cy-Erx" secondAttribute="leading" constant="7" id="VAu-wT-uX0"/>
                                                         <constraint firstItem="oqR-ak-b0n" firstAttribute="top" secondItem="kSP-cy-Erx" secondAttribute="top" constant="7" id="gQr-yv-6u6"/>
-                                                        <constraint firstAttribute="trailing" secondItem="oqR-ak-b0n" secondAttribute="trailing" constant="8" id="mZE-6X-tPY"/>
+                                                        <constraint firstAttribute="trailing" secondItem="oqR-ak-b0n" secondAttribute="trailing" constant="7" id="mZE-6X-tPY"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>
@@ -975,7 +1031,7 @@ connect more.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="baZ-ZO-CJh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1339.5" y="1651.5"/>
+            <point key="canvasLocation" x="1537" y="1349"/>
         </scene>
         <!--Other Profile View Controller-->
         <scene sceneID="hJZ-mJ-e6z">
@@ -1082,7 +1138,7 @@ connect more.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7qs-sg-Qkd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="879.5" y="1651.5"/>
+            <point key="canvasLocation" x="1011" y="1349"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="oNn-XC-N6p">
@@ -1481,16 +1537,16 @@ connect more.</string>
         <image name="homeSelected" width="32" height="32"/>
         <image name="instagram" width="32" height="32"/>
         <image name="message" width="32" height="32"/>
-        <image name="messageSelected" width="32" height="32"/>
         <image name="noProfilePic" width="600" height="600"/>
         <image name="profile" width="32" height="32"/>
         <image name="profileSelected" width="32" height="32"/>
+        <image name="search" width="32" height="32"/>
         <image name="snapchat" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dSR-do-J2n"/>
+        <segue reference="uuz-sF-FdZ"/>
         <segue reference="BOl-PT-rRT"/>
-        <segue reference="urL-jw-skh"/>
-        <segue reference="Qez-RA-UYN"/>
+        <segue reference="J3i-b6-ZUb"/>
+        <segue reference="xZp-m8-7Pg"/>
     </inferredMetricsTieBreakers>
 </document>
