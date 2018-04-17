@@ -19,6 +19,14 @@ class quickMessageViewController: UIViewController, UITextViewDelegate, UITextFi
     var currentUserUid = ""
     
     @IBAction func textFieldEditingInProgress(_ sender: Any) {
+        print("here")
+        if messageTextField.text == "" {
+            print("here1")
+           sendButton.isEnabled = false
+        } else {
+            print("here2")
+            sendButton.isEnabled = true
+        }
 
 //        let size:CGSize = messageTextField.attributedText!.size()
 //        let textHeight = size.height
@@ -72,6 +80,7 @@ class quickMessageViewController: UIViewController, UITextViewDelegate, UITextFi
             
         }
         messageTextField.text = ""
+        sendButton.isEnabled = false
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -83,17 +92,31 @@ class quickMessageViewController: UIViewController, UITextViewDelegate, UITextFi
         let cell = tableView.dequeueReusableCell(withIdentifier: "quickMessageCell") as! quickMessageCustomCell
         cell.messageLabel.text = messageArray[indexPath.row].postMessage
         cell.messageLabel.numberOfLines = 0
-       
-        cell.messageProfileView.image = self.dmProfileNavImage
-        cell.messageProfileView.layer.cornerRadius = 5
-        cell.messageProfileView.clipsToBounds = true
-    
+        
+        
+        if indexPath.row == 0 {
+            //first message shown
+            cell.messageProfileView.image = self.dmProfileNavImage
+            cell.messageProfileView.layer.cornerRadius = 5
+            cell.messageProfileView.clipsToBounds = true
+            
+        } else {
+            
+            if (messageArray[indexPath.row - 1].userOneUid == self.currentUserUid) {
+                cell.messageProfileView.isHidden = true
+            } else {
+                cell.messageProfileView.image = self.dmProfileNavImage
+                cell.messageProfileView.layer.cornerRadius = 5
+                cell.messageProfileView.clipsToBounds = true
+            }
+            
+        }
+        
         cell.messageContainerViewLabel.layer.borderWidth = 1.0
         cell.messageContainerViewLabel.layer.borderColor = UIColor.gray.cgColor
         cell.messageContainerViewLabel.layer.masksToBounds = true
         cell.messageContainerViewLabel.layer.cornerRadius = 5
         
-
         return cell
     }
     
@@ -121,7 +144,7 @@ class quickMessageViewController: UIViewController, UITextViewDelegate, UITextFi
         
         //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
         //tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
+        tableView.addGestureRecognizer(tap)
     }
     
     func loadMessages() {
@@ -135,6 +158,8 @@ class quickMessageViewController: UIViewController, UITextViewDelegate, UITextFi
                         self.messageArray.insert(message, at: self.messageArray.endIndex)
                         DispatchQueue.main.async {
                                 self.tableView.reloadData()
+                            let indexPath = IndexPath(row: self.messageArray.count-1, section: 0)
+                            self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
                         }
                     }
                 }
@@ -142,7 +167,6 @@ class quickMessageViewController: UIViewController, UITextViewDelegate, UITextFi
     }
     
     func loadTitle() {
-        
         self.navigationItem.title = self.userName
     }
     
@@ -167,18 +191,68 @@ class quickMessageViewController: UIViewController, UITextViewDelegate, UITextFi
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
+        let duration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y == 0{
-                self.view.frame.origin.y -= keyboardSize.height
-            }
+            
+            //messageView
+            let xPosition = messageTextField.frame.origin.x
+            let yPosition = messageTextField.frame.origin.y - keyboardSize.height
+            let height = messageTextField.frame.size.height
+            let width = messageTextField.frame.size.width
+            
+            //sendMessageButton
+            let sendButtonxPosition = sendButton.frame.origin.x
+            let sendButtonyPosition = sendButton.frame.origin.y - keyboardSize.height
+            let sendButtonHeight = sendButton.frame.size.height
+            let sendButtonWidth = sendButton.frame.size.width
+            
+            //TableView
+            let tableViewxPosition = tableView.frame.origin.x
+            let tableViewyPosition = tableView.frame.origin.y
+            let tableViewHeight = tableView.frame.size.height - keyboardSize.height
+            let tableViewWidth = tableView.frame.size.width
+            
+            UIView.animate(withDuration: duration as! TimeInterval, animations: {
+                
+                self.messageTextField.frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+                self.sendButton.frame = CGRect(x: sendButtonxPosition, y: sendButtonyPosition, width: sendButtonWidth, height: sendButtonHeight)
+                self.tableView.frame = CGRect(x: tableViewxPosition, y: tableViewyPosition, width: tableViewWidth, height: tableViewHeight)
+                
+            }, completion: {(completed) in
+                let indexPath = IndexPath(row: self.messageArray.count-1, section: 0)
+                self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            })
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
+        let duration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y != 0{
-                self.view.frame.origin.y += keyboardSize.height
-            }
+            
+            //messageView
+            let xPosition = messageTextField.frame.origin.x
+            let yPosition = messageTextField.frame.origin.y + keyboardSize.height
+            let height = messageTextField.frame.size.height
+            let width = messageTextField.frame.size.width
+            
+            //sendButtonView
+            let sendButtonxPosition = sendButton.frame.origin.x
+            let sendButtonyPosition = sendButton.frame.origin.y + keyboardSize.height
+            let sendButtonHeight = sendButton.frame.size.height
+            let sendButtonWidth = sendButton.frame.size.width
+            
+            //CollectionView
+            let tableViewxPosition = tableView.frame.origin.x
+            let tableViewyPosition = tableView.frame.origin.y
+            let tableViewHeight = tableView.frame.size.height + keyboardSize.height
+            let tableViewWidth = tableView.frame.size.width
+            
+            UIView.animate(withDuration: duration as! TimeInterval, animations: {
+                
+                self.messageTextField.frame = CGRect(x: xPosition, y: yPosition, width: width, height: height)
+                self.sendButton.frame = CGRect(x: sendButtonxPosition, y: sendButtonyPosition, width: sendButtonWidth, height: sendButtonHeight)
+                self.tableView.frame = CGRect(x: tableViewxPosition, y: tableViewyPosition, width: tableViewWidth, height: tableViewHeight)
+            })
         }
     }
 
