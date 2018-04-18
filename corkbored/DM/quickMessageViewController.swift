@@ -119,9 +119,6 @@ class quickMessageViewController: UIViewController, UITextViewDelegate, UITextFi
         addKeyboardObservers()
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
-        
-        //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
-        //tap.cancelsTouchesInView = false
         tableView.addGestureRecognizer(tap)
     }
     
@@ -149,14 +146,6 @@ class quickMessageViewController: UIViewController, UITextViewDelegate, UITextFi
     }
     
     func loadViews() {
-        self.navigationItem.hidesBackButton = true
-        let newBackButton = UIBarButtonItem(image: #imageLiteral(resourceName: "back"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(OtherProfileViewController.back(sender:)))
-        self.navigationItem.leftBarButtonItem = newBackButton
-    }
-    
-    @objc func back(sender: UIBarButtonItem) {
-        // Go back to the previous ViewController
-        self.navigationController?.popViewController(animated: true)
     }
     
     @objc func dismissKeyboard() {

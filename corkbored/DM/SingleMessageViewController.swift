@@ -157,16 +157,8 @@ class SingleMessageViewController: UIViewController, UICollectionViewDataSource,
     
     func loadViews() {
         view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
-        self.navigationItem.hidesBackButton = true
-        let newBackButton = UIBarButtonItem(image: #imageLiteral(resourceName: "back"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(OtherProfileViewController.back(sender:)))
-        self.navigationItem.leftBarButtonItem = newBackButton
+        self.navigationItem.backBarButtonItem?.title = "asdfas"
         
-    }
-    
-    @objc func back(sender: UIBarButtonItem) {
-        
-        // Go back to the previous ViewController
-        self.navigationController?.popViewController(animated: true)
     }
     
     func fetchMessages() {

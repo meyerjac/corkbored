@@ -38,10 +38,6 @@ class OtherProfileViewController: UIViewController {
         let width = view.frame.size.width
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
         
-        self.navigationItem.hidesBackButton = true
-        let newBackButton = UIBarButtonItem(image: #imageLiteral(resourceName: "back"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(OtherProfileViewController.back(sender:)))
-        self.navigationItem.leftBarButtonItem = newBackButton
-        
         profileImageView.frame = CGRect(x: width / 4, y: view.frame.size.height / 6, width: width / 2, height: width / 2)
         profileImageView.layer.cornerRadius = 15
         profileImageView.clipsToBounds = true
@@ -53,11 +49,13 @@ class OtherProfileViewController: UIViewController {
         ageLabel.center = CGPoint(x: width / 2, y: nameLabel.frame.origin.y + nameLabel.frame.size.height + 8 + ageLabel.frame.size.height / 2)
     }
     
-    @objc func back(sender: UIBarButtonItem) {
-        // Perform your custom actions
-           animateTabBarControllerUp()
-        // Go back to the previous ViewController
-        self.navigationController?.popViewController(animated: true)
+    override func viewWillDisappear(_ animated : Bool) {
+        super.viewWillDisappear(animated)
+        
+        if self.isMovingFromParentViewController {
+            // Your code...
+                animateTabBarControllerUp()
+        }
     }
 
     override func didReceiveMemoryWarning() {

@@ -28,7 +28,6 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     var activeUser = Auth.auth().currentUser
     var manager = Nuke.Manager.shared
     var posts = [Post]()
-    var reactionEmojiArray = [#imageLiteral(resourceName: "Image"), #imageLiteral(resourceName: "Image-1"), #imageLiteral(resourceName: "Image-2"), #imageLiteral(resourceName: "Image-3"), #imageLiteral(resourceName: "Image-4"), #imageLiteral(resourceName: "Image-5")]
     
     //passing messageData
     var clickedPostMessageBody = ""
@@ -108,57 +107,56 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         
         //my two type of table cell
         if post.pinnedMediaFileName != "null" {
-            
+
             let textAndImageCell = tableView.dequeueReusableCell(withIdentifier: "postCellWithPhoto", for: indexPath) as! FeedViewControllerTableViewCell
-            
-            textAndImageCell.separatorInset = UIEdgeInsetsMake(0, textAndImageCell.bounds.size.width, 0, 0)
-            textAndImageCell.selectionStyle = .none
-            
-            //getting Profile picture and username
-            var ref: DatabaseReference!
-            ref = Database.database().reference()
-            
-            ref.child("users").child(post.ownerUid).observeSingleEvent(of: .value, with: { (snapshot) in
-                // Get user value
-                
-                let value = snapshot.value as? NSDictionary
-                
-                let postProfilePictureStringURL = value?["profilePic"] as? String ?? ""
-                let firstName = value?["firstName"] as? String ?? ""
-                
-                if let urlUrl = URL.init(string: postProfilePictureStringURL) {
-                    self.manager.loadImage(with: urlUrl, into: textAndImageCell.profilePhotoImageView)
-                }
-                
-                textAndImageCell.usernameTextField.text = firstName
-                
-            }) { (error) in
-                print(error.localizedDescription)
-            }
-            
-            textAndImageCell.profilePhotoImageView?.contentMode = .scaleAspectFill
-            textAndImageCell.profilePhotoImageView?.layer.borderWidth = 1.0
-            textAndImageCell.profilePhotoImageView?.layer.masksToBounds = false
-            textAndImageCell.profilePhotoImageView.layer.borderColor = UIColor.white.cgColor
-            textAndImageCell.profilePhotoImageView?.layer.cornerRadius = textAndImageCell.profilePhotoImageView.frame.size.width / 2
-            textAndImageCell.profilePhotoImageView?.clipsToBounds = true
-            
-            
-            //setting picture field
-            let postPhotoString = URL.init(string: post.pinnedMediaFileName)
-            self.manager.loadImage(with: postPhotoString!, into: textAndImageCell.postPhoto)
-            
-            textAndImageCell.timePosted.text = stringTimeStamp
-            textAndImageCell.messageBody.text = post.postMessage
-            textAndImageCell.numberOfComments.text = post.numberOfComments
-            
-            let height = textAndImageCell.messageBody.frame.size.height + 92
-            
-            textAndImageCell.frame.size.height = height
-            textAndImageCell.frame = CGRect(x: textAndImageCell.frame.origin.x, y: textAndImageCell.frame.origin.y, width: textAndImageCell.frame.size.width, height: height)
-            
+//
+//            textAndImageCell.separatorInset = UIEdgeInsetsMake(0, textAndImageCell.bounds.size.width, 0, 0)
+//            textAndImageCell.selectionStyle = .none
+//
+//            //getting Profile picture and username
+//            var ref: DatabaseReference!
+//            ref = Database.database().reference()
+//
+//            ref.child("users").child(post.ownerUid).observeSingleEvent(of: .value, with: { (snapshot) in
+//                // Get user value
+//
+//                let value = snapshot.value as? NSDictionary
+//
+//                let postProfilePictureStringURL = value?["profilePic"] as? String ?? ""
+//                let firstName = value?["firstName"] as? String ?? ""
+//
+//                if let urlUrl = URL.init(string: postProfilePictureStringURL) {
+//                    self.manager.loadImage(with: urlUrl, into: textAndImageCell.profilePhotoImageView)
+//                }
+//
+//                textAndImageCell.usernameTextField.text = firstName
+//
+//            }) { (error) in
+//                print(error.localizedDescription)
+//            }
+//
+//            textAndImageCell.profilePhotoImageView?.contentMode = .scaleAspectFill
+//            textAndImageCell.profilePhotoImageView?.layer.borderWidth = 2.0
+//            textAndImageCell.profilePhotoImageView?.layer.masksToBounds = false
+//            textAndImageCell.profilePhotoImageView.layer.borderColor = UIColor.purple.cgColor
+//            textAndImageCell.profilePhotoImageView?.layer.cornerRadius = 5
+//            textAndImageCell.profilePhotoImageView?.clipsToBounds = true
+//
+//
+//            //setting picture field
+//            let postPhotoString = URL.init(string: post.pinnedMediaFileName)
+//            self.manager.loadImage(with: postPhotoString!, into: textAndImageCell.postPhoto)
+//
+//            textAndImageCell.timePosted.text = stringTimeStamp
+//            textAndImageCell.messageBody.text = post.postMessage
+//            textAndImageCell.numberOfComments.text = post.numberOfComments
+//
+//            let height = textAndImageCell.messageBody.frame.size.height + 92
+//
+//            textAndImageCell.frame.size.height = height
+//            textAndImageCell.frame = CGRect(x: textAndImageCell.frame.origin.x, y: textAndImageCell.frame.origin.y, width: textAndImageCell.frame.size.width, height: height)
+//
             return textAndImageCell
-            
         } else {
             
             let textOnlyCell = tableView.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as! FeedViewControllerTableViewCell
@@ -195,10 +193,11 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
             }
             
             textOnlyCell.profilePhotoImageView?.contentMode = .scaleAspectFit
-            textOnlyCell.profilePhotoImageView?.layer.borderWidth = 1.0
+            textOnlyCell.profilePhotoImageView?.layer.borderWidth = 1.5
             textOnlyCell.profilePhotoImageView?.layer.masksToBounds = false
             textOnlyCell.profilePhotoImageView.layer.borderColor = UIColor.white.cgColor
-            textOnlyCell.profilePhotoImageView?.layer.cornerRadius = textOnlyCell.profilePhotoImageView.frame.size.width / 2
+            textOnlyCell.profilePhotoImageView.layer.borderColor = UIColor.cyan.cgColor
+            textOnlyCell.profilePhotoImageView?.layer.cornerRadius = 5
             textOnlyCell.profilePhotoImageView?.clipsToBounds = true
             
             textOnlyCell.timePosted.text = stringTimeStamp

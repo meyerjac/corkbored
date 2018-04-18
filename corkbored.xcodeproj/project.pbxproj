@@ -47,6 +47,9 @@
 		85A5361C1FDB8B2A0096E054 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */; };
 		85C1BEBC2074A1F90002B065 /* ReactionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C1BEBB2074A1F90002B065 /* ReactionCollectionViewCell.swift */; };
 		85C3EC05208484830071B336 /* quickMessageCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C3EC04208484830071B336 /* quickMessageCustomCell.swift */; };
+		85C3EC092086A5710071B336 /* groupsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C3EC082086A5710071B336 /* groupsTableViewCell.swift */; };
+		85C3EC0B2086A59D0071B336 /* GroupsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C3EC0A2086A59D0071B336 /* GroupsTableViewController.swift */; };
+		85C3EC0F2086A82E0071B336 /* Community.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C3EC0E2086A82E0071B336 /* Community.swift */; };
 		85CEB66E202AA76E00636D88 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CEB66D202AA76E00636D88 /* ProfileViewController.swift */; };
 		85F4665C1FE391CC00D46D5C /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F4665B1FE391CC00D46D5C /* Post.swift */; };
 		85F466621FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */; };
@@ -103,6 +106,9 @@
 		85A5361B1FDB8B2A0096E054 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		85C1BEBB2074A1F90002B065 /* ReactionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionCollectionViewCell.swift; sourceTree = "<group>"; };
 		85C3EC04208484830071B336 /* quickMessageCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = quickMessageCustomCell.swift; sourceTree = "<group>"; };
+		85C3EC082086A5710071B336 /* groupsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = groupsTableViewCell.swift; sourceTree = "<group>"; };
+		85C3EC0A2086A59D0071B336 /* GroupsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsTableViewController.swift; sourceTree = "<group>"; };
+		85C3EC0E2086A82E0071B336 /* Community.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Community.swift; sourceTree = "<group>"; };
 		85CEB66D202AA76E00636D88 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		85F4665B1FE391CC00D46D5C /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		85F466611FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewControllerTableViewCell.swift; sourceTree = "<group>"; };
@@ -159,11 +165,12 @@
 				852197211FCFC5AE0013D76C /* AppDelegate.swift */,
 				859450A02019C29000DBC726 /* icons */,
 				85F466711FE601F600D46D5C /* models */,
+				85C3EC0D2086A5C70071B336 /* Groups */,
 				85F466541FE3918F00D46D5C /* photos */,
 				85A5361F1FDB9B7C0096E054 /* fonts */,
 				85D513271FE8C54000DF4BC4 /* login */,
 				85C1BEBA20749A4B0002B065 /* Feed */,
-				85C1BEB920749A470002B065 /* Messaging */,
+				85C1BEB920749A470002B065 /* DM */,
 				85C1BEB820749A410002B065 /* Profiles */,
 				85C1BEB420749A2A0002B065 /* Search */,
 				8539FE9D20454A1C00A2D0EF /* tabbedCameraViewController.swift */,
@@ -205,7 +212,7 @@
 			path = Profiles;
 			sourceTree = "<group>";
 		};
-		85C1BEB920749A470002B065 /* Messaging */ = {
+		85C1BEB920749A470002B065 /* DM */ = {
 			isa = PBXGroup;
 			children = (
 				85424E112066379600191BF3 /* SingleMessageViewController.swift */,
@@ -215,7 +222,7 @@
 				85424E03205E1AD700191BF3 /* quickMessageViewController.swift */,
 				85C3EC04208484830071B336 /* quickMessageCustomCell.swift */,
 			);
-			path = Messaging;
+			path = DM;
 			sourceTree = "<group>";
 		};
 		85C1BEBA20749A4B0002B065 /* Feed */ = {
@@ -230,6 +237,15 @@
 				85C1BEBB2074A1F90002B065 /* ReactionCollectionViewCell.swift */,
 			);
 			path = Feed;
+			sourceTree = "<group>";
+		};
+		85C3EC0D2086A5C70071B336 /* Groups */ = {
+			isa = PBXGroup;
+			children = (
+				85C3EC0A2086A59D0071B336 /* GroupsTableViewController.swift */,
+				85C3EC082086A5710071B336 /* groupsTableViewCell.swift */,
+			);
+			path = Groups;
 			sourceTree = "<group>";
 		};
 		85D513271FE8C54000DF4BC4 /* login */ = {
@@ -272,6 +288,7 @@
 				85F4665B1FE391CC00D46D5C /* Post.swift */,
 				85FD872A202EF63500143339 /* Comment.swift */,
 				85424E092064D21A00191BF3 /* Message.swift */,
+				85C3EC0E2086A82E0071B336 /* Community.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -495,6 +512,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				85FD8721202D7B2800143339 /* appTabController.swift in Sources */,
+				85C3EC0F2086A82E0071B336 /* Community.swift in Sources */,
 				850BCEA5205A13C20059138A /* MessagesTableViewController.swift in Sources */,
 				85424E06205E273300191BF3 /* OtherProfileViewController.swift in Sources */,
 				8529032F1FD75602005477CE /* LoginViewController.swift in Sources */,
@@ -517,11 +535,13 @@
 				8539FE9E20454A1C00A2D0EF /* tabbedCameraViewController.swift in Sources */,
 				85CEB66E202AA76E00636D88 /* ProfileViewController.swift in Sources */,
 				852903311FD75675005477CE /* PhoneEmailRegistrationViewController.swift in Sources */,
+				85C3EC092086A5710071B336 /* groupsTableViewCell.swift in Sources */,
 				852903331FD7BC75005477CE /* UsernameViewController.swift in Sources */,
 				851D04312033E459006986E6 /* PostCommentsViewController.swift in Sources */,
 				85424E0A2064D21A00191BF3 /* Message.swift in Sources */,
 				85A5361C1FDB8B2A0096E054 /* FeedViewController.swift in Sources */,
 				8539FE9620413E1700A2D0EF /* RulesAndInfoViewController.swift in Sources */,
+				85C3EC0B2086A59D0071B336 /* GroupsTableViewController.swift in Sources */,
 				85FCC271203812700091B9AC /* HashtagViewController.swift in Sources */,
 				85F466621FE3C75C00D46D5C /* FeedViewControllerTableViewCell.swift in Sources */,
 				852197221FCFC5AE0013D76C /* AppDelegate.swift in Sources */,

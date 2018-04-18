@@ -18,6 +18,8 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
     var numberOfComments = "0"
     var picturePresent = false
     
+    
+    @IBOutlet weak var dimmedView: UIView!
     @IBOutlet weak var newPostImageView: UIImageView!
     @IBOutlet weak var whatsOnYourMindTextField: UITextView!
     @IBOutlet weak var charactersRemaining: UILabel!
@@ -149,8 +151,10 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         getLoginInfo()
         getUsersLocation()
+        addKeyboardObservers()
         
         let postButton = UIBarButtonItem(title: "post", style: .plain, target: self, action: #selector(createPostViewController.post))
          let cancelButton = UIBarButtonItem(title: "cancel", style: .plain, target: self, action: #selector(createPostViewController.cancelBackToFeed))
@@ -190,11 +194,59 @@ class createPostViewController: UIViewController, UITextViewDelegate, UIImagePic
             currentCity = userLocation
         }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+        self.dimmedView.alpha = 0
     }
     
-
+    @objc func ok() {
+        let postButton = UIBarButtonItem(title: "post", style: .plain, target: self, action: #selector(createPostViewController.post))
+        let cancelButton = UIBarButtonItem(title: "cancel", style: .plain, target: self, action: #selector(createPostViewController.cancelBackToFeed))
+        
+        self.navigationItem.rightBarButtonItem  = postButton
+        self.navigationItem.leftBarButtonItem  = cancelButton
+        self.navigationItem.title = "Create Post"
+        dismissKeyboard()
+    }
+    
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let duration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            let duration = 0.25
+            
+            let okButton = UIBarButtonItem(title: "OK", style: .plain, target: self, action: #selector(createPostViewController.ok))
+            
+            self.navigationItem.rightBarButtonItem  = okButton
+            self.navigationItem.leftBarButtonItem?.title = ""
+            self.navigationItem.title = "Caption"
+            
+            UIView.animate(withDuration: duration as! TimeInterval, animations: {
+                
+                self.dimmedView.alpha = 0.8
+            
+            })
+            
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        let duration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            self.dimmedView.alpha = 0
+            
+            let postButton = UIBarButtonItem(title: "post", style: .plain, target: self, action: #selector(createPostViewController.post))
+            let cancelButton = UIBarButtonItem(title: "cancel", style: .plain, target: self, action: #selector(createPostViewController.cancelBackToFeed))
+            
+            self.navigationItem.rightBarButtonItem  = postButton
+            self.navigationItem.leftBarButtonItem  = cancelButton
+            self.navigationItem.title = "Create Post"
+        }
+    }
+    
+    func addKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(quickMessageViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(quickMessageViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
 }

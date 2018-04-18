@@ -18,18 +18,17 @@ class MessagesTableViewController: UITableViewController {
         uid = (Auth.auth().currentUser?.uid)!
         loadMessages()
         
-        self.navigationItem.hidesBackButton = true
-        let newBackButton = UIBarButtonItem(image: #imageLiteral(resourceName: "back"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(OtherProfileViewController.back(sender:)))
-        self.navigationItem.leftBarButtonItem = newBackButton
+        self.navigationItem.backBarButtonItem?.title = ""
     }
     
-    @objc func back(sender: UIBarButtonItem) {
-        // Perform your custom actions
-        animateTabBarControllerUp()
-        // Go back to the previous ViewController
-        self.navigationController?.popViewController(animated: true)
+    override func viewWillDisappear(_ animated : Bool) {
+        super.viewWillDisappear(animated)
+        
+        if self.isMovingFromParentViewController {
+            // Your code...
+            animateTabBarControllerUp()
+        }
     }
-
     
     func animateTabBarControllerDown() {
         let duration = 0.25
@@ -122,8 +121,8 @@ class MessagesTableViewController: UITableViewController {
         let otherUserUid = allMessageProfileUid[indexPath.row]
         let message = messages[indexPath.row]
         
-        cell.messageSeenIndicator.layer.cornerRadius = cell.messageSeenIndicator.frame.size.height / 2
-        cell.messageSeenIndicator.clipsToBounds = true
+//        cell.messageSeenIndicator.layer.cornerRadius = cell.messageSeenIndicator.frame.size.height / 2
+//        cell.messageSeenIndicator.clipsToBounds = true
         
         //Database Ref
         usersRef = Database.database().reference().child("users").child(otherUserUid)
@@ -147,12 +146,12 @@ class MessagesTableViewController: UITableViewController {
         }
         
         cell.messagesProfileView.contentMode = .scaleAspectFit
-        cell.messagesProfileView.layer.cornerRadius = cell.messagesProfileView.frame.size.height / 2
+        cell.messagesProfileView.layer.cornerRadius = 5
         cell.messagesProfileView.clipsToBounds = true
         cell.messagesLastMessageSent.text = messages[indexPath.row].pinnedTimeAsInterval
         cell.messagesLastMessagePeek.text = messages[indexPath.row].postMessage
         
-        cell.messageSeenIndicator.backgroundColor = UIColor.red
+//        cell.messageSeenIndicator.backgroundColor = UIColor.red
         
         return cell
     }
