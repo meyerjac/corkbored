@@ -13,7 +13,6 @@ import ASIACheckmarkView
 import AudioToolbox
 
 class HashtagViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
-    
     @IBOutlet weak var checkmarkOrEx: ASIACheckmarkView!
     @IBAction func nextButton(_ sender: Any) {
         if selectedHashtags.count < 10 {
@@ -81,6 +80,7 @@ class HashtagViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        print("hello")
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! HashtagCollectionViewCell
         
         cell.hashtagButton.setTitle(hashtagArray[indexPath.row], for: .normal)

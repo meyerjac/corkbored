@@ -31,10 +31,12 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
     //commentProfilesRef
     var ref: DatabaseReference = Database.database().reference()
     
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var commentTextField: UITextField!
     @IBOutlet weak var commentsTableView: UITableView!
     @IBOutlet weak var sendCommentButton: UIButton!
-    @IBOutlet weak var PostMessageTextView: UITextView!
+    @IBOutlet weak var descriptionOfEventLabel: UILabel!
+    @IBOutlet weak var titleOfEventLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var postUserProfileImageView: UIImageView!
@@ -112,9 +114,10 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
             let hours = minutesSince!/60
         }
         
-        cell.messageBody.text = comment.commentMessage
+//        cell.messageBody.text = comment.commentMessage
         cell.commentCellTimeLabel.text = stringTimeStamp
-        
+        cell.commentProfileImageVIew.layer.cornerRadius = 5.0
+        cell.commentProfileImageVIew.clipsToBounds = true
         print(stringTimeStamp, "timeStamp")
         
         return cell
@@ -122,6 +125,7 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyle.none
         loadPost()
         fetchComments()
     
@@ -137,7 +141,7 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func loadPost() {
-        PostMessageTextView.text = clickedPostMessageBody
+        descriptionOfEventLabel.text = clickedPostMessageBody
         usernameLabel.text = clickedUsername
         timeLabel.text = clickedPostTimeStamp
         
@@ -146,7 +150,7 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
         postUserProfileImageView.layer.borderWidth = 1.0
         postUserProfileImageView.layer.masksToBounds = true
         postUserProfileImageView.layer.borderColor = UIColor.white.cgColor
-        postUserProfileImageView.layer.cornerRadius = postUserProfileImageView.frame.size.width / 2
+        postUserProfileImageView.layer.cornerRadius = 5.0
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

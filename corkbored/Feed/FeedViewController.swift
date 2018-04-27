@@ -3,16 +3,17 @@ import Firebase
 import FirebaseAuth
 import Nuke
 import CoreLocation
+import ChameleonFramework
 
 class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource {
-    
+    @IBOutlet weak var tableView: UITableView!
     @IBAction func toMessagingBarButton(_ sender: Any) {
           self.performSegue(withIdentifier: "feedToMessagingSegue", sender: self)
     }
-    
     @IBAction func createPostBarButton(_ sender: Any) {
-        
+          self.performSegue(withIdentifier: "createPost", sender: self)
     }
+    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 
         guard let tableViewCell = cell as? FeedViewControllerTableViewCell else { return }
@@ -41,37 +42,11 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
     //passing profile data
     var clickedProfilePicOwnerUid = ""
     
-    @IBOutlet weak var tableView: UITableView!
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return posts.count
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        let messageText = self.posts[indexPath.row].postMessage as? String
-        let size = CGSize(width: view.frame.size.width - 32, height: 600)
-        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
-        let attributes = [NSAttributedStringKey.font:  UIFont.systemFont(ofSize: 14)]
-        let estimatedFrame = NSString(string: messageText!).boundingRect(with: size, options: options, attributes: attributes, context: nil)
-
-        if posts[indexPath.row].pinnedMediaFileName != "null" {
-            if estimatedFrame.height < 20 {
-                    return 485
-                } else {
-                    return 485 + estimatedFrame.height - 16.7
-                }
-            } else {
-                if estimatedFrame.height < 20 {
-                    return 130
-                } else {
-                    return 130 + estimatedFrame.height - 16.7
-                                }
-                }
-        }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         //getting time stamp of users device to to compare to stamp of post
         let nowish = Double(Date().timeIntervalSinceReferenceDate)
         
@@ -93,83 +68,28 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         } else if minutesSince! > 60 {
             let hours = minutesSince!/60
             if hours >= 24 {
-                
                 //choosing not to delete from Feed
                 
-                //                deletePostFromFeed(postUid: post.postUid)
+                deletePostFromFeed(postUid: post.postUid)
                 stringTimeStamp = "\(hours) hr"
             } else {
                 stringTimeStamp = "\(hours) hr"
             }
         }
-        
     
-        
-        //my two type of table cell
-        if post.pinnedMediaFileName != "null" {
-
-            let textAndImageCell = tableView.dequeueReusableCell(withIdentifier: "postCellWithPhoto", for: indexPath) as! FeedViewControllerTableViewCell
-//
-//            textAndImageCell.separatorInset = UIEdgeInsetsMake(0, textAndImageCell.bounds.size.width, 0, 0)
-//            textAndImageCell.selectionStyle = .none
-//
-//            //getting Profile picture and username
-//            var ref: DatabaseReference!
-//            ref = Database.database().reference()
-//
-//            ref.child("users").child(post.ownerUid).observeSingleEvent(of: .value, with: { (snapshot) in
-//                // Get user value
-//
-//                let value = snapshot.value as? NSDictionary
-//
-//                let postProfilePictureStringURL = value?["profilePic"] as? String ?? ""
-//                let firstName = value?["firstName"] as? String ?? ""
-//
-//                if let urlUrl = URL.init(string: postProfilePictureStringURL) {
-//                    self.manager.loadImage(with: urlUrl, into: textAndImageCell.profilePhotoImageView)
-//                }
-//
-//                textAndImageCell.usernameTextField.text = firstName
-//
-//            }) { (error) in
-//                print(error.localizedDescription)
-//            }
-//
-//            textAndImageCell.profilePhotoImageView?.contentMode = .scaleAspectFill
-//            textAndImageCell.profilePhotoImageView?.layer.borderWidth = 2.0
-//            textAndImageCell.profilePhotoImageView?.layer.masksToBounds = false
-//            textAndImageCell.profilePhotoImageView.layer.borderColor = UIColor.purple.cgColor
-//            textAndImageCell.profilePhotoImageView?.layer.cornerRadius = 5
-//            textAndImageCell.profilePhotoImageView?.clipsToBounds = true
-//
-//
-//            //setting picture field
-//            let postPhotoString = URL.init(string: post.pinnedMediaFileName)
-//            self.manager.loadImage(with: postPhotoString!, into: textAndImageCell.postPhoto)
-//
-//            textAndImageCell.timePosted.text = stringTimeStamp
-//            textAndImageCell.messageBody.text = post.postMessage
-//            textAndImageCell.numberOfComments.text = post.numberOfComments
-//
-//            let height = textAndImageCell.messageBody.frame.size.height + 92
-//
-//            textAndImageCell.frame.size.height = height
-//            textAndImageCell.frame = CGRect(x: textAndImageCell.frame.origin.x, y: textAndImageCell.frame.origin.y, width: textAndImageCell.frame.size.width, height: height)
-//
-            return textAndImageCell
-        } else {
+        //my table cell
             
-            let textOnlyCell = tableView.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as! FeedViewControllerTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as! FeedViewControllerTableViewCell
             
             //setting tag for comment button
-            textOnlyCell.commentButton.tag = indexPath.row
-            textOnlyCell.commentButton.addTarget(self, action: #selector(handleComment), for: .touchUpInside)
+            cell.commentButton.tag = indexPath.row
+            cell.commentButton.addTarget(self, action: #selector(handleComment), for: .touchUpInside)
             
             //setting tag for profile image and username
             let nameTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleProfile))
-            textOnlyCell.profilePhotoImageView.tag = indexPath.row
-            textOnlyCell.profilePhotoImageView.addGestureRecognizer(nameTapGesture)
-            textOnlyCell.profilePhotoImageView.isUserInteractionEnabled = true
+            cell.profilePhotoImageView.tag = indexPath.row
+            cell.profilePhotoImageView.addGestureRecognizer(nameTapGesture)
+            cell.profilePhotoImageView.isUserInteractionEnabled = true
             
             var ref: DatabaseReference!
             ref = Database.database().reference()
@@ -183,29 +103,29 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
                 let username = value?["firstName"] as? String ?? ""
                 
                 if let urlUrl = URL.init(string: postProfilePictureStringURL) {
-                    self.manager.loadImage(with: urlUrl, into: textOnlyCell.profilePhotoImageView)
+                    self.manager.loadImage(with: urlUrl, into: cell.profilePhotoImageView)
                 }
                 
-                textOnlyCell.usernameTextField.text = username
+                cell.usernameTextField.text = username
                 
             }) { (error) in
                 print(error.localizedDescription)
             }
             
-            textOnlyCell.profilePhotoImageView?.contentMode = .scaleAspectFit
-            textOnlyCell.profilePhotoImageView?.layer.borderWidth = 1.5
-            textOnlyCell.profilePhotoImageView?.layer.masksToBounds = false
-            textOnlyCell.profilePhotoImageView.layer.borderColor = UIColor.white.cgColor
-            textOnlyCell.profilePhotoImageView.layer.borderColor = UIColor.cyan.cgColor
-            textOnlyCell.profilePhotoImageView?.layer.cornerRadius = 5
-            textOnlyCell.profilePhotoImageView?.clipsToBounds = true
+            cell.profilePhotoImageView?.contentMode = .scaleAspectFit
+            cell.profilePhotoImageView?.layer.borderWidth = 1.5
+            cell.profilePhotoImageView?.layer.masksToBounds = false
+            cell.profilePhotoImageView.layer.borderColor = UIColor.flatYellow().cgColor
+            cell.profilePhotoImageView?.layer.cornerRadius = 5
+            cell.profilePhotoImageView?.clipsToBounds = true
             
-            textOnlyCell.timePosted.text = stringTimeStamp
-            textOnlyCell.numberOfComments.text = post.numberOfComments
-            textOnlyCell.messageBody.text = post.postMessage
+            cell.timePosted.text = stringTimeStamp
+            cell.numberOfComments.text = post.numberOfComments
+            cell.DescriptionLabel.text = post.postMessage
+            cell.hangoutDate.text = "March 13th, 8ish"
+            cell.hangoutTitle.text = "Beer pong tournament, cash prizes"
         
-            return textOnlyCell
-        }
+            return cell
     }
     
     @objc func handleComment(sender: UIButton) {
@@ -238,6 +158,13 @@ class FeedViewController: UIViewController, CLLocationManagerDelegate, UITableVi
         super.viewDidLoad()
         self.tableView.separatorStyle = UITableViewCellSeparatorStyle.none
         fetchUserLocation()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        // Do any additional setup after loading the view, typically from a nib.
+        
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
     }
     
     

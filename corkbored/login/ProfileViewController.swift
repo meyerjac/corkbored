@@ -164,7 +164,9 @@ UINavigationControllerDelegate,  CLLocationManagerDelegate {
             } else {
                 SVProgressHUD.showProgress(1.0, status: "Creating your profile...")
                 SVProgressHUD.dismiss()
-                self.performSegue(withIdentifier: "profileSetUpToHashtags", sender: nil)
+//                self.performSegue(withIdentifier: "profileSetUpToHashtags", sender: nil)
+                 self.performSegue(withIdentifier: "profileToNavigationalController", sender: nil)
+                
             }
         }
     }
